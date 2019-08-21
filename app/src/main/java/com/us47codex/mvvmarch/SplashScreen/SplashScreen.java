@@ -11,9 +11,60 @@ import androidx.annotation.Nullable;
 import com.us47codex.mvvmarch.R;
 import com.us47codex.mvvmarch.base.BaseFragment;
 
+import io.reactivex.disposables.CompositeDisposable;
+
 public class SplashScreen extends BaseFragment {
     private static final String TAG = SplashScreen.class.getSimpleName();
 
+    @Override
+    protected int getLayoutId() {
+        return 0;
+    }
+
+    @Override
+    protected CompositeDisposable getCompositeDisposable() {
+        return null;
+    }
+
+    @Override
+    protected String getToolbarTitle() {
+        return null;
+    }
+
+    @Override
+    protected boolean shouldShowToolbar() {
+        return false;
+    }
+
+    @Override
+    protected boolean shouldShowBackArrow() {
+        return false;
+    }
+
+    @Override
+    protected boolean shouldShowSecondImageIcon() {
+        return false;
+    }
+
+    @Override
+    protected boolean shouldShowFirstImageIcon() {
+        return false;
+    }
+
+    @Override
+    protected boolean shouldLoaderImplement() {
+        return false;
+    }
+
+    @Override
+    protected boolean shouldShowDrawer() {
+        return false;
+    }
+
+    @Override
+    protected int getCurrentFragmentId() {
+        return 0;
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
