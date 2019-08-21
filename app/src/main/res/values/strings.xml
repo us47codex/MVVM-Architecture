@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">MVVM-Architecture</string>
+    <string name="no_internet_connection">No Internet connection</string>
+    <string name="back_to_online">Back online</string>
+</resources>
