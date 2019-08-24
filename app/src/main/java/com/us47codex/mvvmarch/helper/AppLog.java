@@ -8,8 +8,11 @@ import com.us47codex.mvvmarch.constant.Endpoint;
 
 
 /**
- * Created by Upen on 20/9/17.
- */
+ * Created by Upen on 24 August, 2019 for
+ * Project : MVVM-Architecture
+ * Company : US47Codex
+ * Email : us47codex@gmail.com
+ **/
 
 public class AppLog {
 

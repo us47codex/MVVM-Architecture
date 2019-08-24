@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="UsTypeface">
+        <attr name="custom_typeface" format="enum">
+            <enum name="open_sans_regular" value="1" />
+            <enum name="open_sans_semi_bold" value="2" />
+            <enum name="open_sans_bold_light" value="3" />
+            <enum name="open_sans_bold" value="4" />
+        </attr>
+        <attr name="custom_input_type" format="enum">
+            <enum name="normal" value="0" />
+            <enum name="smallAll" value="1" />
+            <enum name="capsAll" value="2" />
+            <enum name="capsWord" value="3" />
+            <enum name="capsSentence" value="4" />
+        </attr>
+    </declare-styleable>
+
+    <declare-styleable name="UsMaxHeight">
+        <attr name="custom_maxHeight" format="dimension" />
+    </declare-styleable>
+</resources>
