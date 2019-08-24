@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">suntec</string>
-
     <string name="no_internet_connection">No Internet connection</string>
     <string name="back_to_online">Back online</string>
 
@@ -9,4 +8,12 @@
     <string name="typeface_open_sans_bold_light" translatable="false"> OpenSans-Light.ttf</string>
     <string name="typeface_open_sans_regular" translatable="false"> OpenSans-Regular.ttf</string>
     <string name="typeface_open_sans_semi_bold" translatable="false"> OpenSans-Semibold.ttf</string>
+
+    <string name="hint_edit_email">Email Id</string>
+    <string name="hint_enter_password">Password</string>
+    <string name="err_unknown">Please try again</string>
+    <string name="signIn">Sign In</string>
+    <string name="submit">Submit</string>
+    <string name="something_went_wrong">Something went wrong please try again.</string>
+    <string name="please_try_again">Please try again.</string>
 </resources>

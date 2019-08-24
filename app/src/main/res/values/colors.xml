@@ -7,4 +7,7 @@
     <color name="black" tools:keep="@color/black">#000000</color>
     <color name="maroon" tools:keep="@color/maroon">#800000</color>
     <color name="green" tools:keep="@color/green">#008000</color>
+    <color name="text_color" tools:keep="@color/text_color">#252525</color>
+    <color name="text_color_gray" tools:keep="@color/text_color_gray">#888888</color>
+    <color name="text_divider_color" tools:keep="@color/text_divider_color">#d4ccc6</color>
 </resources>

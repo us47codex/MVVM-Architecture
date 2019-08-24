@@ -8,7 +8,7 @@ public class Config {
     /**
      * API
      */
-    public static final int TIMEOUT_SOCKET = 60000;
+    public static final int API_CALL_TIMEOUT = 60000;
     public static final String API_SUCCESS = "1"; //response success = 1
     public static final String API_FAIL = "0"; //response success = 0
     public static final String API_ERROR = "-1"; //response success = 0

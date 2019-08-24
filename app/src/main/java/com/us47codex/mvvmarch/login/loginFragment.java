@@ -1,21 +1,34 @@
 package com.us47codex.mvvmarch.login;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatButton;
+import androidx.lifecycle.ViewModelProvider;
 
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.us47codex.mvvmarch.R;
 import com.us47codex.mvvmarch.base.BaseFragment;
+
+import java.util.Objects;
 
 import io.reactivex.disposables.CompositeDisposable;
 
 public class loginFragment extends BaseFragment {
 
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
+    private TextInputLayout inputEmailLayout,inputPasswordLayout;
+    private TextInputEditText edtEmail,edtPassword;
+    private AppCompatButton btnLogin;
+    private LoginViewModel loginViewModel;
 
     @Override
     protected int getLayoutId() {
@@ -70,6 +83,12 @@ public class loginFragment extends BaseFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Window window = Objects.requireNonNull(getActivity()).getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.setStatusBarColor(getResources().getColor(R.color.white));
+        }
+        //loginViewModel = ViewModelProviders.of(this).get(LoginViewModel.class);
     }
 
     @Nullable
@@ -81,7 +100,19 @@ public class loginFragment extends BaseFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        initView(view);
     }
 
+    private void initView(View view){
+        inputEmailLayout = view.findViewById(R.id.inputEmailLayout);
+        inputPasswordLayout = view.findViewById(R.id.inputPasswordLayout);
+
+        edtEmail = view.findViewById(R.id.edtEmail);
+        edtPassword = view.findViewById(R.id.edtPassword);
+
+        btnLogin = view.findViewById(R.id.btnLogin);
+
+
+    }
 
 }
