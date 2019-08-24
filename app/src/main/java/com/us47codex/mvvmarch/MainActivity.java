@@ -75,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .onErrorReturn(throwable -> {
-                    AppLog.loge(TAG, "onCreate: " + throwable.getLocalizedMessage());
+                    AppLog.error(TAG, "onCreate: " + throwable.getLocalizedMessage());
                     return false;
                 })
                 //.filter(jsonObject -> jsonObject != null)
