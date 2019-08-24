@@ -15,6 +15,9 @@ public class MyPreferenceManager {
     // SharedPref file name
     private static final String PREF_NAME = "MVVMArchitecture";
 
+    public static final String AUTHENTICATION_TOKEN = "authentication_token";
+
+
     // Constructor
     @SuppressLint("CommitPrefEdits")
     MyPreferenceManager(Context context) {

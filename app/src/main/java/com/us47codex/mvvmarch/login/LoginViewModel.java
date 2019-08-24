@@ -7,10 +7,18 @@ import androidx.annotation.NonNull;
 import com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork;
 import com.us47codex.mvvmarch.base.BaseViewModel;
 import com.us47codex.mvvmarch.enums.ApiCallStatus;
+import com.us47codex.mvvmarch.helper.AppLog;
+import com.us47codex.mvvmarch.restApi.RestApiClient;
 
-import io.reactivex.Scheduler;
-import io.reactivex.functions.Consumer;
+import org.json.JSONObject;
+
+import java.util.Objects;
+
 import io.reactivex.schedulers.Schedulers;
+import okhttp3.internal.http.RealResponseBody;
+import retrofit2.Response;
+
+import static com.us47codex.mvvmarch.constant.Constant.SERVICE_UNAVAILABLE;
 
 public class LoginViewModel extends BaseViewModel {
 
@@ -29,31 +37,50 @@ public class LoginViewModel extends BaseViewModel {
             getCompositeDisposable().add(
                     ReactiveNetwork.checkInternetConnectivity()
                     .subscribeOn(Schedulers.io())
-                    .doOnSuccess(new Consumer<Boolean>() {
-                        @Override
-                        public void accept(Boolean aBoolean) throws Exception {
-                            if(aBoolean){
-                                try{
-                                    switch (apiTag) {
-                                        case USER_LOGIN:
-
-                                            break;
-                                    }
-                                }catch (Exception e){
-                                    e.printStackTrace();
+                    .doOnSuccess(aBoolean -> {
+                        if(aBoolean){
+                            try{
+                                if (USER_LOGIN.equals(apiTag)) {
+                                    callToUserLogin((LoginParamModel) params, apiTag, shouldShowLoader);
                                 }
+                            }catch (Exception e){
+                                e.printStackTrace();
                             }
                         }
                     })
-                    .doOnError(new Consumer<Throwable>() {
-                        @Override
-                        public void accept(Throwable throwable) throws Exception {
-
-                        }
+                    .doOnError(e -> {
+                        getStatusBehaviorRelay().accept(ApiCallStatus.ERROR);
+                        getErrorRelay().accept(Objects.requireNonNull(e.getLocalizedMessage()));
                     })
                     .subscribe());
     }
 
+    private void callToUserLogin(LoginParamModel params, String apiTag, boolean shouldShowLoader) {
+        getCompositeDisposable().add(RestApiClient.apiService
+                .userLogin(params)
+                .subscribeOn(Schedulers.io())
+                .onErrorReturn(throwable -> {
+                    throwable.printStackTrace();
+                    return Response.error(SERVICE_UNAVAILABLE, new RealResponseBody("", 0, null));
+                })
+                .doOnSuccess(response -> {
+                    try {
+                        JSONObject jsonObject = parseOnSuccess(response, apiTag, shouldShowLoader);
+                        if (jsonObject != null) {
+
+                            AppLog.loge(TAG,"User Login :"+ jsonObject.toString());
+                            //processIntoData(jsonObject, apiTag, shouldShowLoader);
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        if (shouldShowLoader)
+                            getStatusBehaviorRelay().accept(ApiCallStatus.ERROR);
+                        getErrorRelay().accept(Objects.requireNonNull(e.getLocalizedMessage()));
+                    }
+                })
+                .doOnError(error -> parseOnError(error, apiTag, shouldShowLoader)).subscribe()
+        );
+    }
 
 
 }
