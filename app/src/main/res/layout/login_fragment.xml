@@ -14,8 +14,8 @@
         <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/space_ten"
-            android:layout_marginEnd="@dimen/space_ten"
+            android:layout_marginStart="@dimen/space_twenty"
+            android:layout_marginEnd="@dimen/space_twenty"
             android:gravity="center"
             android:orientation="vertical">
 
@@ -44,6 +44,7 @@
                 android:id="@+id/inputPasswordLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_twenty"
                 android:hint="@string/hint_enter_password"
                 app:hintTextAppearance="@style/TextInputLayout.gray">
 

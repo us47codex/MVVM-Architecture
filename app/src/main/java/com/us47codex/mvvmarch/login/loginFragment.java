@@ -7,7 +7,10 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatButton;
 
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.us47codex.mvvmarch.R;
 import com.us47codex.mvvmarch.base.BaseFragment;
 
@@ -16,6 +19,9 @@ import io.reactivex.disposables.CompositeDisposable;
 public class loginFragment extends BaseFragment {
 
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
+    private TextInputLayout inputEmailLayout,inputPasswordLayout;
+    private TextInputEditText edtEmail,edtPassword;
+    private AppCompatButton btnLogin;
 
     @Override
     protected int getLayoutId() {
@@ -81,7 +87,19 @@ public class loginFragment extends BaseFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        initView(view);
     }
 
+    private void initView(View view){
+        inputEmailLayout = view.findViewById(R.id.inputEmailLayout);
+        inputPasswordLayout = view.findViewById(R.id.inputPasswordLayout);
+
+        edtEmail = view.findViewById(R.id.edtEmail);
+        edtPassword = view.findViewById(R.id.edtPassword);
+
+        btnLogin = view.findViewById(R.id.btnLogin);
+
+
+    }
 
 }
