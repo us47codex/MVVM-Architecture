@@ -1,6 +1,6 @@
 package com.us47codex.mvvmarch.constant;
 
-public class Endpoint {
+public class EndPoints {
     public static final String NETWORK_PING_URL = "http://clients3.google.com/generate_204";
 
     public static final String BASE_URL = "http://sunteccustomercare.in/api/api/login";

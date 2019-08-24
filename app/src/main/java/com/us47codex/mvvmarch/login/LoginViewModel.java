@@ -18,7 +18,7 @@ import io.reactivex.schedulers.Schedulers;
 import okhttp3.internal.http.RealResponseBody;
 import retrofit2.Response;
 
-import static com.us47codex.mvvmarch.constant.Constant.SERVICE_UNAVAILABLE;
+import static com.us47codex.mvvmarch.constant.Constants.SERVICE_UNAVAILABLE;
 
 public class LoginViewModel extends BaseViewModel {
 

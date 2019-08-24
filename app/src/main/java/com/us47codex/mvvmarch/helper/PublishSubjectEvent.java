@@ -7,7 +7,7 @@ import com.github.pwittchen.reactivenetwork.library.rx2.internet.observing.error
 import com.github.pwittchen.reactivenetwork.library.rx2.internet.observing.error.ErrorHandler;
 import com.github.pwittchen.reactivenetwork.library.rx2.internet.observing.strategy.WalledGardenInternetObservingStrategy;
 import com.jakewharton.rxrelay2.PublishRelay;
-import com.us47codex.mvvmarch.constant.Endpoint;
+import com.us47codex.mvvmarch.constant.EndPoints;
 
 import java.net.HttpURLConnection;
 
@@ -34,7 +34,7 @@ public class PublishSubjectEvent {
     private PublishSubjectEvent() {
         int initialInterval = 0;
         int interval = 2000;
-        String host = Endpoint.NETWORK_PING_URL;
+        String host = EndPoints.NETWORK_PING_URL;
         int port = 80;
         int timeout = 5000;
         int httpResponse = HttpURLConnection.HTTP_NO_CONTENT;

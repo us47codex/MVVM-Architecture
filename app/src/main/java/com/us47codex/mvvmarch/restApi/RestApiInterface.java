@@ -1,6 +1,6 @@
 package com.us47codex.mvvmarch.restApi;
 
-import com.us47codex.mvvmarch.constant.Endpoint;
+import com.us47codex.mvvmarch.constant.EndPoints;
 import com.us47codex.mvvmarch.login.LoginParamModel;
 
 import io.reactivex.Single;
@@ -14,7 +14,7 @@ public interface RestApiInterface {
     Single<Response<ResponseBody>> getAmenities(@HeaderMap Map<String, String> headers,
                                                 @Body AmenitiesModel params);*/
 
-    @POST(Endpoint.LOGIN)
+    @POST(EndPoints.LOGIN)
     Single<Response<ResponseBody>> userLogin(@Body LoginParamModel params);
 
 

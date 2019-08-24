@@ -4,7 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-public class MyPreferenceManager {
+public class SunTecPreferenceManager {
 
     // Shared Preferences
     private final SharedPreferences pref;
@@ -13,14 +13,14 @@ public class MyPreferenceManager {
     private final SharedPreferences.Editor editor;
 
     // SharedPref file name
-    private static final String PREF_NAME = "MVVMArchitecture";
+    private static final String PREF_NAME = "Sun_Tec_Pref";
 
     public static final String AUTHENTICATION_TOKEN = "authentication_token";
 
 
     // Constructor
     @SuppressLint("CommitPrefEdits")
-    MyPreferenceManager(Context context) {
+    SunTecPreferenceManager(Context context) {
         // Context
         // Shared pref mode
         int PRIVATE_MODE = 0;

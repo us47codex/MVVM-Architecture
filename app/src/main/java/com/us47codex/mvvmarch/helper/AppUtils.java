@@ -15,7 +15,7 @@ import android.view.WindowManager;
 
 import com.us47codex.mvvmarch.BuildConfig;
 import com.us47codex.mvvmarch.R;
-import com.us47codex.mvvmarch.constant.Constant;
+import com.us47codex.mvvmarch.constant.Constants;
 
 import org.json.JSONObject;
 
@@ -102,31 +102,31 @@ public class AppUtils {
                 .map(code -> {
                     String message;
                     switch (code) {
-                        case Constant.BAD_REQUEST:
+                        case Constants.BAD_REQUEST:
                             message = "Bad Request";
                             break;
-                        case Constant.UNAUTHORIZED:
+                        case Constants.UNAUTHORIZED:
                             message = "Unauthorized";
                             break;
-                        case Constant.FORBIDDEN:
+                        case Constants.FORBIDDEN:
                             message = "Forbidden";
                             break;
-                        case Constant.NOT_FOUND:
+                        case Constants.NOT_FOUND:
                             message = "Not Found";
                             break;
-                        case Constant.REQUEST_TIMEOUT:
+                        case Constants.REQUEST_TIMEOUT:
                             message = "Request Timeout";
                             break;
-                        case Constant.SERVER_BROKEN:
+                        case Constants.SERVER_BROKEN:
                             message = "Server Broken"; //internal server error
                             break;
-                        case Constant.BAD_GATEWAY:
+                        case Constants.BAD_GATEWAY:
                             message = "Bad Gateway";
                             break;
-                        case Constant.SERVICE_UNAVAILABLE:
+                        case Constants.SERVICE_UNAVAILABLE:
                             message = "Service Unavailable";
                             break;
-                        case Constant.GATEWAY_TIMEOUT:
+                        case Constants.GATEWAY_TIMEOUT:
                             message = "Gateway Timeout";
                             break;
 //                        case 301:

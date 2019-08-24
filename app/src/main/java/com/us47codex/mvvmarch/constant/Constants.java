@@ -1,6 +1,9 @@
 package com.us47codex.mvvmarch.constant;
 
-public class Constant {
+public class Constants {
+
+    public static final String APP_NAME = "SunTec";
+    public static final String PACKAGE_NAME = "com.us47codex.mvvmarch";
 
     public static final int NOTIFICATION_ID = 100;
     public static final int INVITE_VENDOR_DEPARTMENT_ID = 101;
@@ -34,16 +37,25 @@ public class Constant {
     public static final String PARSE_ERROR = "PARSE_ERROR";
     public static final String SERVER_COULD_NOT_BE_FOUND = "SERVER_COULD_NOT_BE_FOUND";
 
-    public static final String KEY_CODE = "code";
-    public static final String KEY_API_TAG = "api_tag";
+
+    /**
+     * API
+     */
+    public static final int API_CALL_TIMEOUT = 60000;
+    public static final String API_SUCCESS = "1"; //response success = 1
+    public static final String API_FAIL = "0"; //response success = 0
+    public static final String API_ERROR = "-1"; //response success = 0
     public static final String KEY_SUCCESS = "success";
+    public static final String KEY_STATUS = "status";
+    public static final String KEY_CODE = "code";
     public static final String KEY_MESSAGE = "message";
     public static final String KEY_DATA = "data";
+    public static final String KEY_API_TAG = "api_tag";
     public static final String KEY_TIMEOUT = "timeout";
     public static final String KEY_TIME_OUT = "time out";
-    public static final String KEY_AUTHORIZATION = "Authorization";
-    public static final String KEY_MODEL = "Model";
-    public static final String KEY_OBJECT = "Object";
+    public static final String KEY_AUTHORIZATION = "authorization";
+    public static final String KEY_MODEL = "model";
+    public static final String KEY_OBJECT = "object";
     public static final String KEY_COMPLAIN_ACTION = "complain_action";
 
     /**

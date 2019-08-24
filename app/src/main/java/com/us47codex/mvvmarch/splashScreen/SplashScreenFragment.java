@@ -1,4 +1,4 @@
-package com.us47codex.mvvmarch.SplashScreen;
+package com.us47codex.mvvmarch.splashScreen;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -20,15 +20,15 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
 
-public class SplashScreen extends BaseFragment {
-    private static final String TAG = SplashScreen.class.getSimpleName();
+public class SplashScreenFragment extends BaseFragment {
+    private static final String TAG = SplashScreenFragment.class.getSimpleName();
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
     private FrameLayout frameMain;
     private ProgressBar horizontalProgress;
 
     @Override
     protected int getLayoutId() {
-        return R.layout.splash_screen_fragment;
+        return R.layout.fragment_splash_screen;
     }
 
     @Override
@@ -84,7 +84,7 @@ public class SplashScreen extends BaseFragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.splash_screen_fragment, container, false);
+        return inflater.inflate(R.layout.fragment_splash_screen, container, false);
     }
 
     @Override
@@ -109,7 +109,7 @@ public class SplashScreen extends BaseFragment {
                         .observeOn(AndroidSchedulers.mainThread())
                         .doOnComplete(() -> {
                             horizontalProgress.setVisibility(View.INVISIBLE);
-                            jumpToDestinationFragment(SplashScreen.this.getCurrentFragmentId(), R.id.toLoginFragment, frameMain, null, true);
+                            jumpToDestinationFragment(SplashScreenFragment.this.getCurrentFragmentId(), R.id.toLoginFragment, frameMain, null, true);
                         })
                         .subscribe()
         );

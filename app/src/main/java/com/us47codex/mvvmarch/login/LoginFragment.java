@@ -11,7 +11,6 @@ import android.view.WindowManager;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatButton;
-import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -22,17 +21,17 @@ import java.util.Objects;
 
 import io.reactivex.disposables.CompositeDisposable;
 
-public class loginFragment extends BaseFragment {
+public class LoginFragment extends BaseFragment {
 
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
-    private TextInputLayout inputEmailLayout,inputPasswordLayout;
-    private TextInputEditText edtEmail,edtPassword;
+    private TextInputLayout inputEmailLayout, inputPasswordLayout;
+    private TextInputEditText edtEmail, edtPassword;
     private AppCompatButton btnLogin;
     private LoginViewModel loginViewModel;
 
     @Override
     protected int getLayoutId() {
-        return R.layout.login_fragment;
+        return R.layout.fragment_login;
     }
 
     @Override
@@ -94,7 +93,7 @@ public class loginFragment extends BaseFragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.login_fragment,container,false);
+        return inflater.inflate(R.layout.fragment_login, container, false);
     }
 
     @Override
@@ -103,7 +102,7 @@ public class loginFragment extends BaseFragment {
         initView(view);
     }
 
-    private void initView(View view){
+    private void initView(View view) {
         inputEmailLayout = view.findViewById(R.id.inputEmailLayout);
         inputPasswordLayout = view.findViewById(R.id.inputPasswordLayout);
 

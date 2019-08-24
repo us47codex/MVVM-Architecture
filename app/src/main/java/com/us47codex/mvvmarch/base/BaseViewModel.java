@@ -10,7 +10,7 @@ import androidx.lifecycle.AndroidViewModel;
 import com.google.gson.Gson;
 import com.jakewharton.rxrelay2.PublishRelay;
 import com.us47codex.mvvmarch.R;
-import com.us47codex.mvvmarch.constant.Constant;
+import com.us47codex.mvvmarch.constant.Constants;
 import com.us47codex.mvvmarch.enums.ApiCallStatus;
 import com.us47codex.mvvmarch.helper.AppLog;
 import com.us47codex.mvvmarch.helper.AppUtils;
@@ -106,14 +106,14 @@ public abstract class BaseViewModel extends AndroidViewModel {
                 String res = response.body() != null ? response.body().string() : "";
                 if (!AppUtils.isEmpty(res)) {
                     JSONObject obj = new JSONObject(res);
-                    if (obj.has(Constant.KEY_CODE)) {
-                        AppLog.error(TAG, "parseOnSuccess :: API TAG : " + API_TAG + ":: Error : " + obj.getString(Constant.KEY_CODE));
+                    if (obj.has(Constants.KEY_CODE)) {
+                        AppLog.error(TAG, "parseOnSuccess :: API TAG : " + API_TAG + ":: Error : " + obj.getString(Constants.KEY_CODE));
                         if (showProgressBar)
                             getStatusBehaviorRelay().accept(ApiCallStatus.ERROR);
                         String errMessage = AppUtils.getMessageForErrorCode(obj, getContextBaseViewModel());
                         getErrorRelay().accept(errMessage);
                     } else {
-                        obj.put(Constant.KEY_API_TAG, API_TAG);
+                        obj.put(Constants.KEY_API_TAG, API_TAG);
                         /*if (showProgressBar)
                             complainListStatusBehaviorRelay.accept(ApiCallStatus.SUCCESS);*/
 //                        responseNavigator.handleSuccess(obj);
@@ -134,15 +134,15 @@ public abstract class BaseViewModel extends AndroidViewModel {
             }
         } else {
             AppLog.error(TAG, String.valueOf(response.code()));
-            if (/*response.code() == Constant.BAD_REQUEST ||*/
-                /*response.code() == Constant.UNAUTHORIZED ||*/
-                    response.code() == Constant.FORBIDDEN ||
-                            response.code() == Constant.NOT_FOUND ||
-                            response.code() == Constant.REQUEST_TIMEOUT ||
-                            response.code() == Constant.SERVER_BROKEN ||
-                            response.code() == Constant.BAD_GATEWAY ||
-                            response.code() == Constant.SERVICE_UNAVAILABLE ||
-                            response.code() == Constant.GATEWAY_TIMEOUT) {
+            if (/*response.code() == Constants.BAD_REQUEST ||*/
+                /*response.code() == Constants.UNAUTHORIZED ||*/
+                    response.code() == Constants.FORBIDDEN ||
+                            response.code() == Constants.NOT_FOUND ||
+                            response.code() == Constants.REQUEST_TIMEOUT ||
+                            response.code() == Constants.SERVER_BROKEN ||
+                            response.code() == Constants.BAD_GATEWAY ||
+                            response.code() == Constants.SERVICE_UNAVAILABLE ||
+                            response.code() == Constants.GATEWAY_TIMEOUT) {
 
                 getCompositeDisposable().add(
                         AppUtils.getErrorMessageFRomErrorCode(response.code())
@@ -160,7 +160,7 @@ public abstract class BaseViewModel extends AndroidViewModel {
                                 .subscribe()
                 );
             } else {
-                if (response.code() != Constant.UNAUTHORIZED) {
+                if (response.code() != Constants.UNAUTHORIZED) {
                     Gson gson = new Gson();
                     ErrorMessageHandlerModel message = null;
                     if (response.errorBody() != null) {
@@ -208,7 +208,7 @@ public abstract class BaseViewModel extends AndroidViewModel {
                     getStatusBehaviorRelay().accept(ApiCallStatus.ERROR);
                 getErrorRelay().accept(context.getString(R.string.please_try_again));
                 /*getErrorCodeRelay().accept(AppUtils.isEmpty(error.getLocalizedMessage()) ?
-                        Constant.ERR_SOMETHING_WRONG : error.getLocalizedMessage());*/
+                        Constants.ERR_SOMETHING_WRONG : error.getLocalizedMessage());*/
             } else {
                 AppLog.error(TAG, "parseOnError :: API TAG : " + API_TAG + ":: Error : " + error.getLocalizedMessage());
                 if (showProgressBar)
@@ -219,7 +219,7 @@ public abstract class BaseViewModel extends AndroidViewModel {
 
                     getErrorRelay().accept(context.getString(R.string.please_try_again));
                 } else {
-                    getErrorRelay().accept(AppUtils.isEmpty(error.getLocalizedMessage()) ? Constant.ERR_SOMETHING_WRONG : error.getLocalizedMessage());
+                    getErrorRelay().accept(AppUtils.isEmpty(error.getLocalizedMessage()) ? Constants.ERR_SOMETHING_WRONG : error.getLocalizedMessage());
                 }
             }
         } catch (NullPointerException e) {

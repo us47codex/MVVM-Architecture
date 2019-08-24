@@ -4,11 +4,10 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import com.us47codex.mvvmarch.BuildConfig;
-import com.us47codex.mvvmarch.MyApplication;
-import com.us47codex.mvvmarch.MyPreferenceManager;
-import com.us47codex.mvvmarch.constant.Config;
-import com.us47codex.mvvmarch.constant.Constant;
-import com.us47codex.mvvmarch.constant.Endpoint;
+import com.us47codex.mvvmarch.SunTecApplication;
+import com.us47codex.mvvmarch.SunTecPreferenceManager;
+import com.us47codex.mvvmarch.constant.Constants;
+import com.us47codex.mvvmarch.constant.EndPoints;
 import com.us47codex.mvvmarch.helper.AppLog;
 import com.us47codex.mvvmarch.helper.ErrorMessageHandlerModel;
 import com.us47codex.mvvmarch.helper.PublishSubjectEvent;
@@ -38,7 +37,7 @@ public class RestApiClient {
 
         if (retrofit == null) {
             retrofit = new Retrofit.Builder()
-                    .baseUrl(Endpoint.BASE_URL)
+                    .baseUrl(EndPoints.BASE_URL)
                     .client(getHeader())
                     .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                     .addConverterFactory(GsonConverterFactory.create(gson))
@@ -54,15 +53,15 @@ public class RestApiClient {
             interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
             return new OkHttpClient.Builder()
                     .addInterceptor(interceptor)
-                    .readTimeout(Config.API_CALL_TIMEOUT, TimeUnit.SECONDS)
-                    .writeTimeout(Config.API_CALL_TIMEOUT, TimeUnit.SECONDS)
-                    .connectTimeout(Config.API_CALL_TIMEOUT, TimeUnit.SECONDS)
+                    .readTimeout(Constants.API_CALL_TIMEOUT, TimeUnit.SECONDS)
+                    .writeTimeout(Constants.API_CALL_TIMEOUT, TimeUnit.SECONDS)
+                    .connectTimeout(Constants.API_CALL_TIMEOUT, TimeUnit.SECONDS)
                     .addInterceptor(chain -> {
                         Request request = chain.request();
                         Response response = chain.proceed(request);
 
                         AppLog.error(TAG, String.valueOf(response.code()));
-                        if (response.code() == Constant.UNAUTHORIZED) {
+                        if (response.code() == Constants.UNAUTHORIZED) {
 
                             Gson gson = new Gson();
                             ErrorMessageHandlerModel message = null;
@@ -87,7 +86,7 @@ public class RestApiClient {
                                 Request request;
                                 Request original = chain.request();
                                 Request.Builder requestBuilder = original.newBuilder()
-                                        .addHeader("Authorization", "Bearer "+ MyApplication.getInstance().getPrefrenceManager().getStringValue(MyPreferenceManager.AUTHENTICATION_TOKEN, ""));
+                                        .addHeader("Authorization", "Bearer " + SunTecApplication.getInstance().getPreferenceManager().getStringValue(SunTecPreferenceManager.AUTHENTICATION_TOKEN, ""));
                                 request = requestBuilder.build();
                                 return chain.proceed(request);
                             })
@@ -102,7 +101,7 @@ public class RestApiClient {
                         Response response = chain.proceed(request);
 
                         AppLog.error(TAG, String.valueOf(response.code()));
-                        if (response.code() == Constant.UNAUTHORIZED) {
+                        if (response.code() == Constants.UNAUTHORIZED) {
 
                             Gson gson = new Gson();
                             ErrorMessageHandlerModel message = null;
@@ -127,7 +126,7 @@ public class RestApiClient {
                                 Request request;
                                 Request original = chain.request();
                                 Request.Builder requestBuilder = original.newBuilder()
-                                        .addHeader("Authorization", "Bearer "+MyApplication.getInstance().getPrefrenceManager().getStringValue(MyPreferenceManager.AUTHENTICATION_TOKEN, ""));
+                                        .addHeader("Authorization", "Bearer " + SunTecApplication.getInstance().getPreferenceManager().getStringValue(SunTecPreferenceManager.AUTHENTICATION_TOKEN, ""));
                                 request = requestBuilder.build();
                                 return chain.proceed(request);
                             })
