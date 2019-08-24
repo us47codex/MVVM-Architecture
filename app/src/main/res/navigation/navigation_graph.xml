@@ -9,5 +9,14 @@
         android:id="@+id/splashScreen"
         android:name="com.us47codex.mvvmarch.SplashScreen.SplashScreen"
         android:label="SplashScreen"
-        tools:layout="@layout/splash_screen_fragment"/>
+        tools:layout="@layout/splash_screen_fragment">
+        <action
+            android:id="@+id/toLoginFragment"
+            app:destination="@id/loginFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.us47codex.mvvmarch.login.loginFragment"
+        android:label="login_fragment"
+        tools:layout="@layout/login_fragment" />
 </navigation>
