@@ -5,11 +5,12 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 /**
- * Created by Upendra Shah on 11 July, 2019 for
- * Project : AavGo-Guest-Android
- * Company : Astics Techlabs Pvt. Ltd
- * Email : upendra.shah@asticsinc.com
+ * Created by Upendra Shah on 24 August, 2019 for
+ * Project : MVVM-Architecture
+ * Company : US47Codex
+ * Email : us47codex@gmail.com
  **/
+
 @Entity(tableName = "tbl_user")
 public class User {
 

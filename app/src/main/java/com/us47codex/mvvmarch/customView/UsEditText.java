@@ -14,7 +14,7 @@ import androidx.appcompat.widget.AppCompatEditText;
 import com.us47codex.mvvmarch.R;
 
 /**
- * Created by Upen on 24 August, 2019 for
+ * Created by Upendra Shah on 24 August, 2019 for
  * Project : MVVM-Architecture
  * Company : US47Codex
  * Email : us47codex@gmail.com
