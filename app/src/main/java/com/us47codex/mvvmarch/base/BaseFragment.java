@@ -11,6 +11,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavOptions;
+import androidx.navigation.Navigation;
 
 import io.reactivex.disposables.CompositeDisposable;
 
@@ -69,6 +71,15 @@ public abstract class BaseFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
     }
 
+    protected void jumpToDestinationFragment(int parentId, int destinationId, View view, Bundle bundle, boolean inclusive) {
+        try {
+            Navigation.findNavController(view).navigate(destinationId, bundle,
+                    new NavOptions.Builder()
+                            .setPopUpTo(parentId, inclusive).build());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
     @Override
     public void onDetach() {
         super.onDetach();
