@@ -7,9 +7,9 @@
 
     <fragment
         android:id="@+id/splashScreen"
-        android:name="com.us47codex.mvvmarch.splashScreen.SplashScreenFragment"
+        android:name="com.us47codex.mvvmarch.splash.SplashFragment"
         android:label="SplashScreen"
-        tools:layout="@layout/fragment_splash_screen">
+        tools:layout="@layout/fragment_splash">
         <action
             android:id="@+id/toLoginFragment"
             app:destination="@id/loginFragment" />
