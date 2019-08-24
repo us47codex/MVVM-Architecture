@@ -16,7 +16,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
  * Email : us47codex@gmail.com
  **/
 
-@Database(entities = {User.class}, version = 2)
+@Database(entities = {User.class}, version = 2, exportSchema = false)
 @TypeConverters(Converter.class)
 public abstract class SunTecDatabase extends RoomDatabase {
 
