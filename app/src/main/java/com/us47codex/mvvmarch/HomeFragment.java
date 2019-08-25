@@ -120,7 +120,6 @@ public class HomeFragment extends BaseFragment {
 
     private void initView(View view) {
 
-
     }
 
     @Override
@@ -131,5 +130,4 @@ public class HomeFragment extends BaseFragment {
     private void subscribeApiCallStatusObservable() {
 
     }
-
 }
