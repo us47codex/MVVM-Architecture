@@ -1,6 +1,7 @@
 package com.us47codex.mvvmarch.login;
 
 import android.app.Application;
+import android.content.Context;
 
 import androidx.annotation.NonNull;
 
@@ -26,8 +27,8 @@ public class LoginViewModel extends BaseViewModel {
 
     public static final String USER_LOGIN = "user_login";
 
-    protected LoginViewModel(@NonNull Application application) {
-        super(application);
+    public LoginViewModel(Context context) {
+        super(context);
     }
 
     public void callToApi(Object params, String apiTag, boolean shouldShowLoader) {

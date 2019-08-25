@@ -3,9 +3,9 @@ package com.us47codex.mvvmarch.base;
 import android.app.Application;
 import android.content.Context;
 
-import androidx.annotation.NonNull;
 import androidx.core.util.Pair;
 import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.ViewModel;
 
 import com.google.gson.Gson;
 import com.jakewharton.rxrelay2.PublishRelay;
@@ -20,6 +20,7 @@ import org.json.JSONObject;
 
 import java.util.Objects;
 
+import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.ResponseBody;
@@ -36,6 +37,8 @@ public abstract class BaseViewModel extends AndroidViewModel {
     /* private final PublishRelay<String> errorCodeRelay = PublishRelay.create();*/
     private final PublishRelay<Pair<String, Object>> responseRelay = PublishRelay.create();
 
+
+
     protected BaseViewModel(@NonNull Application application) {
         super(application);
         this.mCompositeDisposable = new CompositeDisposable();
@@ -46,7 +49,7 @@ public abstract class BaseViewModel extends AndroidViewModel {
         return mCompositeDisposable;
     }
 
-    protected Context getContextBaseViewModel() {
+    private Context getContextBaseViewModel() {
         return context;
     }
 
@@ -170,8 +173,9 @@ public abstract class BaseViewModel extends AndroidViewModel {
                                     .subscribeOn(Schedulers.io())
                                     .onErrorReturn(Throwable::getLocalizedMessage)
                                     .doOnSuccess(message1 -> {
-                                        if (showProgressBar)
+                                        if (showProgressBar) {
                                             getStatusBehaviorRelay().accept(ApiCallStatus.ERROR);
+                                        }
                                         getErrorRelay().accept(message1);
                                     })
                                     .subscribe()
