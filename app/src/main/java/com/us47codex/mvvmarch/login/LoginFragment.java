@@ -7,25 +7,38 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatButton;
+import androidx.core.util.Pair;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.gson.Gson;
 import com.us47codex.mvvmarch.R;
 import com.us47codex.mvvmarch.base.BaseFragment;
+import com.us47codex.mvvmarch.constant.Constants;
+import com.us47codex.mvvmarch.enums.ApiCallStatus;
+import com.us47codex.mvvmarch.helper.AppLog;
 import com.us47codex.mvvmarch.helper.AppUtils;
 
+import org.json.JSONObject;
+
+import java.util.List;
 import java.util.Objects;
 
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.schedulers.Schedulers;
 
 public class LoginFragment extends BaseFragment {
 
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
+    private FrameLayout frameMain;
     private TextInputLayout inputEmailLayout, inputPasswordLayout;
     private TextInputEditText edtEmail, edtPassword;
     private AppCompatButton btnLogin;
@@ -102,9 +115,11 @@ public class LoginFragment extends BaseFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initView(view);
+        subscribeApiCallStatusObservable();
     }
 
     private void initView(View view) {
+        frameMain = view.findViewById(R.id.frameMain);
         inputEmailLayout = view.findViewById(R.id.inputEmailLayout);
         inputPasswordLayout = view.findViewById(R.id.inputPasswordLayout);
 
@@ -171,6 +186,49 @@ public class LoginFragment extends BaseFragment {
             return false;
         }
         return true;
+    }
+
+    private void subscribeApiCallStatusObservable() {
+        getCompositeDisposable().add(Observable.merge(loginViewModel.getStatusBehaviorRelay(),
+                loginViewModel.getErrorRelay(),
+                loginViewModel.getResponseRelay())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .onErrorReturn(throwable -> {
+                    throwable.printStackTrace();
+                    return new Object();
+                })
+                .filter(object -> !(null == object))
+                .doOnNext(object -> {
+                    try {
+                        if (object instanceof ApiCallStatus) {
+                            ApiCallStatus apiCallStatus = (ApiCallStatus) object;
+                            if (apiCallStatus == ApiCallStatus.LOADING) {
+
+                            } else {
+
+                            }
+                        } else if (object instanceof String) {
+                            String errorCode = (String) object;
+
+                        } else if (object instanceof Pair) {
+                            Pair pair = (Pair) object;
+                            if (pair.first != null) {
+                                if (pair.first.equals(LoginViewModel.USER_LOGIN)) {
+                                    JSONObject jsonObject = (JSONObject) pair.second;
+                                    if (jsonObject != null) {
+                                        jumpToDestinationFragment(getCurrentFragmentId(), R.id.toHomeFragment, frameMain, null, true);
+                                    }
+                                }
+                            }
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                })
+                .doOnError(Throwable::printStackTrace)
+                .subscribe()
+        );
     }
 
 }

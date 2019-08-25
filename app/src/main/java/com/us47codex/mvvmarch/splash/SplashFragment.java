@@ -11,7 +11,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.us47codex.mvvmarch.R;
+import com.us47codex.mvvmarch.SunTecPreferenceManager;
 import com.us47codex.mvvmarch.base.BaseFragment;
+import com.us47codex.mvvmarch.helper.AppUtils;
 
 import java.util.concurrent.TimeUnit;
 
@@ -19,6 +21,8 @@ import io.reactivex.Completable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
+
+import static com.us47codex.mvvmarch.SunTecPreferenceManager.PREF_USER_ID;
 
 public class SplashFragment extends BaseFragment {
     private static final String TAG = SplashFragment.class.getSimpleName();
@@ -35,6 +39,7 @@ public class SplashFragment extends BaseFragment {
     protected CompositeDisposable getCompositeDisposable() {
         return compositeDisposable;
     }
+
     @Override
     protected String getToolbarTitle() {
         return null;
@@ -95,7 +100,7 @@ public class SplashFragment extends BaseFragment {
         jumpToLoginOrHomeScreen();
     }
 
-    private void jumpToLoginOrHomeScreen(){
+    private void jumpToLoginOrHomeScreen() {
         initSplashTimer();
     }
 
@@ -109,7 +114,10 @@ public class SplashFragment extends BaseFragment {
                         .observeOn(AndroidSchedulers.mainThread())
                         .doOnComplete(() -> {
                             horizontalProgress.setVisibility(View.INVISIBLE);
-                            jumpToDestinationFragment(SplashFragment.this.getCurrentFragmentId(), R.id.toLoginFragment, frameMain, null, true);
+                            if (AppUtils.isEmpty(getPreference().getStringValue(PREF_USER_ID, "")))
+                                jumpToDestinationFragment(getCurrentFragmentId(), R.id.toLoginFragment, frameMain, null, true);
+                            else
+                                jumpToDestinationFragment(getCurrentFragmentId(), R.id.toHomeFragment, frameMain, null, true);
                         })
                         .subscribe()
         );

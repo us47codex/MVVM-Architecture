@@ -35,4 +35,7 @@
     <string name="password_length_must_be_four">Password must be 4–16 characters with at least.</string>
     <string name="new_password_reg">Password must have upper and lowercase letters at least 1 number.</string>
 
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 </resources>

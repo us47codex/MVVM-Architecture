@@ -3,6 +3,7 @@ package com.us47codex.mvvmarch.login;
 import android.app.Application;
 
 import androidx.annotation.NonNull;
+import androidx.core.util.Pair;
 
 import com.github.pwittchen.reactivenetwork.library.rx2.internet.observing.InternetObservingSettings;
 import com.github.pwittchen.reactivenetwork.library.rx2.internet.observing.strategy.SocketInternetObservingStrategy;
@@ -101,7 +102,7 @@ public class LoginViewModel extends BaseViewModel {
 //                                {"success":1,"data":{"token":"lZRilPvbZC6h6qowPZS4cCF9qTxx353zYmccVSIUFfE1wya9ylma4HmQuXwv"},"api_tag":"user_login"}
                                         //processIntoData(jsonObject, apiTag, shouldShowLoader);
                                         JSONObject data = jsonObject.getJSONObject("data");
-                                        SunTecApplication.getInstance().getPreferenceManager().putStringValue(PREF_AUTHENTICATION_TOKEN, data.getString("token"));
+                                        getPreference().putStringValue(PREF_AUTHENTICATION_TOKEN, data.getString("token"));
                                         callToUserProfile(new HashMap<>(), apiTag, shouldShowLoader);
                                     }
                                 } catch (Exception e) {
@@ -132,6 +133,9 @@ public class LoginViewModel extends BaseViewModel {
 //                                        {"success":1,"data":{"id":40,"first_name":"developer","middle_name":"m","last_name":"developer","username":"developer","mno":"9624610263","email":"ashokchavda193@gmail.com","profile":"http:\/\/sunteccustomercare.in\/public\/upload\/profile\/","department":"Burner"},"api_tag":"user_login"}
                                         JSONObject data = jsonObject.getJSONObject("data");
                                         processUserData(data);
+                                        if (shouldShowLoader)
+                                            getStatusBehaviorRelay().accept(ApiCallStatus.SUCCESS);
+                                        getResponseRelay().accept(new Pair<>(apiTag, jsonObject));
                                     }
                                 } catch (Exception e) {
                                     e.printStackTrace();
@@ -198,7 +202,7 @@ public class LoginViewModel extends BaseViewModel {
                     user.setProfile(jsonObject.getString("profile"));
                     user.setDepartment(jsonObject.getString("department"));
 
-                    getPreference().putIntValue(PREF_USER_ID, user.getId());
+                    getPreference().putStringValue(PREF_USER_ID, String.valueOf(user.getId()));
                     getPreference().putStringValue(PREF_USER_FIRST_NAME, user.getFirst_name());
                     getPreference().putStringValue(PREF_USER_MIDDLE_NAME, user.getMiddle_name());
                     getPreference().putStringValue(PREF_USER_LAST_NAME, user.getLast_name());

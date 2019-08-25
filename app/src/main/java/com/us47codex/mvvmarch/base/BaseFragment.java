@@ -14,6 +14,11 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
 
+import com.us47codex.mvvmarch.R;
+import com.us47codex.mvvmarch.SunTecApplication;
+import com.us47codex.mvvmarch.SunTecPreferenceManager;
+import com.us47codex.mvvmarch.roomDatabase.SunTecDatabase;
+
 import io.reactivex.disposables.CompositeDisposable;
 
 public abstract class BaseFragment extends Fragment implements View.OnClickListener {
@@ -93,5 +98,13 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
     @Override
     public void onClick(View view) {
 
+    }
+
+    public SunTecDatabase getDatabase() {
+        return SunTecApplication.getInstance().getDatabase();
+    }
+
+    public SunTecPreferenceManager getPreference() {
+        return SunTecApplication.getInstance().getPreferenceManager();
     }
 }
