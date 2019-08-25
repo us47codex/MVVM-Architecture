@@ -28,11 +28,8 @@ import retrofit2.Response;
 public abstract class BaseViewModel extends AndroidViewModel {
 
     private static final String TAG = BaseViewModel.class.getSimpleName();
-
     private final CompositeDisposable mCompositeDisposable;
-
     private final Context context;
-    private boolean isMyRoleHigher;
 
     private final PublishRelay<ApiCallStatus> statusBehaviorRelay = PublishRelay.create();
     private final PublishRelay<String> errorRelay = PublishRelay.create();
@@ -56,10 +53,6 @@ public abstract class BaseViewModel extends AndroidViewModel {
     /*public AppDatabase getDatabase(){
         return CustomerApplication.getInstance().getDatabase();
     }*/
-
-    protected Boolean getMyRoleIsHigher() {
-        return isMyRoleHigher;
-    }
 
     @Override
     protected void onCleared() {

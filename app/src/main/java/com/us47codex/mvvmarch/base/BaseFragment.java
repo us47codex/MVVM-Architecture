@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
@@ -14,11 +15,15 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
 
+import com.afollestad.materialdialogs.MaterialDialog;
+import com.us47codex.mvvmarch.R;
+
 import io.reactivex.disposables.CompositeDisposable;
 
 public abstract class BaseFragment extends Fragment {
     private static final String TAG = BaseFragment.class.getSimpleName();
     private Toolbar toolbar;
+    private ProgressBar loadingSpinner;
 
 
     protected abstract
@@ -69,6 +74,42 @@ public abstract class BaseFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        if (getLayoutId() != 0) {
+            initView(view);
+        }
+    }
+
+    private void initView(View view){
+        if (shouldLoaderImplement()) {
+            loadingSpinner = view.findViewById(R.id.loadingSpinner);
+        }
+    }
+
+    protected void showDialogWithSingleButtons(Context context, String title, String msg, String positiveButtonName,
+                                               MaterialDialog.SingleButtonCallback positiveButtonCallback, boolean cancelable) {
+        try {
+            new MaterialDialog.Builder(context)
+                    .title(title)
+                    .content(msg)
+                    .positiveText(positiveButtonName)
+                    .onPositive(positiveButtonCallback)
+                    .cancelable(cancelable)
+                    .show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    protected void enableDisableView(View view, boolean enabled) {
+        if (view != null) {
+            view.setEnabled(enabled);
+            if (view instanceof ViewGroup) {
+                ViewGroup group = (ViewGroup) view;
+                for (int idx = 0; idx < group.getChildCount(); idx++) {
+                    enableDisableView(group.getChildAt(idx), enabled);
+                }
+            }
+        }
     }
 
     protected void jumpToDestinationFragment(int parentId, int destinationId, View view, Bundle bundle, boolean inclusive) {
@@ -88,5 +129,17 @@ public abstract class BaseFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
+    }
+
+    protected void showProgressLoader() {
+        if (shouldLoaderImplement()) {
+            loadingSpinner.setVisibility(View.VISIBLE);
+        }
+    }
+
+    protected void hideProgressLoader() {
+        if (shouldLoaderImplement()) {
+            loadingSpinner.setVisibility(View.GONE);
+        }
     }
 }

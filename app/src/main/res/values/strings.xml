@@ -9,6 +9,13 @@
     <string name="typeface_open_sans_regular" translatable="false"> OpenSans-Regular.ttf</string>
     <string name="typeface_open_sans_semi_bold" translatable="false"> OpenSans-Semibold.ttf</string>
 
+    <string name="war_enter_email">Please enter email / username / mobile number.</string>
+    <string name="war_enter_user_name">Please enter valid username.</string>
+    <string name="war_enter_your_email">Please enter email.</string>
+    <string name="war_enter_valid_email">Please enter valid email.</string>
+    <string name="war_password_empty">Password should not be empty.</string>
+    <string name="password_length_must_be_four">Password must be 4–16 characters with at least.</string>
+
     <string name="hint_edit_email">Email Id</string>
     <string name="hint_enter_password">Password</string>
     <string name="err_unknown">Please try again</string>
@@ -16,4 +23,6 @@
     <string name="submit">Submit</string>
     <string name="something_went_wrong">Something went wrong please try again.</string>
     <string name="please_try_again">Please try again.</string>
+    <string name="ok">Ok</string>
+    <string name="cancel">Cancel</string>
 </resources>
