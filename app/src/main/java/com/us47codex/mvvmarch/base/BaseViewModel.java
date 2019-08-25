@@ -10,11 +10,14 @@ import androidx.lifecycle.AndroidViewModel;
 import com.google.gson.Gson;
 import com.jakewharton.rxrelay2.PublishRelay;
 import com.us47codex.mvvmarch.R;
+import com.us47codex.mvvmarch.SunTecApplication;
+import com.us47codex.mvvmarch.SunTecPreferenceManager;
 import com.us47codex.mvvmarch.constant.Constants;
 import com.us47codex.mvvmarch.enums.ApiCallStatus;
 import com.us47codex.mvvmarch.helper.AppLog;
 import com.us47codex.mvvmarch.helper.AppUtils;
 import com.us47codex.mvvmarch.helper.ErrorMessageHandlerModel;
+import com.us47codex.mvvmarch.roomDatabase.SunTecDatabase;
 
 import org.json.JSONObject;
 
@@ -53,9 +56,13 @@ public abstract class BaseViewModel extends AndroidViewModel {
         return context;
     }
 
-    /*public AppDatabase getDatabase(){
-        return CustomerApplication.getInstance().getDatabase();
-    }*/
+    public SunTecDatabase getDatabase() {
+        return SunTecApplication.getInstance().getDatabase();
+    }
+
+    public SunTecPreferenceManager getPreference() {
+        return SunTecApplication.getInstance().getPreferenceManager();
+    }
 
     protected Boolean getMyRoleIsHigher() {
         return isMyRoleHigher;

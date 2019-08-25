@@ -21,6 +21,8 @@ import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+import static com.us47codex.mvvmarch.constant.Constants.API_CALL_TIMEOUT;
+
 public class RestApiClient {
     private static Retrofit retrofit = null;
 
@@ -53,29 +55,17 @@ public class RestApiClient {
             interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
             return new OkHttpClient.Builder()
                     .addInterceptor(interceptor)
-                    .readTimeout(Constants.API_CALL_TIMEOUT, TimeUnit.SECONDS)
-                    .writeTimeout(Constants.API_CALL_TIMEOUT, TimeUnit.SECONDS)
-                    .connectTimeout(Constants.API_CALL_TIMEOUT, TimeUnit.SECONDS)
+                    .readTimeout(API_CALL_TIMEOUT, TimeUnit.SECONDS)
+                    .writeTimeout(API_CALL_TIMEOUT, TimeUnit.SECONDS)
+                    .connectTimeout(API_CALL_TIMEOUT, TimeUnit.SECONDS)
                     .addInterceptor(chain -> {
                         Request request = chain.request();
                         Response response = chain.proceed(request);
 
                         AppLog.error(TAG, String.valueOf(response.code()));
                         if (response.code() == Constants.UNAUTHORIZED) {
-
-                            Gson gson = new Gson();
-                            ErrorMessageHandlerModel message = null;
-
-                            if (response.body() != null) {
-                                message = gson.fromJson(response.body().charStream(), ErrorMessageHandlerModel.class);
-                                message.code = response.code();
-                            }
-
-                            if (message == null) {
-                                message = new ErrorMessageHandlerModel();
-                                message.code = response.code();
-                            }
-
+                            ErrorMessageHandlerModel message = response.body() != null ? new Gson().fromJson(response.body().charStream(), ErrorMessageHandlerModel.class) : new ErrorMessageHandlerModel();
+                            message.code = response.code();
                             PublishSubjectEvent.getInstance().authErrorCodeRelay.accept(message);
                         }
 
@@ -86,7 +76,7 @@ public class RestApiClient {
                                 Request request;
                                 Request original = chain.request();
                                 Request.Builder requestBuilder = original.newBuilder()
-                                        .addHeader("Authorization", "Bearer " + SunTecApplication.getInstance().getPreferenceManager().getStringValue(SunTecPreferenceManager.AUTHENTICATION_TOKEN, ""));
+                                        .addHeader("Authorization", "Bearer " + SunTecApplication.getInstance().getPreferenceManager().getStringValue(SunTecPreferenceManager.PREF_AUTHENTICATION_TOKEN, ""));
                                 request = requestBuilder.build();
                                 return chain.proceed(request);
                             })
@@ -102,23 +92,10 @@ public class RestApiClient {
 
                         AppLog.error(TAG, String.valueOf(response.code()));
                         if (response.code() == Constants.UNAUTHORIZED) {
-
-                            Gson gson = new Gson();
-                            ErrorMessageHandlerModel message = null;
-
-                            if (response.body() != null) {
-                                message = gson.fromJson(response.body().charStream(), ErrorMessageHandlerModel.class);
-                                message.code = response.code();
-                            }
-
-                            if (message == null) {
-                                message = new ErrorMessageHandlerModel();
-                                message.code = response.code();
-                            }
-
+                            ErrorMessageHandlerModel message = response.body() != null ? new Gson().fromJson(response.body().charStream(), ErrorMessageHandlerModel.class) : new ErrorMessageHandlerModel();
+                            message.code = response.code();
                             PublishSubjectEvent.getInstance().authErrorCodeRelay.accept(message);
                         }
-
                         return response;
                     })
                     .addNetworkInterceptor(
@@ -126,7 +103,7 @@ public class RestApiClient {
                                 Request request;
                                 Request original = chain.request();
                                 Request.Builder requestBuilder = original.newBuilder()
-                                        .addHeader("Authorization", "Bearer " + SunTecApplication.getInstance().getPreferenceManager().getStringValue(SunTecPreferenceManager.AUTHENTICATION_TOKEN, ""));
+                                        .addHeader("Authorization", "Bearer " + SunTecApplication.getInstance().getPreferenceManager().getStringValue(SunTecPreferenceManager.PREF_AUTHENTICATION_TOKEN, ""));
                                 request = requestBuilder.build();
                                 return chain.proceed(request);
                             })

@@ -13,13 +13,21 @@ import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.WindowManager;
 
+import com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork;
+import com.github.pwittchen.reactivenetwork.library.rx2.internet.observing.InternetObservingSettings;
+import com.github.pwittchen.reactivenetwork.library.rx2.internet.observing.InternetObservingStrategy;
+import com.github.pwittchen.reactivenetwork.library.rx2.internet.observing.error.DefaultErrorHandler;
+import com.github.pwittchen.reactivenetwork.library.rx2.internet.observing.error.ErrorHandler;
+import com.github.pwittchen.reactivenetwork.library.rx2.internet.observing.strategy.WalledGardenInternetObservingStrategy;
 import com.us47codex.mvvmarch.BuildConfig;
 import com.us47codex.mvvmarch.R;
 import com.us47codex.mvvmarch.constant.Constants;
+import com.us47codex.mvvmarch.constant.EndPoints;
 
 import org.json.JSONObject;
 
 import java.io.File;
+import java.net.HttpURLConnection;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -61,6 +69,10 @@ public class AppUtils {
         return !check;
     }
 
+    public static boolean isValidUserName(String username) {
+        String userNameValid = "^[a-zA-Z]{3}[0-9]{4}$";
+        return Pattern.compile(userNameValid).matcher(username).matches();
+    }
 
     public static int getWidth(Activity activity) {
         try {
@@ -229,5 +241,27 @@ public class AppUtils {
         return code == 201 || code == 200;
     }
 
+    public static Single<Boolean> checkHardInternetConnection() {
+        int initialInterval = 0;
+        int interval = 2000;
+        String host = EndPoints.NETWORK_PING_URL;
+        int port = 80;
+        int timeout = 5000;
+        int httpResponse = HttpURLConnection.HTTP_NO_CONTENT;
+        ErrorHandler errorHandler = new DefaultErrorHandler();
+        InternetObservingStrategy strategy = new WalledGardenInternetObservingStrategy();
 
+        InternetObservingSettings settings = InternetObservingSettings.builder()
+                .initialInterval(initialInterval)
+                .interval(interval)
+                .host(host)
+                .port(port)
+                .timeout(timeout)
+                .httpResponse(httpResponse)
+                .errorHandler(errorHandler)
+                .strategy(strategy)
+                .build();
+
+        return ReactiveNetwork.checkInternetConnectivity(settings);
+    }
 }

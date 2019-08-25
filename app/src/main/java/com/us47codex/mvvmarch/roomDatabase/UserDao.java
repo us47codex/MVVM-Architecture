@@ -8,6 +8,7 @@ import androidx.room.Update;
 
 import java.util.List;
 
+import io.reactivex.Completable;
 import io.reactivex.Single;
 
 /**
@@ -21,7 +22,7 @@ import io.reactivex.Single;
 public interface UserDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    long insertUser(User user);
+    Completable insertUser(User user);
 
     @Update
     int updateUser(User user);

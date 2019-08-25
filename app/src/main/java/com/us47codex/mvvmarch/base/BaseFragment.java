@@ -16,7 +16,7 @@ import androidx.navigation.Navigation;
 
 import io.reactivex.disposables.CompositeDisposable;
 
-public abstract class BaseFragment extends Fragment {
+public abstract class BaseFragment extends Fragment implements View.OnClickListener {
     private static final String TAG = BaseFragment.class.getSimpleName();
     private Toolbar toolbar;
 
@@ -88,5 +88,10 @@ public abstract class BaseFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
+    }
+
+    @Override
+    public void onClick(View view) {
+
     }
 }

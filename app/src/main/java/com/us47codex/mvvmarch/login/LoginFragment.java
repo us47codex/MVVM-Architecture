@@ -11,11 +11,13 @@ import android.view.WindowManager;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatButton;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.us47codex.mvvmarch.R;
 import com.us47codex.mvvmarch.base.BaseFragment;
+import com.us47codex.mvvmarch.helper.AppUtils;
 
 import java.util.Objects;
 
@@ -87,7 +89,7 @@ public class LoginFragment extends BaseFragment {
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             window.setStatusBarColor(getResources().getColor(R.color.white));
         }
-        //loginViewModel = ViewModelProviders.of(this).get(LoginViewModel.class);
+        loginViewModel = ViewModelProviders.of(this).get(LoginViewModel.class);
     }
 
     @Nullable
@@ -111,7 +113,64 @@ public class LoginFragment extends BaseFragment {
 
         btnLogin = view.findViewById(R.id.btnLogin);
 
+        btnLogin.setOnClickListener(this);
 
+    }
+
+    @Override
+    public void onClick(View view) {
+        if (view.getId() == R.id.btnLogin) {
+            if (checkValidations()) {
+                String loginId = Objects.requireNonNull(edtEmail.getText()).toString().trim();
+                LoginParamModel loginParamModel = new LoginParamModel();
+//                if (AppUtils.isValidUserName(loginId))
+//                    loginParamModel.username = Objects.requireNonNull(edtEmail.getText()).toString().trim().toLowerCase();
+//                else
+                loginParamModel.username = Objects.requireNonNull(edtEmail.getText()).toString().trim().toLowerCase();
+                loginParamModel.password = Objects.requireNonNull(edtPassword.getText()).toString().trim();
+                loginViewModel.callToApi(loginParamModel, LoginViewModel.USER_LOGIN, true);
+            }
+        }
+    }
+
+    private boolean checkValidations() {
+        String loginId = Objects.requireNonNull(edtEmail.getText()).toString().trim();
+        String loginPassword = Objects.requireNonNull(edtPassword.getText()).toString().trim();
+        if (AppUtils.isEmpty(loginId)) {
+            inputEmailLayout.setError(getString(R.string.war_enter_email));
+            return false;
+//        } else if (loginId.length() == 7 && !loginId.contains(".")) {
+//            if (!AppUtils.isValidUserName(loginId)) {
+//                inputEmailLayout.setError(getString(R.string.war_enter_user_name));
+//                return false;
+//            }
+//        } else {
+//            boolean isNumber;
+//            try {
+//                Long.parseLong(loginId);
+//                isNumber = true;
+//            } catch (NumberFormatException e) {
+//                isNumber = false;
+//            }
+//            if (isNumber) {
+//                if (AppUtils.isValidMobile(loginId)) {
+//                    inputEmailLayout.setError(getString(R.string.war_enter_valid_mobile));
+//                    return false;
+//                }
+//            } else if (AppUtils.isValidEmailId(loginId)) {
+//                inputEmailLayout.setError(getString(R.string.war_enter_valid_email));
+//                return false;
+//            }
+        }
+
+        if (AppUtils.isEmpty(loginPassword)) {
+            inputPasswordLayout.setError(getString(R.string.war_password_empty));
+            return false;
+        } else if (!(edtPassword.length() >= 4 && edtPassword.length() <= 16)) {
+            inputPasswordLayout.setError(getString(R.string.password_length_must_be_four));
+            return false;
+        }
+        return true;
     }
 
 }
