@@ -32,11 +32,10 @@ import io.reactivex.schedulers.Schedulers;
 public class LoginFragment extends BaseFragment {
 
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
+    private FrameLayout frameMain;
     private TextInputLayout inputEmailLayout, inputPasswordLayout;
     private TextInputEditText edtEmail, edtPassword;
-    private AppCompatButton btnLogin;
     private LoginViewModel loginViewModel;
-    private FrameLayout frameMain;
 
     @Override
     protected int getLayoutId() {
@@ -138,7 +137,9 @@ public class LoginFragment extends BaseFragment {
                             if (pair.first != null) {
                                 if (pair.first.equals(LoginViewModel.USER_LOGIN)) {
                                     enableDisableView(frameMain, true);
-                                    Toast.makeText(getContext(),"login success",Toast.LENGTH_LONG).show();
+                                    hideProgressLoader();
+                                    Toast.makeText(getContext(), "login success", Toast.LENGTH_LONG).show();
+                                    jumpToDestinationFragment(getCurrentFragmentId(),R.id.toHomeFragment,frameMain,null,false);
                                 }
                             }
                         }
@@ -152,6 +153,7 @@ public class LoginFragment extends BaseFragment {
     }
 
     private void initView(View view) {
+        frameMain = view.findViewById(R.id.frameMain);
         inputEmailLayout = view.findViewById(R.id.inputEmailLayout);
         inputPasswordLayout = view.findViewById(R.id.inputPasswordLayout);
         frameMain = view.findViewById(R.id.frameMain);
@@ -159,7 +161,7 @@ public class LoginFragment extends BaseFragment {
         edtEmail = view.findViewById(R.id.edtEmail);
         edtPassword = view.findViewById(R.id.edtPassword);
 
-        btnLogin = view.findViewById(R.id.btnLogin);
+        AppCompatButton btnLogin = view.findViewById(R.id.btnLogin);
 
         getCompositeDisposable().add(
                 RxView.clicks(btnLogin).throttleFirst(500, TimeUnit.MILLISECONDS).subscribe(o -> {
@@ -175,16 +177,38 @@ public class LoginFragment extends BaseFragment {
         );
     }
 
+
     private boolean checkValidations() {
         String loginId = Objects.requireNonNull(edtEmail.getText()).toString().trim();
         String loginPassword = Objects.requireNonNull(edtPassword.getText()).toString().trim();
         if (AppUtils.isEmpty(loginId)) {
             inputEmailLayout.setError(getString(R.string.war_enter_email));
             return false;
-        } else if (AppUtils.isValidEmailId(loginId)) {
-            inputEmailLayout.setError(getString(R.string.war_enter_valid_email));
-            return false;
-        } else if (AppUtils.isEmpty(loginPassword)) {
+//        } else if (loginId.length() == 7 && !loginId.contains(".")) {
+//            if (!AppUtils.isValidUserName(loginId)) {
+//                inputEmailLayout.setError(getString(R.string.war_enter_user_name));
+//                return false;
+//            }
+//        } else {
+//            boolean isNumber;
+//            try {
+//                Long.parseLong(loginId);
+//                isNumber = true;
+//            } catch (NumberFormatException e) {
+//                isNumber = false;
+//            }
+//            if (isNumber) {
+//                if (AppUtils.isValidMobile(loginId)) {
+//                    inputEmailLayout.setError(getString(R.string.war_enter_valid_mobile));
+//                    return false;
+//                }
+//            } else if (AppUtils.isValidEmailId(loginId)) {
+//                inputEmailLayout.setError(getString(R.string.war_enter_valid_email));
+//                return false;
+//            }
+        }
+
+        if (AppUtils.isEmpty(loginPassword)) {
             inputPasswordLayout.setError(getString(R.string.war_password_empty));
             return false;
         } else if (!(edtPassword.length() >= 4 && edtPassword.length() <= 16)) {
@@ -193,5 +217,4 @@ public class LoginFragment extends BaseFragment {
         }
         return true;
     }
-
 }

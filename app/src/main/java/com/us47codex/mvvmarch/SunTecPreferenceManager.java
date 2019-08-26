@@ -15,7 +15,16 @@ public class SunTecPreferenceManager {
     // SharedPref file name
     private static final String PREF_NAME = "Sun_Tec_Pref";
 
-    public static final String AUTHENTICATION_TOKEN = "authentication_token";
+    public static final String PREF_AUTHENTICATION_TOKEN = "authentication_token";
+    public static final String PREF_USER_ID = "user_id";
+    public static final String PREF_USER_FIRST_NAME = "user_first_name";
+    public static final String PREF_USER_MIDDLE_NAME = "user_middle_name";
+    public static final String PREF_USER_LAST_NAME = "user_last_name";
+    public static final String PREF_USER_NAME = "user_name";
+    public static final String PREF_USER_EMAIL = "user_email";
+    public static final String PREF_USER_MNO = "user_mno";
+    public static final String PREF_USER_DEPARTMENT = "user_department";
+    public static final String PREF_USER_PROFILE = "user_profile";
 
 
     // Constructor
@@ -28,7 +37,7 @@ public class SunTecPreferenceManager {
         editor = pref.edit();
     }
 
-    public void addStringValue(String keyName, String value) {
+    public void putStringValue(String keyName, String value) {
         editor.putString(keyName, value);
         editor.commit();
     }
@@ -37,7 +46,7 @@ public class SunTecPreferenceManager {
         return pref.getString(keyName, defaultValue);
     }
 
-    public void addBooleanValue(String keyName, boolean value) {
+    public void putBooleanValue(String keyName, boolean value) {
         editor.putBoolean(keyName, value);
         editor.commit();
     }
@@ -46,16 +55,16 @@ public class SunTecPreferenceManager {
         return pref.getBoolean(keyName, defaultValue);
     }
 
-    public void addIntegerValue(String keyName, int value) {
+    public void putIntValue(String keyName, int value) {
         editor.putInt(keyName, value);
         editor.commit();
     }
 
-    public int getIntegerValue(String keyName, int defaultValue) {
+    public int getIntValue(String keyName, int defaultValue) {
         return pref.getInt(keyName, defaultValue);
     }
 
-    public void addLongValue(String keyName, long value) {
+    public void putLongValue(String keyName, long value) {
         editor.putLong(keyName, value);
         editor.commit();
     }

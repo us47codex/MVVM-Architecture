@@ -5,5 +5,5 @@
     android:indeterminateTintMode="src_atop"
     android:indeterminateTint="@color/colorPrimary"
     android:layout_gravity="center"
-    android:visibility="visible"
+    android:visibility="gone"
     xmlns:android="http://schemas.android.com/apk/res/android" />

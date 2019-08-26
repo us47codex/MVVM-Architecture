@@ -15,12 +15,17 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
 
+import com.us47codex.mvvmarch.R;
+import com.us47codex.mvvmarch.SunTecApplication;
+import com.us47codex.mvvmarch.SunTecPreferenceManager;
+import com.us47codex.mvvmarch.roomDatabase.SunTecDatabase;
+
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.us47codex.mvvmarch.R;
 
 import io.reactivex.disposables.CompositeDisposable;
 
-public abstract class BaseFragment extends Fragment {
+public abstract class BaseFragment extends Fragment implements View.OnClickListener {
     private static final String TAG = BaseFragment.class.getSimpleName();
     private Toolbar toolbar;
     private ProgressBar loadingSpinner;
@@ -129,6 +134,19 @@ public abstract class BaseFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
+    }
+
+    @Override
+    public void onClick(View view) {
+
+    }
+
+    public SunTecDatabase getDatabase() {
+        return SunTecApplication.getInstance().getDatabase();
+    }
+
+    public SunTecPreferenceManager getPreference() {
+        return SunTecApplication.getInstance().getPreferenceManager();
     }
 
     protected void showProgressLoader() {

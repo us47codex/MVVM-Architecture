@@ -11,6 +11,7 @@ import com.us47codex.mvvmarch.constant.EndPoints;
 
 import java.net.HttpURLConnection;
 
+import io.reactivex.Single;
 import io.reactivex.schedulers.Schedulers;
 
 public class PublishSubjectEvent {

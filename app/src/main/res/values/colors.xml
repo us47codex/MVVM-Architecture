@@ -3,6 +3,8 @@
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
+
+    <color name="background_color" tools:keep="@color/background_color">#f9fafb</color>
     <color name="white" tools:keep="@color/white">#FFFFFF</color>
     <color name="black" tools:keep="@color/black">#000000</color>
     <color name="maroon" tools:keep="@color/maroon">#800000</color>
@@ -10,4 +12,14 @@
     <color name="text_color" tools:keep="@color/text_color">#252525</color>
     <color name="text_color_gray" tools:keep="@color/text_color_gray">#888888</color>
     <color name="text_divider_color" tools:keep="@color/text_divider_color">#d4ccc6</color>
+
+    <color name="pending_status" tools:keep="@color/pending_status">#f36a22</color>
+    <color name="in_progress_status" tools:keep="@color/in_progress_status">#01aef0</color>
+    <color name="assignee_to_status" tools:keep="@color/assignee_to_status">#17cbc0</color>
+    <color name="accept_status" tools:keep="@color/accept_status">#39be16</color>
+    <color name="start_status" tools:keep="@color/start_status">#ebbd07</color>
+    <color name="pause_status" tools:keep="@color/pause_status">#b4b4b5</color>
+    <color name="completed_status" tools:keep="@color/completed_status">#8ec63f</color>
+    <color name="verify_status" tools:keep="@color/verify_status">#432e8b</color>
+    <color name="reOpen_status" tools:keep="@color/reOpen_status">#c24343</color>
 </resources>

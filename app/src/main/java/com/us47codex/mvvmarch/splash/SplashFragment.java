@@ -1,6 +1,7 @@
 package com.us47codex.mvvmarch.splash;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +12,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.us47codex.mvvmarch.R;
+import com.us47codex.mvvmarch.SunTecPreferenceManager;
 import com.us47codex.mvvmarch.base.BaseFragment;
+import com.us47codex.mvvmarch.helper.AppUtils;
 
 import java.util.concurrent.TimeUnit;
 
@@ -19,6 +22,9 @@ import io.reactivex.Completable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
+
+import static com.us47codex.mvvmarch.SunTecPreferenceManager.PREF_USER_ID;
+import static com.us47codex.mvvmarch.SunTecPreferenceManager.PREF_USER_IS_LOGIN;
 
 public class SplashFragment extends BaseFragment {
     private static final String TAG = SplashFragment.class.getSimpleName();
@@ -35,6 +41,7 @@ public class SplashFragment extends BaseFragment {
     protected CompositeDisposable getCompositeDisposable() {
         return compositeDisposable;
     }
+
     @Override
     protected String getToolbarTitle() {
         return null;
@@ -92,10 +99,6 @@ public class SplashFragment extends BaseFragment {
         super.onViewCreated(view, savedInstanceState);
         frameMain = view.findViewById(R.id.frameMain);
         horizontalProgress = view.findViewById(R.id.horizontalProgress);
-        jumpToLoginOrHomeScreen();
-    }
-
-    private void jumpToLoginOrHomeScreen(){
         initSplashTimer();
     }
 
@@ -109,7 +112,11 @@ public class SplashFragment extends BaseFragment {
                         .observeOn(AndroidSchedulers.mainThread())
                         .doOnComplete(() -> {
                             horizontalProgress.setVisibility(View.INVISIBLE);
-                            jumpToDestinationFragment(SplashFragment.this.getCurrentFragmentId(), R.id.toLoginFragment, frameMain, null, true);
+                            Log.e(TAG, "initSplashTimer: "+ getPreference().getStringValue(PREF_USER_ID, ""));
+                            if (AppUtils.isEmpty(getPreference().getStringValue(PREF_USER_ID, "")))
+                                jumpToDestinationFragment(getCurrentFragmentId(), R.id.toLoginFragment, frameMain, null, true);
+                            else
+                                jumpToDestinationFragment(getCurrentFragmentId(), R.id.toHomeFragment, frameMain, null, true);
                         })
                         .subscribe()
         );

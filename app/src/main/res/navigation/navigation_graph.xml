@@ -13,10 +13,22 @@
         <action
             android:id="@+id/toLoginFragment"
             app:destination="@id/loginFragment" />
+        <action
+            android:id="@+id/toHomeFragment"
+            app:destination="@id/homeFragment" />
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
         android:name="com.us47codex.mvvmarch.login.LoginFragment"
         android:label="login_fragment"
-        tools:layout="@layout/fragment_login" />
+        tools:layout="@layout/fragment_login">
+        <action
+            android:id="@+id/toHomeFragment"
+            app:destination="@id/homeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.us47codex.mvvmarch.HomeFragment"
+        android:label="fragment_home"
+        tools:layout="@layout/fragment_home" />
 </navigation>
