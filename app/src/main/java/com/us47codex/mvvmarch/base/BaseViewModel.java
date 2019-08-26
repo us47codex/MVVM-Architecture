@@ -3,6 +3,7 @@ package com.us47codex.mvvmarch.base;
 import android.app.Application;
 import android.content.Context;
 
+import androidx.annotation.NonNull;
 import androidx.core.util.Pair;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.ViewModel;
@@ -20,7 +21,6 @@ import org.json.JSONObject;
 
 import java.util.Objects;
 
-import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.ResponseBody;
