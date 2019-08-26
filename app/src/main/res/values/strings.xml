@@ -46,4 +46,14 @@
 
     <string name="ok">Ok</string>
     <string name="cancel">Cancel</string>
+    <string name="search_hint">Search...</string>
+
+    <string name="home">Home</string>
+    <string name="drawer_open">Open</string>
+    <string name="drawer_close">Close</string>
+    <string name="version">Version</string>
+    <string name="setting">Settings</string>
+    <string name="about_us">About Us</string>
+    <string name="logout">Logout</string>
+
 </resources>

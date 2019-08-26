@@ -1,16 +1,11 @@
 package com.us47codex.mvvmarch;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.AppCompatButton;
-import androidx.core.util.Pair;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProviders;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,21 +14,11 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 
-import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.textfield.TextInputLayout;
 import com.us47codex.mvvmarch.base.BaseFragment;
-import com.us47codex.mvvmarch.enums.ApiCallStatus;
-import com.us47codex.mvvmarch.login.LoginParamModel;
-import com.us47codex.mvvmarch.login.LoginViewModel;
-
-import org.json.JSONObject;
 
 import java.util.Objects;
 
-import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.schedulers.Schedulers;
 
 
 /**
@@ -56,12 +41,12 @@ public class HomeFragment extends BaseFragment {
 
     @Override
     protected String getToolbarTitle() {
-        return null;
+        return getString(R.string.home);
     }
 
     @Override
     protected boolean shouldShowToolbar() {
-        return false;
+        return true;
     }
 
     @Override
@@ -86,7 +71,7 @@ public class HomeFragment extends BaseFragment {
 
     @Override
     protected boolean shouldShowDrawer() {
-        return false;
+        return true;
     }
 
     @Override

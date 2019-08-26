@@ -21,6 +21,7 @@ import com.us47codex.mvvmarch.base.BaseFragment;
 import com.us47codex.mvvmarch.enums.ApiCallStatus;
 import com.us47codex.mvvmarch.helper.AppUtils;
 
+import java.util.HashMap;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
@@ -139,7 +140,7 @@ public class LoginFragment extends BaseFragment {
                                     enableDisableView(frameMain, true);
                                     hideProgressLoader();
                                     Toast.makeText(getContext(), "login success", Toast.LENGTH_LONG).show();
-                                    jumpToDestinationFragment(getCurrentFragmentId(),R.id.toHomeFragment,frameMain,null,false);
+                                    jumpToDestinationFragment(getCurrentFragmentId(), R.id.toHomeFragment, frameMain, null, false);
                                 }
                             }
                         }
@@ -167,11 +168,14 @@ public class LoginFragment extends BaseFragment {
                 RxView.clicks(btnLogin).throttleFirst(500, TimeUnit.MILLISECONDS).subscribe(o -> {
                     if (checkValidations()) {
                         showProgressLoader();
-                        String loginId = Objects.requireNonNull(edtEmail.getText()).toString().trim();
-                        LoginParamModel loginParamModel = new LoginParamModel();
-                        loginParamModel.username = Objects.requireNonNull(loginId);
-                        loginParamModel.password = Objects.requireNonNull(edtPassword.getText()).toString().trim();
-                        loginViewModel.callToApi(loginParamModel, LoginViewModel.USER_LOGIN, true);
+//                        String loginId = Objects.requireNonNull(edtEmail.getText()).toString().trim();
+//                        LoginParamModel loginParamModel = new LoginParamModel();
+//                        loginParamModel.username = Objects.requireNonNull(loginId);
+//                        loginParamModel.password = Objects.requireNonNull(edtPassword.getText()).toString().trim();
+                        HashMap<String, String> params = new HashMap<>();
+                        params.put("username", edtEmail.getText().toString());
+                        params.put("password", edtPassword.getEditableText().toString());
+                        loginViewModel.callToApi(params, LoginViewModel.USER_LOGIN, true);
                     }
                 })
         );

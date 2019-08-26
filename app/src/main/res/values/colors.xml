@@ -22,4 +22,8 @@
     <color name="completed_status" tools:keep="@color/completed_status">#8ec63f</color>
     <color name="verify_status" tools:keep="@color/verify_status">#432e8b</color>
     <color name="reOpen_status" tools:keep="@color/reOpen_status">#c24343</color>
+    <color name="side_drawer_icon_color" tools:keep="@color/side_drawer_icon_color">#AAAAAA</color>
+    <color name="place_holder_image" tools:keep="@color/place_holder_image">#CCCBCB</color>
+    <color name="place_holder_image_inner" tools:keep="@color/place_holder_image_inner">#D6D6D6
+    </color>
 </resources>

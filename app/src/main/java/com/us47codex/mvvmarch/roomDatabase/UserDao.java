@@ -9,6 +9,7 @@ import androidx.room.Update;
 import java.util.List;
 
 import io.reactivex.Completable;
+import io.reactivex.Maybe;
 import io.reactivex.Single;
 
 /**
@@ -39,6 +40,9 @@ public interface UserDao {
 
     @Query("SELECT * FROM tbl_user WHERE email = :email")
     Single<User> getUserByEmail(String email);
+
+    @Query("SELECT * FROM tbl_user")
+    Maybe<User> getUser();
 
     @Query("SELECT * FROM tbl_user")
     Single<List<User>> getAllUsers();

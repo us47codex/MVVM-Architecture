@@ -12,7 +12,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.us47codex.mvvmarch.R;
-import com.us47codex.mvvmarch.SunTecPreferenceManager;
 import com.us47codex.mvvmarch.base.BaseFragment;
 import com.us47codex.mvvmarch.helper.AppUtils;
 
@@ -24,7 +23,6 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
 
 import static com.us47codex.mvvmarch.SunTecPreferenceManager.PREF_USER_ID;
-import static com.us47codex.mvvmarch.SunTecPreferenceManager.PREF_USER_IS_LOGIN;
 
 public class SplashFragment extends BaseFragment {
     private static final String TAG = SplashFragment.class.getSimpleName();
@@ -112,7 +110,7 @@ public class SplashFragment extends BaseFragment {
                         .observeOn(AndroidSchedulers.mainThread())
                         .doOnComplete(() -> {
                             horizontalProgress.setVisibility(View.INVISIBLE);
-                            Log.e(TAG, "initSplashTimer: "+ getPreference().getStringValue(PREF_USER_ID, ""));
+                            Log.e(TAG, "initSplashTimer: " + getPreference().getStringValue(PREF_USER_ID, ""));
                             if (AppUtils.isEmpty(getPreference().getStringValue(PREF_USER_ID, "")))
                                 jumpToDestinationFragment(getCurrentFragmentId(), R.id.toLoginFragment, frameMain, null, true);
                             else

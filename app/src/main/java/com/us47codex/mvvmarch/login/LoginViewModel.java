@@ -26,6 +26,8 @@ import io.reactivex.Completable;
 import io.reactivex.Single;
 import io.reactivex.SingleSource;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Action;
+import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
@@ -70,7 +72,8 @@ public class LoginViewModel extends BaseViewModel {
 //                            if (aBoolean) {
         try {
             if (USER_LOGIN.equals(apiTag)) {
-                callToUserLogin((LoginParamModel) params, apiTag, shouldShowLoader);
+//                callToUserLogin((LoginParamModel) params, apiTag, shouldShowLoader);
+                callToUserLogin((HashMap<String, String>) params, apiTag, shouldShowLoader);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -86,27 +89,61 @@ public class LoginViewModel extends BaseViewModel {
 
     private void callToUserLogin(LoginParamModel params, String apiTag, boolean shouldShowLoader) {
         getCompositeDisposable().add(RestApiClient.apiService
-                        .userLogin(params)
-                        .subscribeOn(Schedulers.io())
-                        .onErrorReturn(throwable -> {
-                            throwable.printStackTrace();
-                            return Response.error(SERVICE_UNAVAILABLE, new RealResponseBody("", 0, null));
-                        })
-                        .doOnSuccess(response -> {
-                            try {
-                                JSONObject jsonObject = LoginViewModel.this.parseOnSuccess(response, apiTag, shouldShowLoader);
-                                if (jsonObject != null) {
-                                    processLoginData(jsonObject,apiTag,shouldShowLoader);
-                                }
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                                if (shouldShowLoader)
-                                    LoginViewModel.this.getStatusBehaviorRelay().accept(ApiCallStatus.ERROR);
-                                LoginViewModel.this.getErrorRelay().accept(Objects.requireNonNull(e.getLocalizedMessage()));
-                            }
-                        })
-                        .doOnError(error -> parseOnError(error, apiTag, shouldShowLoader)).subscribe()
+                .userLogin(params)
+                .subscribeOn(Schedulers.io())
+                .onErrorReturn(throwable -> {
+                    throwable.printStackTrace();
+                    return Response.error(SERVICE_UNAVAILABLE, new RealResponseBody("", 0, null));
+                })
+                .doOnSuccess(response -> {
+                    try {
+                        JSONObject jsonObject = parseOnSuccess(response, apiTag, shouldShowLoader);
+                        if (jsonObject != null) {
+                            processLoginData(jsonObject, apiTag, shouldShowLoader);
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        if (shouldShowLoader)
+                            getStatusBehaviorRelay().accept(ApiCallStatus.ERROR);
+                        getErrorRelay().accept(Objects.requireNonNull(e.getLocalizedMessage()));
+                    }
+                })
+                .doOnError(error -> parseOnError(error, apiTag, shouldShowLoader)).subscribe()
         );
+    }
+
+    private void callToUserLogin(HashMap<String, String> params, String apiTag, boolean shouldShowLoader) {
+        getCompositeDisposable().add(
+                RestCallAPI.restCallAPI(
+                        EndPoints.LOGIN,
+                        new HashMap<>(),
+                        params,
+                        new DisposableSingleObserver<Response<ResponseBody>>() {
+                            @Override
+                            public void onSuccess(Response<ResponseBody> response) {
+                                try {
+                                    JSONObject jsonObject = parseOnSuccess(response, apiTag, shouldShowLoader);
+                                    if (jsonObject != null) {
+                                        AppLog.error(TAG, "User Login :" + jsonObject.toString());
+                                        JSONObject data = jsonObject.getJSONObject("data");
+                                        getPreference().putStringValue(PREF_AUTHENTICATION_TOKEN, data.getString("token"));
+                                        callToUserProfile(new HashMap<>(), apiTag, shouldShowLoader);
+                                    }
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                    if (shouldShowLoader)
+                                        getStatusBehaviorRelay().accept(ApiCallStatus.ERROR);
+                                    getErrorRelay().accept(Objects.requireNonNull(e.getLocalizedMessage()));
+                                }
+                            }
+
+                            @Override
+                            public void onError(Throwable e) {
+                                e.printStackTrace();
+                                parseOnError(e, apiTag, shouldShowLoader);
+                            }
+                        }
+                ));
     }
     private void processLoginData(JSONObject jsonObject,String apiTag,boolean shouldShowLoader){
         getCompositeDisposable().add(
@@ -133,8 +170,6 @@ public class LoginViewModel extends BaseViewModel {
     }
 
 
-
-
     private void callToUserProfile(HashMap<String, String> params, String apiTag, boolean shouldShowLoader) {
         getCompositeDisposable().add(
                 RestCallAPI.restCallAPI(
@@ -145,22 +180,28 @@ public class LoginViewModel extends BaseViewModel {
                             @Override
                             public void onSuccess(Response<ResponseBody> response) {
                                 try {
-                                    JSONObject jsonObject = LoginViewModel.this.parseOnSuccess(response, apiTag, shouldShowLoader);
+                                    JSONObject jsonObject = parseOnSuccess(response, apiTag, shouldShowLoader);
                                     if (jsonObject != null) {
                                         AppLog.error(TAG, "User Profile :" + jsonObject.toString());
                                         JSONObject data = jsonObject.getJSONObject("data");
-                                        processUserData(data);
-
-                                        if (shouldShowLoader){
-                                            getStatusBehaviorRelay().accept(ApiCallStatus.SUCCESS);
-                                        }
-                                        getResponseRelay().accept(new Pair<>(apiTag, jsonObject));
+                                        processUserData(data)
+                                                .subscribeOn(Schedulers.io())
+                                                .doOnComplete(() -> {
+                                                    if (shouldShowLoader) {
+                                                        getStatusBehaviorRelay().accept(ApiCallStatus.SUCCESS);
+                                                    }
+                                                    getResponseRelay().accept(new Pair<>(apiTag, jsonObject));
+                                                }).doOnError(throwable -> {
+                                            if (shouldShowLoader)
+                                                getStatusBehaviorRelay().accept(ApiCallStatus.ERROR);
+                                            getErrorRelay().accept(Objects.requireNonNull(throwable.getLocalizedMessage()));
+                                        }).subscribe();
                                     }
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                     if (shouldShowLoader)
-                                        LoginViewModel.this.getStatusBehaviorRelay().accept(ApiCallStatus.ERROR);
-                                    LoginViewModel.this.getErrorRelay().accept(Objects.requireNonNull(e.getLocalizedMessage()));
+                                        getStatusBehaviorRelay().accept(ApiCallStatus.ERROR);
+                                    getErrorRelay().accept(Objects.requireNonNull(e.getLocalizedMessage()));
                                 }
                             }
 
