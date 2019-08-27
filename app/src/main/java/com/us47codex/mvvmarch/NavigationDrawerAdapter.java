@@ -91,7 +91,6 @@ public class NavigationDrawerAdapter extends RecyclerView.Adapter<NavigationDraw
         private final LinearLayout linMain;
         private final ImageView imgIcon;
         private final AppCompatTextView navTitle, navGroupTitle;
-        private final View viewLine;
 
         @SuppressWarnings("ResultOfMethodCallIgnored")
         @SuppressLint("CheckResult")
@@ -102,16 +101,12 @@ public class NavigationDrawerAdapter extends RecyclerView.Adapter<NavigationDraw
             navTitle = itemView.findViewById(R.id.navTitle);
             navGroupTitle = itemView.findViewById(R.id.navGroupTitle);
             imgIcon = itemView.findViewById(R.id.imgIcon);
-            viewLine = itemView.findViewById(R.id.viewLine);
 
             RxView.clicks(linMain).throttleFirst(500, TimeUnit.MILLISECONDS).subscribe(empty -> {
                 if (onClickListener != null) {
                     onClickListener.onItemClick(linMain, getAdapterPosition(), items.get(getAdapterPosition()));
                 }
             });
-
-//            navTitle.setTypeface(SunTecApplication.getInstance().getMontserratMedium());
-//            navGroupTitle.setTypeface(SunTecApplication.getInstance().getMontserratMedium());
         }
     }
 }

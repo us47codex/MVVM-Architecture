@@ -55,5 +55,6 @@
     <string name="setting">Settings</string>
     <string name="about_us">About Us</string>
     <string name="logout">Logout</string>
+    <string name="change_password">Change Password</string>
 
 </resources>

@@ -32,7 +32,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.jakewharton.rxbinding2.view.RxView;
 import com.us47codex.mvvmarch.NavigationDrawerAdapter;
 import com.us47codex.mvvmarch.R;
 import com.us47codex.mvvmarch.SunTecApplication;
@@ -46,7 +45,6 @@ import com.us47codex.mvvmarch.roomDatabase.User;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.TimeUnit;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
@@ -270,11 +268,17 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
         navItemAboutUs.setImgId(R.drawable.ic_aboutus);
         navDrawerModelList.add(navItemAboutUs);
 
+        NavDrawerModel navItemChangePassword = new NavDrawerModel();
+        navItemChangePassword.setTitle(getResources().getString(R.string.change_password));
+        navItemChangePassword.setImgId(R.drawable.ic_change_password);
+        navDrawerModelList.add(navItemChangePassword);
+
         NavDrawerModel navItemLogout = new NavDrawerModel();
         navItemLogout.setTitle(getResources().getString(R.string.logout));
         navItemLogout.setImgId(R.drawable.ic_logout);
         navDrawerModelList.add(navItemLogout);
         drawerAdapter.notifyDataSetChanged();
+
     }
 
     private final OnItemClickListener onItemClickListener = new OnItemClickListener() {

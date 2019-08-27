@@ -111,10 +111,11 @@ public class SplashFragment extends BaseFragment {
                         .doOnComplete(() -> {
                             horizontalProgress.setVisibility(View.INVISIBLE);
                             Log.e(TAG, "initSplashTimer: " + getPreference().getStringValue(PREF_USER_ID, ""));
-                            if (AppUtils.isEmpty(getPreference().getStringValue(PREF_USER_ID, "")))
+                            if (AppUtils.isEmpty(getPreference().getStringValue(PREF_USER_ID, ""))) {
                                 jumpToDestinationFragment(getCurrentFragmentId(), R.id.toLoginFragment, frameMain, null, true);
-                            else
+                            }else {
                                 jumpToDestinationFragment(getCurrentFragmentId(), R.id.toHomeFragment, frameMain, null, true);
+                            }
                         })
                         .subscribe()
         );

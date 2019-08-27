@@ -10,12 +10,12 @@
     android:background="@color/background_color"
     android:orientation="horizontal">
 
-    <de.hdodenhof.circleimageview.CircleImageView
+    <!--<de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/imageUser"
         android:layout_width="@dimen/_45sdp"
         android:layout_height="@dimen/_45sdp"
         android:src="@drawable/ic_place_holder"
-        android:visibility="gone" />
+        android:visibility="gone" />-->
 
     <FrameLayout
         android:id="@+id/frameNameView"
