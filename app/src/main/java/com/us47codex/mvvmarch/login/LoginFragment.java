@@ -10,6 +10,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatButton;
+import androidx.appcompat.widget.AppCompatTextView;
 import androidx.core.util.Pair;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -36,6 +37,7 @@ public class LoginFragment extends BaseFragment {
     private FrameLayout frameMain;
     private TextInputLayout inputEmailLayout, inputPasswordLayout;
     private TextInputEditText edtEmail, edtPassword;
+    private AppCompatTextView txtResetPassword;
     private LoginViewModel loginViewModel;
 
     @Override
@@ -136,7 +138,7 @@ public class LoginFragment extends BaseFragment {
                         } else if (object instanceof Pair) {
                             Pair pair = (Pair) object;
                             if (pair.first != null) {
-                                if (pair.first.equals(LoginViewModel.USER_LOGIN)) {
+                                if (pair.first.equals(LoginViewModel.LOGIN_API_TAG)) {
                                     enableDisableView(frameMain, true);
                                     hideProgressLoader();
                                     Toast.makeText(getContext(), "login success", Toast.LENGTH_LONG).show();
@@ -158,6 +160,7 @@ public class LoginFragment extends BaseFragment {
         inputEmailLayout = view.findViewById(R.id.inputEmailLayout);
         inputPasswordLayout = view.findViewById(R.id.inputPasswordLayout);
         frameMain = view.findViewById(R.id.frameMain);
+        txtResetPassword = view.findViewById(R.id.txtResetPassword);
 
         edtEmail = view.findViewById(R.id.edtEmail);
         edtPassword = view.findViewById(R.id.edtPassword);
@@ -175,9 +178,14 @@ public class LoginFragment extends BaseFragment {
                         HashMap<String, String> params = new HashMap<>();
                         params.put("username", edtEmail.getText().toString());
                         params.put("password", edtPassword.getEditableText().toString());
-                        loginViewModel.callToApi(params, LoginViewModel.USER_LOGIN, true);
+                        loginViewModel.callToApi(params, LoginViewModel.LOGIN_API_TAG, true);
                     }
                 })
+        );
+
+        compositeDisposable.add(
+                RxView.clicks(txtResetPassword).throttleFirst(500, TimeUnit.MILLISECONDS).subscribe(o -> jumpToDestinationFragment(getCurrentFragmentId(),
+                        R.id.toUserProfileFragment, frameMain, null, false))
         );
     }
 

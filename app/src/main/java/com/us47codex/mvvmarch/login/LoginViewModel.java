@@ -26,8 +26,6 @@ import io.reactivex.Completable;
 import io.reactivex.Single;
 import io.reactivex.SingleSource;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Action;
-import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
@@ -51,7 +49,9 @@ public class LoginViewModel extends BaseViewModel {
 
     private final String TAG = LoginViewModel.class.getSimpleName();
 
-    public static final String USER_LOGIN = "user_login";
+    public static final String LOGIN_API_TAG = "login_api_tag";
+    public static final String OTP_SEND_API_TAG = "otp_send_api_tag";
+    public static final String OTP_PASSWORD_UPDATE_API_TAG = "otp_password_update_api_tag";
 
     public LoginViewModel(@NonNull Application application) {
         super(application);
@@ -71,9 +71,15 @@ public class LoginViewModel extends BaseViewModel {
 //                        .doOnSuccess(aBoolean -> {
 //                            if (aBoolean) {
         try {
-            if (USER_LOGIN.equals(apiTag)) {
-//                callToUserLogin((LoginParamModel) params, apiTag, shouldShowLoader);
-                callToUserLogin((HashMap<String, String>) params, apiTag, shouldShowLoader);
+            switch ((apiTag)) {
+                case LOGIN_API_TAG:
+                    callToUserLogin((HashMap<String, String>) params, apiTag, shouldShowLoader);
+                    break;
+                case OTP_SEND_API_TAG:
+                    callToOTPSend((HashMap<String, String>) params, apiTag, shouldShowLoader);
+                    break;
+                case OTP_PASSWORD_UPDATE_API_TAG:
+                    break;
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -145,7 +151,42 @@ public class LoginViewModel extends BaseViewModel {
                         }
                 ));
     }
-    private void processLoginData(JSONObject jsonObject,String apiTag,boolean shouldShowLoader){
+
+    private void callToOTPSend(HashMap<String, String> params, String apiTag, boolean shouldShowLoader) {
+        getCompositeDisposable().add(
+                RestCallAPI.restCallAPI(
+                        EndPoints.OTP_SEND,
+                        new HashMap<>(),
+                        params,
+                        new DisposableSingleObserver<Response<ResponseBody>>() {
+                            @Override
+                            public void onSuccess(Response<ResponseBody> response) {
+                                try {
+                                    JSONObject jsonObject = parseOnSuccess(response, apiTag, shouldShowLoader);
+                                    if (jsonObject != null) {
+                                        AppLog.error(TAG, "User Login :" + jsonObject.toString());
+                                        JSONObject data = jsonObject.getJSONObject("data");
+                                        getPreference().putStringValue(PREF_AUTHENTICATION_TOKEN, data.getString("token"));
+                                        callToUserProfile(new HashMap<>(), apiTag, shouldShowLoader);
+                                    }
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                    if (shouldShowLoader)
+                                        getStatusBehaviorRelay().accept(ApiCallStatus.ERROR);
+                                    getErrorRelay().accept(Objects.requireNonNull(e.getLocalizedMessage()));
+                                }
+                            }
+
+                            @Override
+                            public void onError(Throwable e) {
+                                e.printStackTrace();
+                                parseOnError(e, apiTag, shouldShowLoader);
+                            }
+                        }
+                ));
+    }
+
+    private void processLoginData(JSONObject jsonObject, String apiTag, boolean shouldShowLoader) {
         getCompositeDisposable().add(
                 Single.just(Objects.requireNonNull(jsonObject.optJSONObject(Constants.KEY_DATA)))
                         .subscribeOn(Schedulers.computation())

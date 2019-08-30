@@ -19,6 +19,11 @@
     <dimen name="space_thirty">30dp</dimen>
     <dimen name="space_forty">40dp</dimen>
     <dimen name="space_hundred">100dp</dimen>
+    <dimen name="space_hundred_fifty">150dp</dimen>
+    <dimen name="space_two_hundred">200dp</dimen>
+    <dimen name="space_three_hundred">300dp</dimen>
+    <dimen name="space_seventy">70dp</dimen>
+    <dimen name="space_sixty">60dp</dimen>
     <dimen name="space_fifty" tools:keep="@dimen/space_fifty">50dp</dimen>
 
 </resources>
