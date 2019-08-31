@@ -3,7 +3,7 @@ package com.us47codex.mvvmarch.models;
 public class NavDrawerModel {
 
     private int imgId;
-    private long globalId, groupId;
+    private long globalId, groupId, id;
 
     private String title;
 
@@ -37,5 +37,13 @@ public class NavDrawerModel {
 
     public void setGroupId(long groupId) {
         this.groupId = groupId;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 }

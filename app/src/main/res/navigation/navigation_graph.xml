@@ -37,6 +37,9 @@
         <action
             android:id="@+id/toUserProfileFragment"
             app:destination="@id/userProfileFragment" />
+        <action
+            android:id="@+id/toLoginFragment"
+            app:destination="@id/loginFragment" />
     </fragment>
     <fragment
         android:id="@+id/userProfileFragment"

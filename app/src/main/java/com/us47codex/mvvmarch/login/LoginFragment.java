@@ -142,7 +142,7 @@ public class LoginFragment extends BaseFragment {
                                     enableDisableView(frameMain, true);
                                     hideProgressLoader();
                                     Toast.makeText(getContext(), "login success", Toast.LENGTH_LONG).show();
-                                    jumpToDestinationFragment(getCurrentFragmentId(), R.id.toHomeFragment, frameMain, null, false);
+                                    jumpToDestinationFragment(getCurrentFragmentId(), R.id.toHomeFragment, frameMain, null, true);
                                 }
                             }
                         }
@@ -185,7 +185,7 @@ public class LoginFragment extends BaseFragment {
 
         compositeDisposable.add(
                 RxView.clicks(txtResetPassword).throttleFirst(500, TimeUnit.MILLISECONDS).subscribe(o -> jumpToDestinationFragment(getCurrentFragmentId(),
-                        R.id.toUserProfileFragment, frameMain, null, false))
+                        R.id.toResetPasswordFragment, frameMain, null, false))
         );
     }
 

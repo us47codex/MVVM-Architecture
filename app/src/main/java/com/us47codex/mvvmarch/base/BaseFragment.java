@@ -31,6 +31,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.us47codex.mvvmarch.NavigationDrawerAdapter;
@@ -255,6 +256,14 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
         }
     }
 
+    protected void backToPreviousFragment(int parentId, View view, boolean inclusive) {
+        try {
+            Navigation.findNavController(view).popBackStack(parentId, inclusive);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     private void setUpRecycleView() {
         NavigationDrawerAdapter drawerAdapter = new NavigationDrawerAdapter(getContext(), navDrawerModelList);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
@@ -266,16 +275,19 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
         navDrawerModelList.clear();
 
         NavDrawerModel navItemChangePassword = new NavDrawerModel();
+        navItemChangePassword.setId(1);
         navItemChangePassword.setTitle(getResources().getString(R.string.complaints));
         navItemChangePassword.setImgId(R.drawable.ic_change_password);
         navDrawerModelList.add(navItemChangePassword);
 
         NavDrawerModel navItemAboutUs = new NavDrawerModel();
+        navItemAboutUs.setId(2);
         navItemAboutUs.setTitle(getResources().getString(R.string.about_us));
         navItemAboutUs.setImgId(R.drawable.ic_aboutus);
         navDrawerModelList.add(navItemAboutUs);
 
         NavDrawerModel navItemLogout = new NavDrawerModel();
+        navItemLogout.setId(3);
         navItemLogout.setTitle(getResources().getString(R.string.logout));
         navItemLogout.setImgId(R.drawable.ic_logout);
         navDrawerModelList.add(navItemLogout);
@@ -298,6 +310,16 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
         public void onItemClick(View view, int pos, Object object) {
             NavDrawerModel navDrawerModel = (NavDrawerModel) object;
 
+            if (navDrawerModel.getId() == 3) {
+                showDialogWithTwoButtons(BaseFragment.this.getActivity(), Objects.requireNonNull(getActivity()).getString(R.string.app_name), getActivity().getString(R.string.logout_warning_msg),
+                        Objects.requireNonNull(getActivity()).getString(R.string.yes), getActivity().getString(R.string.cancel), (dialog, which) -> clearAllDataFromApp(), null, false);
+            } else {
+                showDialogWithSingleButtons(getContext(), getString(R.string.app_name),
+                        Objects.requireNonNull(getActivity()).getString(R.string.coming_soon),
+                        Objects.requireNonNull(getActivity()).getString(R.string.ok), (MaterialDialog dialog, DialogAction which) -> {
+                        }, false);
+            }
+            mDrawerLayout.closeDrawer(GravityCompat.START);
             mDrawerLayout.closeDrawer(GravityCompat.START);
         }
 
@@ -398,5 +420,38 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
         if (shouldLoaderImplement()) {
             loadingSpinner.setVisibility(View.GONE);
         }
+    }
+
+    protected void showDialogWithTwoButtons(Context context, String title, String msg, String positiveButtonName,
+                                            String NegativeButtonName,
+                                            MaterialDialog.SingleButtonCallback positiveButtonCallback,
+                                            MaterialDialog.SingleButtonCallback negativeButtonCallback, boolean cancelable) {
+
+        try {
+            new MaterialDialog.Builder(context)
+                    .title(title)
+                    .content(msg)
+                    .positiveText(positiveButtonName)
+                    .negativeText(NegativeButtonName)
+                    .onPositive(positiveButtonCallback)
+                    .onNegative(negativeButtonCallback)
+                    .cancelable(cancelable)
+                    .show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void clearAllDataFromApp() {
+        compositeDisposable.add(
+                AppUtils.clearPreference()
+                        .subscribeOn(Schedulers.computation())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .doOnComplete(() -> {
+                            jumpToDestinationFragment(getCurrentFragmentId(), R.id.toLoginFragment, frameMain, null, true);
+                        })
+                        .doOnError(Throwable::printStackTrace)
+                        .subscribe()
+        );
     }
 }

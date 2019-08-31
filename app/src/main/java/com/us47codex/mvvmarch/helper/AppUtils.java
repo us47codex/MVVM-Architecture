@@ -21,6 +21,7 @@ import com.github.pwittchen.reactivenetwork.library.rx2.internet.observing.error
 import com.github.pwittchen.reactivenetwork.library.rx2.internet.observing.strategy.WalledGardenInternetObservingStrategy;
 import com.us47codex.mvvmarch.BuildConfig;
 import com.us47codex.mvvmarch.R;
+import com.us47codex.mvvmarch.SunTecApplication;
 import com.us47codex.mvvmarch.constant.Constants;
 import com.us47codex.mvvmarch.constant.EndPoints;
 
@@ -35,6 +36,7 @@ import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import io.reactivex.Completable;
 import io.reactivex.Single;
 import io.reactivex.schedulers.Schedulers;
 
@@ -263,5 +265,11 @@ public class AppUtils {
                 .build();
 
         return ReactiveNetwork.checkInternetConnectivity(settings);
+    }
+
+    public static Completable clearPreference() {
+        return Completable.fromAction(() -> {
+            SunTecApplication.getInstance().getPreferenceManager().clear();
+        });
     }
 }
