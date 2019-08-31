@@ -21,6 +21,7 @@ import com.us47codex.mvvmarch.roomDatabase.SunTecDatabase;
 
 import org.json.JSONObject;
 
+import java.util.HashMap;
 import java.util.Objects;
 
 import io.reactivex.disposables.CompositeDisposable;
@@ -38,7 +39,6 @@ public abstract class BaseViewModel extends AndroidViewModel {
     private final PublishRelay<String> errorRelay = PublishRelay.create();
     /* private final PublishRelay<String> errorCodeRelay = PublishRelay.create();*/
     private final PublishRelay<Pair<String, Object>> responseRelay = PublishRelay.create();
-
 
 
     protected BaseViewModel(@NonNull Application application) {
@@ -230,5 +230,11 @@ public abstract class BaseViewModel extends AndroidViewModel {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    protected HashMap<String, String> getHeaders() {
+        HashMap<String, String> headers = new HashMap<>();
+        headers.put("Authorization", "Bearer " + SunTecApplication.getInstance().getPreferenceManager().getStringValue(SunTecPreferenceManager.PREF_AUTHENTICATION_TOKEN, ""));
+        return headers;
     }
 }

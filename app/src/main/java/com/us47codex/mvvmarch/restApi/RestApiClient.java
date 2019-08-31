@@ -37,10 +37,25 @@ public class RestApiClient {
                 .excludeFieldsWithoutExposeAnnotation()
                 .create();
 
+        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
+        if (AppLog.DO_API_LOG) {
+            interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+        } else {
+            interceptor.setLevel(HttpLoggingInterceptor.Level.NONE);
+        }
+
+        OkHttpClient client = new OkHttpClient.Builder()
+                .addInterceptor(interceptor)
+                .readTimeout(API_CALL_TIMEOUT, TimeUnit.SECONDS)
+                .writeTimeout(API_CALL_TIMEOUT, TimeUnit.SECONDS)
+                .connectTimeout(API_CALL_TIMEOUT, TimeUnit.SECONDS)
+                .build();
+
+
         if (retrofit == null) {
             retrofit = new Retrofit.Builder()
                     .baseUrl(EndPoints.BASE_URL)
-                    .client(getHeader())
+                    .client(client)
                     .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                     .addConverterFactory(GsonConverterFactory.create(gson))
                     .build();

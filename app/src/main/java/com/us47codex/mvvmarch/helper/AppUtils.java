@@ -183,8 +183,8 @@ public class AppUtils {
         return Single.just(errorMessageHandlerModel)
                 .map(error -> {
                     AppLog.error(TAG, error.errCode);
-                    AppLog.error(TAG, error.errorMessages.en);
-                    return error.errorMessages.en;
+                    AppLog.error(TAG, error.errorMessages);
+                    return error.errorMessages;
                 });
     }
 

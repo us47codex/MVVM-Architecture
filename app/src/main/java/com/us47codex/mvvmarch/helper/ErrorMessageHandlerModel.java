@@ -11,9 +11,12 @@ public class ErrorMessageHandlerModel {
     public String errCode;
 
     @SerializedName("message")
-    public final errorMessages errorMessages = new errorMessages();
+    public String errorMessages;
 
-    public class errorMessages {
-        public String en;
-    }
+//    @SerializedName("message")
+//    public final errorMessages errorMessages = new errorMessages();
+//
+//    public class errorMessages {
+//        public String en;
+//    }
 }

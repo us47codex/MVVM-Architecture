@@ -50,6 +50,7 @@ public class LoginViewModel extends BaseViewModel {
     private final String TAG = LoginViewModel.class.getSimpleName();
 
     public static final String LOGIN_API_TAG = "login_api_tag";
+    public static final String PROFILE_API_TAG = "profile_api_tag";
     public static final String OTP_SEND_API_TAG = "otp_send_api_tag";
     public static final String OTP_PASSWORD_UPDATE_API_TAG = "otp_password_update_api_tag";
 
@@ -79,6 +80,9 @@ public class LoginViewModel extends BaseViewModel {
                     callToOTPSend((HashMap<String, String>) params, apiTag, shouldShowLoader);
                     break;
                 case OTP_PASSWORD_UPDATE_API_TAG:
+                    break;
+                case PROFILE_API_TAG:
+                    callToUserProfile((HashMap<String, String>) params, apiTag, shouldShowLoader);
                     break;
             }
         } catch (Exception e) {

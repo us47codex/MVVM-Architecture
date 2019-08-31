@@ -29,6 +29,7 @@
     <string name="war_name_empty">Name should not be empty.</string>
     <string name="war_nick_name_empty">Nick name should not be empty.</string>
     <string name="war_enter_first_name">Please enter your first name.</string>
+    <string name="war_enter_middle_name">Please enter your middle name.</string>
     <string name="war_enter_last_name">Please enter your last name.</string>
     <string name="war_enter_country_name">Please enter your country name.</string>
     <string name="war_enter_your_mobile">Please enter your mobile number.</string>
@@ -48,6 +49,7 @@
     <string name="cancel">Cancel</string>
     <string name="search_hint">Search...</string>
     <string name="logout_warning_msg">Are you sure you want to logout ?</string>
+    <string name="profile_update_msg">Your profile updated successfully.</string>
 
     <string name="home">Home</string>
     <string name="drawer_open">Open</string>
@@ -74,5 +76,7 @@
     <string name="resetPassword">Reset Password</string>
     <string name="coming_soon">Coming Soon</string>
     <string name="yes">Yes</string>
+    <string name="username">Username</string>
+    <string name="departments">Departments</string>
 
 </resources>

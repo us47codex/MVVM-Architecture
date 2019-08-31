@@ -30,11 +30,23 @@
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/txtComplaintNo"
             android:layout_width="match_parent"
-            android:layout_height="fill_parent"
+            android:layout_height="wrap_content"
             android:gravity="center"
             android:textColor="@color/text_color"
-            android:textSize="@dimen/_14ssp"
+            android:textSize="@dimen/_12ssp"
             tools:text="127" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/txtStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/reOpen_status"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:maxLines="1"
+            android:text="Open"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_10ssp" />
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 

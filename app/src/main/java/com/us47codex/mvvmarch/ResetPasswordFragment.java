@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -135,6 +136,12 @@ public class ResetPasswordFragment extends BaseFragment {
 
         handleView(false);
 
+        ImageView imgBackButton = view.findViewById(R.id.imageBack);
+        getCompositeDisposable().add(
+                RxView.clicks(imgBackButton).throttleFirst(500,
+                        TimeUnit.MILLISECONDS).subscribe(o -> backToPreviousFragment(R.id.loginFragment,
+                        imgBackButton, false))
+        );
         compositeDisposable.add(
                 RxView.clicks(btnSendOtp).throttleFirst(500, TimeUnit.MILLISECONDS).subscribe(o -> {
                     if (!AppUtils.isEmpty(edtMobileNo.getText().toString())) {
