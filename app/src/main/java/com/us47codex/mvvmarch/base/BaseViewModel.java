@@ -194,8 +194,20 @@ public abstract class BaseViewModel extends AndroidViewModel {
 
                     );
                 } else {
-                    if (showProgressBar)
-                        getStatusBehaviorRelay().accept(ApiCallStatus.ERROR);
+                    try {
+                        String s = Objects.requireNonNull(response.errorBody()).string();
+                        JSONObject jsonObject = new JSONObject(s);
+                        if (showProgressBar) {
+                            getStatusBehaviorRelay().accept(ApiCallStatus.ERROR);
+                        }
+                        getErrorRelay().accept(jsonObject.getString(Constants.KEY_MESSAGE));
+                    } catch (Exception e) {
+                        if (showProgressBar) {
+                            getStatusBehaviorRelay().accept(ApiCallStatus.ERROR);
+                        }
+                        getErrorRelay().accept(e.getLocalizedMessage());
+                        e.printStackTrace();
+                    }
                 }
             }
         }

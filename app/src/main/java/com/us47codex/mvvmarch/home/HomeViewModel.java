@@ -68,7 +68,7 @@ public class HomeViewModel extends BaseViewModel {
                     callToUpdateProfile((HashMap<String, String>) params, apiTag, shouldShowLoader);
                     break;
                 case CHANGE_PASSWORD_API_TAG:
-                    callToUpdateProfile((HashMap<String, String>) params, apiTag, shouldShowLoader);
+                    callToChangePassword((HashMap<String, String>) params, apiTag, shouldShowLoader);
                     break;
             }
         } catch (Exception e) {
@@ -141,20 +141,10 @@ public class HomeViewModel extends BaseViewModel {
                                     JSONObject jsonObject = parseOnSuccess(response, apiTag, shouldShowLoader);
                                     if (jsonObject != null) {
                                         AppLog.error(TAG, "User Login :" + jsonObject.toString());
-                                        JSONObject data = jsonObject.getJSONObject("data");
-                                        processUserData(data)
-                                                .subscribeOn(Schedulers.io())
-                                                .doOnComplete(() -> {
-                                                    if (shouldShowLoader) {
-                                                        getStatusBehaviorRelay().accept(ApiCallStatus.SUCCESS);
-                                                    }
-                                                    getResponseRelay().accept(new Pair<>(apiTag, jsonObject));
-                                                }).doOnError(throwable -> {
-                                            if (shouldShowLoader)
-                                                getStatusBehaviorRelay().accept(ApiCallStatus.ERROR);
-                                            getErrorRelay().accept(Objects.requireNonNull(throwable.getLocalizedMessage()));
-                                        }).subscribe();
-
+                                        if (shouldShowLoader) {
+                                            getStatusBehaviorRelay().accept(ApiCallStatus.SUCCESS);
+                                        }
+                                        getResponseRelay().accept(new Pair<>(apiTag, jsonObject));
                                     }
                                 } catch (Exception e) {
                                     e.printStackTrace();
