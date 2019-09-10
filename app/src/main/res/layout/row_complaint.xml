@@ -5,8 +5,9 @@
     android:layout_height="wrap_content"
     android:layout_marginStart="@dimen/_5sdp"
     android:layout_marginEnd="@dimen/_5sdp"
+    android:id="@+id/llComplaint"
+    android:background="@color/background_color_two"
     android:orientation="horizontal"
-    android:padding="@dimen/_5sdp"
     android:weightSum="1">
 
     <androidx.appcompat.widget.LinearLayoutCompat
@@ -18,43 +19,54 @@
         android:paddingBottom="@dimen/_8sdp">
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/txtComplaintNoLbl"
+            android:id="@+id/txvComplaintNoLbl"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:maxLines="1"
             android:text="Comp. No."
             android:textColor="@color/text_color_gray"
-            android:textSize="@dimen/_10ssp" />
+            android:textSize="@dimen/_10ssp"
+            android:visibility="gone" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/txtComplaintNo"
+            android:id="@+id/txvComplaintNo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:gravity="center"
             android:textColor="@color/text_color"
-            android:textSize="@dimen/_12ssp"
+            android:textSize="@dimen/_16ssp"
             tools:text="127" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/txtStatus"
+            android:id="@+id/txvStatus"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/reOpen_status"
             android:ellipsize="end"
             android:gravity="center"
             android:maxLines="1"
-            android:text="Open"
+            android:padding="@dimen/_2sdp"
+            android:textAllCaps="true"
             android:textColor="@color/white"
-            android:textSize="@dimen/_10ssp" />
+            android:textSize="@dimen/_10ssp"
+            tools:text="Open" />
 
     </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <View
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:background="@color/text_color_gray"
+        android:visibility="gone" />
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="0.8"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="@dimen/_5sdp">
 
         <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
@@ -69,14 +81,15 @@
                 android:layout_height="wrap_content"
                 android:text="Customer : "
                 android:textColor="@color/text_color_gray"
-                android:textSize="@dimen/_10ssp" />
+                android:textSize="@dimen/_10ssp"
+                android:visibility="gone" />
 
             <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/txtCustomerName"
+                android:id="@+id/txvCustomerName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/text_color"
-                android:textSize="@dimen/_12ssp"
+                android:textSize="@dimen/_14ssp"
                 tools:text="Ronak" />
 
         </androidx.appcompat.widget.LinearLayoutCompat>
@@ -86,25 +99,51 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.7"
             android:orientation="horizontal"
-            android:padding="@dimen/_5sdp"
-            android:paddingBottom="@dimen/_8sdp">
+            android:padding="@dimen/_5sdp">
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="M/C Type : "
                 android:textColor="@color/text_color_gray"
-                android:textSize="@dimen/_10ssp" />
+                android:textSize="@dimen/_10ssp"
+                android:visibility="gone" />
 
             <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/txtMachineType"
-                android:layout_width="wrap_content"
+                android:id="@+id/txvMachineType"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/text_color"
                 android:textSize="@dimen/_12ssp"
                 tools:text="Heat Pump" />
 
         </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.7"
+            android:orientation="horizontal">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Date : "
+                android:textColor="@color/text_color_gray"
+                android:textSize="@dimen/_10ssp"
+                android:visibility="gone" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/txvDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="end"
+                android:textColor="@color/text_color_gray"
+                android:textSize="@dimen/_10ssp"
+                tools:text="Ronak" />
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
     </androidx.appcompat.widget.LinearLayoutCompat>
 
 </androidx.appcompat.widget.LinearLayoutCompat>

@@ -9,12 +9,16 @@ public class Constants {
     public static final int INVITE_VENDOR_DEPARTMENT_ID = 101;
 
 
+    public static final int PROFILE_ID = 1;
+    public static final int CHANGE_PASSWORD_ID = 2;
+    public static final int COMPLAINTS_ID = 3;
+    public static final int ABOUT_US_ID = 4;
+    public static final int LOGOUT_ID = 5;
 
-   /* public static final int PROFILE_ID = 1;
-    public static final int ADD_VENDOR_ID = 2;
-    public static final int CUSTOMER_DETAIL_ID = 3;
-    public static final int CHANGE_CUSTOMER_ID = 4;*/
-
+    /*
+     * KEYs
+     * */
+    public static final String KEY_COMPLAIN_ID = "complain_id";
 
     /**
      * pagination
@@ -95,24 +99,22 @@ public class Constants {
 
     /**
      * Font name
-     *
      */
-    public static final String CANDARA_FONTS="fonts/CANDARA.TTF";
-    public static final String CANDARAB_FONTS="fonts/CANDARAB.TTF";
+    public static final String CANDARA_FONTS = "fonts/CANDARA.TTF";
+    public static final String CANDARAB_FONTS = "fonts/CANDARAB.TTF";
 
-    public static final String MONTSERRAT_BOLD_FONTS="fonts/Montserrat-Bold.ttf";
-    public static final String MONTSERRAT_LIGHT_FONTS="fonts/Montserrat-Light.ttf";
-    public static final String MONTSERRAT_MEDIUM_FONTS="fonts/Montserrat-Medium.ttf";
-    public static final String MONTSERRAT_REGULAR_FONTS="fonts/Montserrat-Regular.ttf";
-    public static final String MONTSERRAT_SEMI_BOLD_FONTS="fonts/Montserrat-SemiBold.ttf";
-    public static final String JURA_BOLD_FONTS="fonts/Jura-Bold.ttf";
+    public static final String MONTSERRAT_BOLD_FONTS = "fonts/Montserrat-Bold.ttf";
+    public static final String MONTSERRAT_LIGHT_FONTS = "fonts/Montserrat-Light.ttf";
+    public static final String MONTSERRAT_MEDIUM_FONTS = "fonts/Montserrat-Medium.ttf";
+    public static final String MONTSERRAT_REGULAR_FONTS = "fonts/Montserrat-Regular.ttf";
+    public static final String MONTSERRAT_SEMI_BOLD_FONTS = "fonts/Montserrat-SemiBold.ttf";
+    public static final String JURA_BOLD_FONTS = "fonts/Jura-Bold.ttf";
 
     /**
      *
-     *
      */
     public static final int KEY_SEARCH_DEBOUNCE_TIME = 300;
-    public static final String SESSION_MANAGER="TeroTamCustomerPref";
-    public static final String SPECIAL_CHARACTERS="[-+.^:,]";
+    public static final String SESSION_MANAGER = "TeroTamCustomerPref";
+    public static final String SPECIAL_CHARACTERS = "[-+.^:,]";
 
 }

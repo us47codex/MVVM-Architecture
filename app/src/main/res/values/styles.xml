@@ -30,7 +30,7 @@
         <item name="android:paddingTop">@dimen/space_ten</item>
         <item name="android:paddingBottom">@dimen/space_twenty</item>
         <item name="android:paddingStart">@dimen/space_five</item>
-        <item name="android:textSize">@dimen/text_size_fourteen</item>
+        <item name="android:textSize">@dimen/text_size_sixteen</item>
         <item name="android:backgroundTint">@color/text_divider_color</item>
     </style>
 

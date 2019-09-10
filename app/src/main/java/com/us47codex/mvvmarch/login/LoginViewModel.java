@@ -80,6 +80,7 @@ public class LoginViewModel extends BaseViewModel {
                     callToOTPSend((HashMap<String, String>) params, apiTag, shouldShowLoader);
                     break;
                 case OTP_PASSWORD_UPDATE_API_TAG:
+                    callToOTPPasswordUpdate((HashMap<String, String>) params, apiTag, shouldShowLoader);
                     break;
                 case PROFILE_API_TAG:
                     callToUserProfile((HashMap<String, String>) params, apiTag, shouldShowLoader);
@@ -169,9 +170,11 @@ public class LoginViewModel extends BaseViewModel {
                                     JSONObject jsonObject = parseOnSuccess(response, apiTag, shouldShowLoader);
                                     if (jsonObject != null) {
                                         AppLog.error(TAG, "User Login :" + jsonObject.toString());
-                                        JSONObject data = jsonObject.getJSONObject("data");
-                                        getPreference().putStringValue(PREF_AUTHENTICATION_TOKEN, data.getString("token"));
-                                        callToUserProfile(new HashMap<>(), apiTag, shouldShowLoader);
+                                        String data = jsonObject.getString("data");
+                                        if (shouldShowLoader) {
+                                            getStatusBehaviorRelay().accept(ApiCallStatus.SUCCESS);
+                                        }
+                                        getResponseRelay().accept(new Pair<>(apiTag, jsonObject));
                                     }
                                 } catch (Exception e) {
                                     e.printStackTrace();
@@ -189,6 +192,40 @@ public class LoginViewModel extends BaseViewModel {
                         }
                 ));
     }
+
+    private void callToOTPPasswordUpdate(HashMap<String, String> params, String apiTag, boolean shouldShowLoader) {
+        getCompositeDisposable().add(
+                RestCallAPI.restCallAPI(
+                        EndPoints.OTP_PASSWORD_UPDATE,
+                        new HashMap<>(),
+                        params,
+                        new DisposableSingleObserver<Response<ResponseBody>>() {
+                            @Override
+                            public void onSuccess(Response<ResponseBody> response) {
+                                try {
+                                    JSONObject jsonObject = parseOnSuccess(response, apiTag, shouldShowLoader);
+                                    if (jsonObject != null) {
+                                        AppLog.error(TAG, "User Login :" + jsonObject.toString());
+                                        JSONObject data = jsonObject.getJSONObject("data");
+
+                                    }
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                    if (shouldShowLoader)
+                                        getStatusBehaviorRelay().accept(ApiCallStatus.ERROR);
+                                    getErrorRelay().accept(Objects.requireNonNull(e.getLocalizedMessage()));
+                                }
+                            }
+
+                            @Override
+                            public void onError(Throwable e) {
+                                e.printStackTrace();
+                                parseOnError(e, apiTag, shouldShowLoader);
+                            }
+                        }
+                ));
+    }
+
 
     private void processLoginData(JSONObject jsonObject, String apiTag, boolean shouldShowLoader) {
         getCompositeDisposable().add(
@@ -219,7 +256,7 @@ public class LoginViewModel extends BaseViewModel {
         getCompositeDisposable().add(
                 RestCallAPI.restCallAPI(
                         EndPoints.PROFILE,
-                        new HashMap<>(),
+                        getHeaders(),
                         params,
                         new DisposableSingleObserver<Response<ResponseBody>>() {
                             @Override

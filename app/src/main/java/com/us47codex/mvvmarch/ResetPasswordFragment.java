@@ -20,9 +20,12 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.us47codex.mvvmarch.base.BaseFragment;
+import com.us47codex.mvvmarch.constant.Constants;
 import com.us47codex.mvvmarch.enums.ApiCallStatus;
 import com.us47codex.mvvmarch.helper.AppUtils;
 import com.us47codex.mvvmarch.login.LoginViewModel;
+
+import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Objects;
@@ -84,7 +87,7 @@ public class ResetPasswordFragment extends BaseFragment {
 
     @Override
     protected boolean shouldLoaderImplement() {
-        return false;
+        return true;
     }
 
     @Override
@@ -161,7 +164,7 @@ public class ResetPasswordFragment extends BaseFragment {
                         params.put("otp", edtOTP.getText().toString());
                         params.put("password", edtPassword.getText().toString());
                         params.put("conform_password", edtConfirmPassword.getText().toString());
-                        loginViewModel.callToApi(params, LoginViewModel.OTP_SEND_API_TAG, true);
+                        loginViewModel.callToApi(params, LoginViewModel.OTP_PASSWORD_UPDATE_API_TAG, true);
                     }
                 })
         );
@@ -204,6 +207,15 @@ public class ResetPasswordFragment extends BaseFragment {
                                 hideProgressLoader();
                                 if (pair.first.equals(LoginViewModel.OTP_SEND_API_TAG)) {
                                     handleView(true);
+                                    JSONObject jsonObject = (JSONObject) pair.second;
+                                    if (jsonObject != null && jsonObject.getInt(Constants.KEY_SUCCESS) == 1) {
+                                        String data = jsonObject.getString("data");
+                                        showDialogWithSingleButtons(getContext(), getString(R.string.app_name),
+                                                data, Objects.requireNonNull(getActivity()).getString(R.string.ok), (dialog, which) -> {
+                                                    enableDisableView(frameMain, true);
+                                                }, false);
+                                    }
+
                                 } else if (pair.first.equals(LoginViewModel.OTP_PASSWORD_UPDATE_API_TAG)) {
                                     backToPreviousFragment(R.id.loginFragment, frameMain, false);
                                 }

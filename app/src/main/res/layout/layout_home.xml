@@ -38,358 +38,185 @@
                     android:orientation="vertical"
                     android:paddingStart="@dimen/_8sdp"
                     android:paddingEnd="@dimen/_8sdp"
-                    android:paddingBottom="@dimen/_50sdp">
-
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:id="@+id/txtRecent"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:background="#FFFFF0"
-                        android:gravity="start"
-                        android:padding="@dimen/space_five"
-                        android:text="Recent Complaints"
-                        android:textSize="@dimen/_14ssp"
-                        android:visibility="visible" />
+                    android:paddingBottom="@dimen/_50sdp"
+                    android:weightSum="5">
 
                     <LinearLayout
+                        android:id="@+id/llOpenComplaints"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/rectangle_border"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        android:padding="@dimen/_5sdp">
 
-                        <androidx.appcompat.widget.LinearLayoutCompat
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/txtOpenComplaintsCount"
+                            android:layout_width="@dimen/_70sdp"
+                            android:layout_height="@dimen/_70sdp"
+                            android:background="@drawable/round_open_drawable"
+                            android:gravity="center"
+                            android:text="13"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/_30ssp"
+                            tools:ignore="HardcodedText" />
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/txtOpenComplaints"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:padding="@dimen/_5sdp"
-                            android:weightSum="1">
+                            android:layout_marginStart="@dimen/_7sdp"
+                            android:gravity="center|start"
+                            android:text="Open Complaints"
+                            android:textAllCaps="true"
+                            android:textColor="@color/text_color"
+                            android:textSize="@dimen/_18ssp" />
 
-                            <androidx.appcompat.widget.LinearLayoutCompat
-                                android:layout_width="0dp"
-                                android:layout_height="match_parent"
-                                android:layout_weight="0.2"
-                                android:orientation="vertical"
-                                android:padding="@dimen/_5sdp"
-                                android:paddingBottom="@dimen/_8sdp">
-
-                                <androidx.appcompat.widget.AppCompatTextView
-                                    android:id="@+id/txtComplaintNoLbl"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:ellipsize="end"
-                                    android:maxLines="1"
-                                    android:text="Comp. No."
-                                    android:textColor="@color/text_color_gray"
-                                    android:textSize="@dimen/_10ssp" />
-
-                                <androidx.appcompat.widget.AppCompatTextView
-                                    android:id="@+id/txtComplaintNo"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:gravity="center"
-                                    android:text="127"
-                                    android:textColor="@color/text_color"
-                                    android:textSize="@dimen/_12ssp" />
-
-                                <androidx.appcompat.widget.AppCompatTextView
-                                    android:id="@+id/txtStatus"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:background="@color/reOpen_status"
-                                    android:ellipsize="end"
-                                    android:gravity="center"
-                                    android:maxLines="1"
-                                    android:text="Open"
-                                    android:textColor="@color/white"
-                                    android:textSize="@dimen/_10ssp" />
-
-                            </androidx.appcompat.widget.LinearLayoutCompat>
-
-                            <androidx.appcompat.widget.LinearLayoutCompat
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="0.8"
-                                android:orientation="vertical">
-
-                                <androidx.appcompat.widget.LinearLayoutCompat
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="0.7"
-                                    android:orientation="horizontal"
-                                    android:padding="@dimen/_5sdp"
-                                    android:paddingBottom="@dimen/_8sdp">
-
-                                    <androidx.appcompat.widget.AppCompatTextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="Customer : "
-                                        android:textColor="@color/text_color_gray"
-                                        android:textSize="@dimen/_10ssp" />
-
-                                    <androidx.appcompat.widget.AppCompatTextView
-                                        android:id="@+id/txtCustomerName"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:text="Ronak"
-                                        android:textColor="@color/text_color"
-                                        android:textSize="@dimen/_12ssp" />
-
-                                </androidx.appcompat.widget.LinearLayoutCompat>
-
-                                <androidx.appcompat.widget.LinearLayoutCompat
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="0.7"
-                                    android:orientation="horizontal"
-                                    android:padding="@dimen/_5sdp"
-                                    android:paddingBottom="@dimen/_8sdp">
-
-                                    <androidx.appcompat.widget.AppCompatTextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="M/C Type : "
-                                        android:textColor="@color/text_color_gray"
-                                        android:textSize="@dimen/_10ssp" />
-
-                                    <androidx.appcompat.widget.AppCompatTextView
-                                        android:id="@+id/txtMachineType"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="Heat Pump"
-                                        android:textColor="@color/text_color"
-                                        android:textSize="@dimen/_12ssp" />
-
-                                </androidx.appcompat.widget.LinearLayoutCompat>
-                            </androidx.appcompat.widget.LinearLayoutCompat>
-
-                        </androidx.appcompat.widget.LinearLayoutCompat>
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:background="@color/text_color_blue" />
-
-                        <androidx.appcompat.widget.LinearLayoutCompat
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:padding="@dimen/_5sdp"
-                            android:weightSum="1">
-
-                            <androidx.appcompat.widget.LinearLayoutCompat
-                                android:layout_width="0dp"
-                                android:layout_height="match_parent"
-                                android:layout_weight="0.2"
-                                android:orientation="vertical"
-                                android:padding="@dimen/_5sdp"
-                                android:paddingBottom="@dimen/_8sdp">
-
-                                <androidx.appcompat.widget.AppCompatTextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:ellipsize="end"
-                                    android:maxLines="1"
-                                    android:text="Comp. No."
-                                    android:textColor="@color/text_color_gray"
-                                    android:textSize="@dimen/_10ssp" />
-
-                                <androidx.appcompat.widget.AppCompatTextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:gravity="center"
-                                    android:text="128"
-                                    android:textColor="@color/text_color"
-                                    android:textSize="@dimen/_12ssp" />
-
-                                <androidx.appcompat.widget.AppCompatTextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:background="@color/reOpen_status"
-                                    android:ellipsize="end"
-                                    android:gravity="center"
-                                    android:maxLines="1"
-                                    android:text="Scheduled"
-                                    android:textColor="@color/white"
-                                    android:textSize="@dimen/_10ssp" />
-
-                            </androidx.appcompat.widget.LinearLayoutCompat>
-
-                            <androidx.appcompat.widget.LinearLayoutCompat
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="0.8"
-                                android:orientation="vertical">
-
-                                <androidx.appcompat.widget.LinearLayoutCompat
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="0.7"
-                                    android:orientation="horizontal"
-                                    android:padding="@dimen/_5sdp"
-                                    android:paddingBottom="@dimen/_8sdp">
-
-                                    <androidx.appcompat.widget.AppCompatTextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="Customer : "
-                                        android:textColor="@color/text_color_gray"
-                                        android:textSize="@dimen/_10ssp" />
-
-                                    <androidx.appcompat.widget.AppCompatTextView
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:text="Nimesh"
-                                        android:textColor="@color/text_color"
-                                        android:textSize="@dimen/_12ssp" />
-
-                                </androidx.appcompat.widget.LinearLayoutCompat>
-
-                                <androidx.appcompat.widget.LinearLayoutCompat
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="0.7"
-                                    android:orientation="horizontal"
-                                    android:padding="@dimen/_5sdp"
-                                    android:paddingBottom="@dimen/_8sdp">
-
-                                    <androidx.appcompat.widget.AppCompatTextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="M/C Type : "
-                                        android:textColor="@color/text_color_gray"
-                                        android:textSize="@dimen/_10ssp" />
-
-                                    <androidx.appcompat.widget.AppCompatTextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="Burner"
-                                        android:textColor="@color/text_color"
-                                        android:textSize="@dimen/_12ssp" />
-
-                                </androidx.appcompat.widget.LinearLayoutCompat>
-                            </androidx.appcompat.widget.LinearLayoutCompat>
-
-                        </androidx.appcompat.widget.LinearLayoutCompat>
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:background="@color/text_color_blue" />
-
-                        <androidx.appcompat.widget.LinearLayoutCompat
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:padding="@dimen/_5sdp"
-                            android:weightSum="1">
-
-                            <androidx.appcompat.widget.LinearLayoutCompat
-                                android:layout_width="0dp"
-                                android:layout_height="match_parent"
-                                android:layout_weight="0.2"
-                                android:orientation="vertical"
-                                android:padding="@dimen/_5sdp"
-                                android:paddingBottom="@dimen/_8sdp">
-
-                                <androidx.appcompat.widget.AppCompatTextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:ellipsize="end"
-                                    android:maxLines="1"
-                                    android:text="Comp. No."
-                                    android:textColor="@color/text_color_gray"
-                                    android:textSize="@dimen/_10ssp" />
-
-                                <androidx.appcompat.widget.AppCompatTextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:gravity="center"
-                                    android:text="123"
-                                    android:textColor="@color/text_color"
-                                    android:textSize="@dimen/_12ssp" />
-
-                                <androidx.appcompat.widget.AppCompatTextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:background="@color/completed_status"
-                                    android:ellipsize="end"
-                                    android:gravity="center"
-                                    android:maxLines="1"
-                                    android:text="Visited"
-                                    android:textColor="@color/white"
-                                    android:textSize="@dimen/_10ssp" />
-
-                            </androidx.appcompat.widget.LinearLayoutCompat>
-
-                            <androidx.appcompat.widget.LinearLayoutCompat
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="0.8"
-                                android:orientation="vertical">
-
-                                <androidx.appcompat.widget.LinearLayoutCompat
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="0.7"
-                                    android:orientation="horizontal"
-                                    android:padding="@dimen/_5sdp"
-                                    android:paddingBottom="@dimen/_8sdp">
-
-                                    <androidx.appcompat.widget.AppCompatTextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="Customer : "
-                                        android:textColor="@color/text_color_gray"
-                                        android:textSize="@dimen/_10ssp" />
-
-                                    <androidx.appcompat.widget.AppCompatTextView
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:text="Upen"
-                                        android:textColor="@color/text_color"
-                                        android:textSize="@dimen/_12ssp" />
-
-                                </androidx.appcompat.widget.LinearLayoutCompat>
-
-                                <androidx.appcompat.widget.LinearLayoutCompat
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="0.7"
-                                    android:orientation="horizontal"
-                                    android:padding="@dimen/_5sdp"
-                                    android:paddingBottom="@dimen/_8sdp">
-
-                                    <androidx.appcompat.widget.AppCompatTextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="M/C Type : "
-                                        android:textColor="@color/text_color_gray"
-                                        android:textSize="@dimen/_10ssp" />
-
-                                    <androidx.appcompat.widget.AppCompatTextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="Mac book"
-                                        android:textColor="@color/text_color"
-                                        android:textSize="@dimen/_12ssp" />
-
-                                </androidx.appcompat.widget.LinearLayoutCompat>
-                            </androidx.appcompat.widget.LinearLayoutCompat>
-
-                        </androidx.appcompat.widget.LinearLayoutCompat>
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:background="@color/text_color_blue" />
 
                     </LinearLayout>
 
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/recyclerView"
+                    <LinearLayout
+                        android:id="@+id/llScheduleComplaints"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:scrollbars="none" />
+                        android:layout_height="0dp"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:layout_weight="1"
+                        android:background="@drawable/rectangle_border2"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        android:padding="@dimen/_5sdp">
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/txtScheduleComplaintsCount"
+                            android:layout_width="@dimen/_70sdp"
+                            android:layout_height="@dimen/_70sdp"
+                            android:background="@drawable/round_schedule_drawable"
+                            android:gravity="center"
+                            android:text="5"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/_30ssp"
+                            tools:ignore="HardcodedText" />
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/txtScheduleComplaints"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/_7sdp"
+                            android:gravity="center|start"
+                            android:text="Scheduled Complaints"
+                            android:textAllCaps="true"
+                            android:textColor="@color/text_color"
+                            android:textSize="@dimen/_18ssp" />
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/llClosedComplaints"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:layout_weight="1"
+                        android:background="@drawable/rectangle_border1"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        android:padding="@dimen/_5sdp">
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/txtClosedComplaintsCount"
+                            android:layout_width="@dimen/_70sdp"
+                            android:layout_height="@dimen/_70sdp"
+                            android:background="@drawable/round_close_drawable"
+                            android:gravity="center"
+                            android:text="10"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/_30ssp"
+                            tools:ignore="HardcodedText" />
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/txtClosedComplaints"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/_7sdp"
+                            android:gravity="center|start"
+                            android:text="Closed Complaints"
+                            android:textAllCaps="true"
+                            android:textColor="@color/text_color"
+                            android:textSize="@dimen/_18ssp" />
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/llTotalComplaints"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:layout_weight="1"
+                        android:background="@drawable/rectangle_border3"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        android:padding="@dimen/_5sdp">
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/txtTotalComplaintsCount"
+                            android:layout_width="@dimen/_70sdp"
+                            android:layout_height="@dimen/_70sdp"
+                            android:background="@drawable/round_total_drawable"
+                            android:gravity="center"
+                            android:text="15"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/_30ssp"
+                            tools:ignore="HardcodedText" />
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/txtTotalComplaints"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/_7sdp"
+                            android:gravity="center|start"
+                            android:text="Total Complaints"
+                            android:textAllCaps="true"
+                            android:textColor="@color/text_color"
+                            android:textSize="@dimen/_18ssp" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/llApprovalPending"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:layout_weight="1"
+                        android:background="@drawable/rectangle_border4"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        android:padding="@dimen/_5sdp">
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/txtApprovalPendingCount"
+                            android:layout_width="@dimen/_70sdp"
+                            android:layout_height="@dimen/_70sdp"
+                            android:background="@drawable/round_approval_pending_drawable"
+                            android:gravity="center"
+                            android:text="15"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/_30ssp"
+                            tools:ignore="HardcodedText" />
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/txtApprovalPending"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/_7sdp"
+                            android:gravity="center|start"
+                            android:text="HOD Approval Pending Complaints"
+                            android:textAllCaps="true"
+                            android:textColor="@color/text_color"
+                            android:textSize="@dimen/_18ssp" />
+
+                    </LinearLayout>
 
                 </LinearLayout>
 

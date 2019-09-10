@@ -56,7 +56,7 @@
             android:gravity="center|start"
             android:text="@string/app_name"
             android:textColor="@color/text_color"
-            android:textSize="@dimen/_12ssp" />
+            android:textSize="@dimen/_14ssp" />
 
     </LinearLayout>
 
@@ -66,6 +66,6 @@
         android:layout_height="0.3dp"
         android:layout_marginTop="@dimen/_5sdp"
         android:background="@color/text_divider_color"
-        android:visibility="gone" />
+        android:visibility="visible" />
 
 </LinearLayout>

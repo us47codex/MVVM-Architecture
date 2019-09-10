@@ -16,13 +16,18 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
  * Email : us47codex@gmail.com
  **/
 
-@Database(entities = {User.class}, version = 2, exportSchema = false)
+@Database(entities = {User.class,
+        Complaint.class},
+        version = 2,
+        exportSchema = false)
 @TypeConverters(Converter.class)
 public abstract class SunTecDatabase extends RoomDatabase {
 
     private static SunTecDatabase INSTANCE;
 
     public abstract UserDao userDao();
+
+    public abstract ComplaintDao complaintDao();
 
     public static SunTecDatabase getInstance(Context context) {
         if (INSTANCE == null) {

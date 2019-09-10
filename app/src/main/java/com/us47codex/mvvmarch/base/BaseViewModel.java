@@ -114,12 +114,18 @@ public abstract class BaseViewModel extends AndroidViewModel {
                             getStatusBehaviorRelay().accept(ApiCallStatus.ERROR);
                         String errMessage = AppUtils.getMessageForErrorCode(obj, getContextBaseViewModel());
                         getErrorRelay().accept(errMessage);
-                    } else {
-                        obj.put(Constants.KEY_API_TAG, API_TAG);
-                        /*if (showProgressBar)
-                            complainListStatusBehaviorRelay.accept(ApiCallStatus.SUCCESS);*/
-//                        responseNavigator.handleSuccess(obj);
-                        return obj;
+                    } else if (obj.has(Constants.KEY_SUCCESS)) {
+                        if (obj.getString(Constants.KEY_SUCCESS).equals(Constants.API_SUCCESS)) {
+                            AppLog.error(TAG, "parseOnSuccess :: API TAG : " + API_TAG + ":: Success : ");
+                            obj.put(Constants.KEY_API_TAG, API_TAG);
+                            return obj;
+                        } else {
+                            AppLog.error(TAG, "parseOnSuccess :: API TAG : " + API_TAG + ":: Error : " + obj.opt(Constants.KEY_MESSAGE));
+                            if (showProgressBar)
+                                getStatusBehaviorRelay().accept(ApiCallStatus.ERROR);
+                            String errMessage = AppUtils.getMessageForErrorCode(obj, getContextBaseViewModel());
+                            getErrorRelay().accept(errMessage);
+                        }
                     }
                 } else {
                     AppLog.error(TAG, "parseOnSuccess :: API TAG : " + API_TAG + ":: Error : Response Null");

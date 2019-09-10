@@ -1,0 +1,584 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/frameMain"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:ignore="Overdraw">
+
+    <include layout="@layout/action_bar_custom" />
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/scrollview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="?attr/actionBarSize"
+        android:fillViewport="true"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:id="@+id/linMain"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/_50sdp">
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tilReportNo"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:layout_weight="1"
+                    android:hint="Report No"
+                    app:hintTextAppearance="@style/TextInputLayout.gray">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edtReportNo"
+                        style="@style/editTextTheme"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawablePadding="@dimen/_10sdp"
+                        android:inputType="text"
+                        android:textColor="@color/text_color"
+                        android:textColorHint="@color/text_color_gray" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tilDate"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="Date"
+                    app:hintTextAppearance="@style/TextInputLayout.gray">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edtDate"
+                        style="@style/editTextTheme"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawablePadding="@dimen/_10sdp"
+                        android:inputType="text"
+                        android:textColor="@color/text_color"
+                        android:textColorHint="@color/text_color_gray" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilCustomerName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Customer Name"
+                app:hintTextAppearance="@style/TextInputLayout.gray">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edtCustomerName"
+                    style="@style/editTextTheme"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="@dimen/_10sdp"
+                    android:inputType="text"
+                    android:textColor="@color/text_color"
+                    android:textColorHint="@color/text_color_gray" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilContactPerson"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Contact Person"
+                app:hintTextAppearance="@style/TextInputLayout.gray">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edtContactPerson"
+                    style="@style/editTextTheme"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="@dimen/_10sdp"
+                    android:inputType="text"
+                    android:textColor="@color/text_color"
+                    android:textColorHint="@color/text_color_gray" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilCustomerAddress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Customer Address"
+                app:hintTextAppearance="@style/TextInputLayout.gray">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edtCustomerAddress"
+                    style="@style/editTextTheme"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="@dimen/_10sdp"
+                    android:inputType="text"
+                    android:textColor="@color/text_color"
+                    android:textColorHint="@color/text_color_gray" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilHeatPumpModelSerialNo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Heat Pump Model and Serial No"
+                app:hintTextAppearance="@style/TextInputLayout.gray">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edtHeatPumpModelSerialNo"
+                    style="@style/editTextTheme"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="@dimen/_10sdp"
+                    android:inputType="text"
+                    android:textColor="@color/text_color"
+                    android:textColorHint="@color/text_color_gray" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilHWGModelSerialNo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="HWG Model and Serial No"
+                app:hintTextAppearance="@style/TextInputLayout.gray">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edtHWGModelSerialNo"
+                    style="@style/editTextTheme"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="@dimen/_10sdp"
+                    android:inputType="text"
+                    android:textColor="@color/text_color"
+                    android:textColorHint="@color/text_color_gray" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilNoOfHWG"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="No. Of HWG"
+                app:hintTextAppearance="@style/TextInputLayout.gray">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edtNoOfHWG"
+                    style="@style/editTextTheme"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="@dimen/_10sdp"
+                    android:inputType="text"
+                    android:textColor="@color/text_color"
+                    android:textColorHint="@color/text_color_gray" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilMonthYearOfInstallation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Month and Year Of Installation"
+                app:hintTextAppearance="@style/TextInputLayout.gray">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edtMonthYearOfInstallation"
+                    style="@style/editTextTheme"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="@dimen/_10sdp"
+                    android:inputType="text"
+                    android:textColor="@color/text_color"
+                    android:textColorHint="@color/text_color_gray" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilOEMDealerName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="OEM / Dealer Name"
+                app:hintTextAppearance="@style/TextInputLayout.gray">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edtOEMDealerName"
+                    style="@style/editTextTheme"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="@dimen/_10sdp"
+                    android:inputType="text"
+                    android:textColor="@color/text_color"
+                    android:textColorHint="@color/text_color_gray" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilDealerContactPerson"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Dealer Contact Person"
+                app:hintTextAppearance="@style/TextInputLayout.gray">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edtDealerContactPerson"
+                    style="@style/editTextTheme"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="@dimen/_10sdp"
+                    android:inputType="text"
+                    android:textColor="@color/text_color"
+                    android:textColorHint="@color/text_color_gray" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilDealerAddress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Dealer Address"
+                app:hintTextAppearance="@style/TextInputLayout.gray">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edtDealerAddress"
+                    style="@style/editTextTheme"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="@dimen/_10sdp"
+                    android:inputType="text"
+                    android:textColor="@color/text_color"
+                    android:textColorHint="@color/text_color_gray" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilDealerPhoneNo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Dealer Phone No"
+                app:hintTextAppearance="@style/TextInputLayout.gray">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edtDealerPhoneNo"
+                    style="@style/editTextTheme"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="@dimen/_10sdp"
+                    android:inputType="text"
+                    android:textColor="@color/text_color"
+                    android:textColorHint="@color/text_color_gray" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilEquipment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Equipment"
+                app:hintTextAppearance="@style/TextInputLayout.gray">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edtEquipment"
+                    style="@style/editTextTheme"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="@dimen/_10sdp"
+                    android:inputType="text"
+                    android:textColor="@color/text_color"
+                    android:textColorHint="@color/text_color_gray" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilPONoDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="PO No and Date"
+                app:hintTextAppearance="@style/TextInputLayout.gray">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edtPONoDate"
+                    style="@style/editTextTheme"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="@dimen/_10sdp"
+                    android:inputType="text"
+                    android:textColor="@color/text_color"
+                    android:textColorHint="@color/text_color_gray" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilComplaintNoDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Complaint No and Date"
+                app:hintTextAppearance="@style/TextInputLayout.gray">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edtComplaintNoDate"
+                    style="@style/editTextTheme"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="@dimen/_10sdp"
+                    android:inputType="text"
+                    android:textColor="@color/text_color"
+                    android:textColorHint="@color/text_color_gray" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilTypeOfCallReceiveDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Type Of Call and Receive Date"
+                app:hintTextAppearance="@style/TextInputLayout.gray">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edtTypeOfCallReceiveDate"
+                    style="@style/editTextTheme"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="@dimen/_10sdp"
+                    android:inputType="text"
+                    android:textColor="@color/text_color"
+                    android:textColorHint="@color/text_color_gray" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilRemark"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Remark"
+                app:hintTextAppearance="@style/TextInputLayout.gray">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edtFirstName"
+                    style="@style/editTextTheme"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="@dimen/_10sdp"
+                    android:inputType="text"
+                    android:minLines="2"
+                    android:textColor="@color/text_color"
+                    android:textColorHint="@color/text_color_gray" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilNatureOfProblem"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Nature Of Problem"
+                app:hintTextAppearance="@style/TextInputLayout.gray">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edtNatureOfProblem"
+                    style="@style/editTextTheme"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="@dimen/_10sdp"
+                    android:inputType="text"
+                    android:minLines="2"
+                    android:textColor="@color/text_color"
+                    android:textColorHint="@color/text_color_gray" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilObservation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Observation"
+                app:hintTextAppearance="@style/TextInputLayout.gray">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edtObservation"
+                    style="@style/editTextTheme"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="@dimen/_10sdp"
+                    android:inputType="text"
+                    android:minLines="2"
+                    android:textColor="@color/text_color"
+                    android:textColorHint="@color/text_color_gray" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilDescriptionOfWorkDone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Description Of Work Done"
+                app:hintTextAppearance="@style/TextInputLayout.gray">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edtDescriptionOfWorkDone"
+                    style="@style/editTextTheme"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="@dimen/_10sdp"
+                    android:inputType="text"
+                    android:minLines="2"
+                    android:textColor="@color/text_color"
+                    android:textColorHint="@color/text_color_gray" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilSuggestionToCustomer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Suggestion Given To Customer"
+                app:hintTextAppearance="@style/TextInputLayout.gray">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edtSuggestionToCustomer"
+                    style="@style/editTextTheme"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="@dimen/_10sdp"
+                    android:inputType="text"
+                    android:minLines="2"
+                    android:textColor="@color/text_color"
+                    android:textColorHint="@color/text_color_gray" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilCustomerRemark"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Customer Remarks"
+                app:hintTextAppearance="@style/TextInputLayout.gray">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edtCustomerRemark"
+                    style="@style/editTextTheme"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="@dimen/_10sdp"
+                    android:inputType="text"
+                    android:minLines="2"
+                    android:textColor="@color/text_color"
+                    android:textColorHint="@color/text_color_gray" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_weight="1"
+                    android:gravity="start"
+                    android:paddingStart="@dimen/_5sdp"
+                    android:paddingEnd="@dimen/_5sdp"
+                    android:text="Work status"
+                    android:textColor="@color/text_color_gray"
+                    android:textSize="@dimen/_10ssp"
+                    tools:ignore="HardcodedText" />
+
+                <RadioGroup
+                    android:id="@+id/rdgWorkStatus"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <RadioButton
+                        android:id="@+id/rdbComplete"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Complete" />
+
+                    <RadioButton
+                        android:id="@+id/rdbIncomplete"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Incomplete" />
+                </RadioGroup>
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/text_divider_color" />
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_weight="1"
+                    android:gravity="start"
+                    android:paddingStart="@dimen/_5sdp"
+                    android:paddingEnd="@dimen/_5sdp"
+                    android:text="Quality Of Service"
+                    android:textColor="@color/text_color_gray"
+                    android:textSize="@dimen/_10ssp"
+                    tools:ignore="HardcodedText" />
+
+                <RadioGroup
+                    android:id="@+id/rdgQualityOfService"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <RadioButton
+                        android:id="@+id/rdbExcellent"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Excellent" />
+
+                    <RadioButton
+                        android:id="@+id/rdbGood"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Good" />
+
+                    <RadioButton
+                        android:id="@+id/rdbPoor"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Poor" />
+                </RadioGroup>
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/text_divider_color" />
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+    </androidx.core.widget.NestedScrollView>
+
+</FrameLayout>

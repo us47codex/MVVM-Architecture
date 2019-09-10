@@ -5,7 +5,7 @@
     android:viewportWidth="100"
     android:viewportHeight="100">
     <path
-        android:fillColor="@color/side_drawer_icon_color"
+        android:fillColor="@color/colorPrimary"
         android:pathData="M49.956,4.166C24.655,4.166 4.167,24.702 4.167,50c0,25.298 20.489,45.834 45.789,45.834c25.341,0 45.876,-20.536 45.876,-45.834C95.832,24.702 75.297,4.166 49.956,4.166zM50,86.667c-20.258,0 -36.667,-16.409 -36.667,-36.667c0,-20.258 16.409,-36.667 36.667,-36.667c20.256,0 36.665,16.409 36.665,36.667C86.665,70.258 70.257,86.667 50,86.667z" />
     <path
         android:fillColor="@color/colorPrimary"

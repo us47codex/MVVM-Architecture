@@ -43,8 +43,7 @@ public class HomeViewModel extends BaseViewModel {
     private final String TAG = HomeViewModel.class.getSimpleName();
 
     public static final String POST_PROFILE_API_TAG = "post_profile_api_tag";
-    public static final String OTP_SEND_API_TAG = "otp_send_api_tag";
-    public static final String OTP_PASSWORD_UPDATE_API_TAG = "otp_password_update_api_tag";
+    public static final String CHANGE_PASSWORD_API_TAG = "change_password_api_tag";
 
     public HomeViewModel(@NonNull Application application) {
         super(application);
@@ -68,6 +67,9 @@ public class HomeViewModel extends BaseViewModel {
                 case POST_PROFILE_API_TAG:
                     callToUpdateProfile((HashMap<String, String>) params, apiTag, shouldShowLoader);
                     break;
+                case CHANGE_PASSWORD_API_TAG:
+                    callToUpdateProfile((HashMap<String, String>) params, apiTag, shouldShowLoader);
+                    break;
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -85,6 +87,51 @@ public class HomeViewModel extends BaseViewModel {
         getCompositeDisposable().add(
                 RestCallAPI.restCallAPI(
                         EndPoints.UPDATE_PROFILE,
+                        getHeaders(),
+                        params,
+                        new DisposableSingleObserver<Response<ResponseBody>>() {
+                            @Override
+                            public void onSuccess(Response<ResponseBody> response) {
+                                try {
+                                    JSONObject jsonObject = parseOnSuccess(response, apiTag, shouldShowLoader);
+                                    if (jsonObject != null) {
+                                        AppLog.error(TAG, "User Login :" + jsonObject.toString());
+                                        JSONObject data = jsonObject.getJSONObject("data");
+                                        processUserData(data)
+                                                .subscribeOn(Schedulers.io())
+                                                .doOnComplete(() -> {
+                                                    if (shouldShowLoader) {
+                                                        getStatusBehaviorRelay().accept(ApiCallStatus.SUCCESS);
+                                                    }
+                                                    getResponseRelay().accept(new Pair<>(apiTag, jsonObject));
+                                                }).doOnError(throwable -> {
+                                            if (shouldShowLoader)
+                                                getStatusBehaviorRelay().accept(ApiCallStatus.ERROR);
+                                            getErrorRelay().accept(Objects.requireNonNull(throwable.getLocalizedMessage()));
+                                        }).subscribe();
+
+                                    }
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                    if (shouldShowLoader)
+                                        getStatusBehaviorRelay().accept(ApiCallStatus.ERROR);
+                                    getErrorRelay().accept(Objects.requireNonNull(e.getLocalizedMessage()));
+                                }
+                            }
+
+                            @Override
+                            public void onError(Throwable e) {
+                                e.printStackTrace();
+                                parseOnError(e, apiTag, shouldShowLoader);
+                            }
+                        }
+                ));
+    }
+
+    private void callToChangePassword(HashMap<String, String> params, String apiTag, boolean shouldShowLoader) {
+        getCompositeDisposable().add(
+                RestCallAPI.restCallAPI(
+                        EndPoints.CHANGE_PASSWORD,
                         getHeaders(),
                         params,
                         new DisposableSingleObserver<Response<ResponseBody>>() {

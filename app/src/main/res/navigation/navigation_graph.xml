@@ -40,16 +40,18 @@
         <action
             android:id="@+id/toLoginFragment"
             app:destination="@id/loginFragment" />
+        <action
+            android:id="@+id/toComplaintsFragment"
+            app:destination="@id/complaintsFragment" />
+        <action
+            android:id="@+id/toChangePasswordFragment"
+            app:destination="@id/changePasswordFragment" />
     </fragment>
     <fragment
         android:id="@+id/userProfileFragment"
         android:name="com.us47codex.mvvmarch.UserProfileFragment"
         android:label="fragment_user_profile"
-        tools:layout="@layout/fragment_user_profile">
-        <action
-            android:id="@+id/toChangePasswordFragment"
-            app:destination="@id/changePasswordFragment" />
-    </fragment>
+        tools:layout="@layout/fragment_user_profile"></fragment>
 
     <fragment
         android:id="@+id/changePasswordFragment"
@@ -61,4 +63,27 @@
         android:name="com.us47codex.mvvmarch.ResetPasswordFragment"
         android:label="fragment_reset_password2"
         tools:layout="@layout/fragment_reset_password" />
+    <fragment
+        android:id="@+id/complaintsFragment"
+        android:name="com.us47codex.mvvmarch.ComplaintsFragment"
+        android:label="fragment_complaints"
+        tools:layout="@layout/fragment_complaints">
+        <action
+            android:id="@+id/toComplaintDetailsFragment"
+            app:destination="@id/complaintDetailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/complaintDetailsFragment"
+        android:name="com.us47codex.mvvmarch.ComplaintDetailsFragment"
+        android:label="fragment_complaint_details"
+        tools:layout="@layout/fragment_complaint_details">
+        <action
+            android:id="@+id/toVisitReportFragment"
+            app:destination="@id/visitReportFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/visitReportFragment"
+        android:name="com.us47codex.mvvmarch.VisitReportFragment"
+        android:label="fragment_visit_report"
+        tools:layout="@layout/fragment_visit_report" />
 </navigation>

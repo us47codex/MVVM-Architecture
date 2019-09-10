@@ -38,6 +38,7 @@ import com.us47codex.mvvmarch.NavigationDrawerAdapter;
 import com.us47codex.mvvmarch.R;
 import com.us47codex.mvvmarch.SunTecApplication;
 import com.us47codex.mvvmarch.SunTecPreferenceManager;
+import com.us47codex.mvvmarch.constant.Constants;
 import com.us47codex.mvvmarch.helper.AppUtils;
 import com.us47codex.mvvmarch.interfaces.OnItemClickListener;
 import com.us47codex.mvvmarch.models.NavDrawerModel;
@@ -53,7 +54,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
 
-public abstract class BaseFragment extends Fragment implements View.OnClickListener {
+public abstract class BaseFragment extends Fragment implements View.OnClickListener, OnItemClickListener {
     private static final String TAG = BaseFragment.class.getSimpleName();
     private Toolbar toolbar;
     private ProgressBar loadingSpinner;
@@ -227,8 +228,11 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
         }
 
         compositeDisposable.add(
-                RxView.clicks(linProfile).throttleFirst(500, TimeUnit.MILLISECONDS).subscribe(o -> jumpToDestinationFragment(getCurrentFragmentId(),
-                        R.id.toUserProfileFragment, frameMain, null, false))
+                RxView.clicks(linProfile).throttleFirst(500, TimeUnit.MILLISECONDS).subscribe(o -> {
+                    mDrawerLayout.closeDrawer(GravityCompat.START);
+                    jumpToDestinationFragment(getCurrentFragmentId(),
+                            R.id.toUserProfileFragment, frameMain, null, false);
+                })
         );
 
         compositeDisposable.add(
@@ -275,19 +279,25 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
         navDrawerModelList.clear();
 
         NavDrawerModel navItemChangePassword = new NavDrawerModel();
-        navItemChangePassword.setId(1);
-        navItemChangePassword.setTitle(getResources().getString(R.string.complaints));
+        navItemChangePassword.setId(Constants.CHANGE_PASSWORD_ID);
+        navItemChangePassword.setTitle(getResources().getString(R.string.change_password));
         navItemChangePassword.setImgId(R.drawable.ic_change_password);
         navDrawerModelList.add(navItemChangePassword);
 
+        NavDrawerModel navItemComplaints = new NavDrawerModel();
+        navItemComplaints.setId(Constants.COMPLAINTS_ID);
+        navItemComplaints.setTitle(getResources().getString(R.string.complaint));
+        navItemComplaints.setImgId(R.drawable.ic_change_password);
+        navDrawerModelList.add(navItemComplaints);
+
         NavDrawerModel navItemAboutUs = new NavDrawerModel();
-        navItemAboutUs.setId(2);
+        navItemAboutUs.setId(Constants.ABOUT_US_ID);
         navItemAboutUs.setTitle(getResources().getString(R.string.about_us));
         navItemAboutUs.setImgId(R.drawable.ic_aboutus);
         navDrawerModelList.add(navItemAboutUs);
 
         NavDrawerModel navItemLogout = new NavDrawerModel();
-        navItemLogout.setId(3);
+        navItemLogout.setId(Constants.LOGOUT_ID);
         navItemLogout.setTitle(getResources().getString(R.string.logout));
         navItemLogout.setImgId(R.drawable.ic_logout);
         navDrawerModelList.add(navItemLogout);
@@ -310,16 +320,21 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
         public void onItemClick(View view, int pos, Object object) {
             NavDrawerModel navDrawerModel = (NavDrawerModel) object;
 
-            if (navDrawerModel.getId() == 3) {
+            if (navDrawerModel.getId() == Constants.LOGOUT_ID) {
                 showDialogWithTwoButtons(BaseFragment.this.getActivity(), Objects.requireNonNull(getActivity()).getString(R.string.app_name), getActivity().getString(R.string.logout_warning_msg),
                         Objects.requireNonNull(getActivity()).getString(R.string.yes), getActivity().getString(R.string.cancel), (dialog, which) -> clearAllDataFromApp(), null, false);
+            } else if (navDrawerModel.getId() == Constants.COMPLAINTS_ID) {
+                jumpToDestinationFragment(getCurrentFragmentId(),
+                        R.id.toComplaintsFragment, frameMain, null, false);
+            } else if (navDrawerModel.getId() == Constants.CHANGE_PASSWORD_ID) {
+                jumpToDestinationFragment(getCurrentFragmentId(),
+                        R.id.toChangePasswordFragment, frameMain, null, false);
             } else {
                 showDialogWithSingleButtons(getContext(), getString(R.string.app_name),
                         Objects.requireNonNull(getActivity()).getString(R.string.coming_soon),
                         Objects.requireNonNull(getActivity()).getString(R.string.ok), (MaterialDialog dialog, DialogAction which) -> {
                         }, false);
             }
-            mDrawerLayout.closeDrawer(GravityCompat.START);
             mDrawerLayout.closeDrawer(GravityCompat.START);
         }
 
@@ -453,5 +468,30 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
                         .doOnError(Throwable::printStackTrace)
                         .subscribe()
         );
+    }
+
+    @Override
+    public void onItemClick(int pos) {
+
+    }
+
+    @Override
+    public void onItemClick(View view, Object object) {
+
+    }
+
+    @Override
+    public void onItemClick(View view, int pos, Object object) {
+
+    }
+
+    @Override
+    public void onItemLongClick(View view, int pos, Object object) {
+
+    }
+
+    @Override
+    public void onOtherItemSave(int id, View view, String value) {
+
     }
 }
