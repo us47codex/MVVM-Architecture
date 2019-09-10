@@ -46,8 +46,13 @@ public class ComplaintViewModel extends BaseViewModel {
 
     private final String TAG = ComplaintViewModel.class.getSimpleName();
 
-    public static final String COMPLAINT_DETAIL_API_TAG = "post_profile_api_tag";
-    public static final String COMPLAINT_LIST_API_TAG = "otp_send_api_tag";
+    public static final String COMPLAINT_DETAIL_API_TAG = "COMPLAINT_DETAIL_API_TAG";
+    public static final String COMPLAINT_LIST_API_TAG = "COMPLAINT_LIST_API_TAG";
+    public static final String SCHEDULE_DATE_API_TAG = "SCHEDULE_DATE_API_TAG";
+    public static final String COMPLAIN_SCHEDULE_API_TAG = "COMPLAIN_SCHEDULE_API_TAG";
+    public static final String HEAT_PUMP_COMPLAIN_VISIT_API_TAG = "HEAT_PUMP_COMPLAIN_VISIT_API_TAG";
+    public static final String BURNER_INSTALLATION_COMPLAINT_VISIT_API_TAG = "BURNER_INSTALLATION_COMPLAINT_VISIT_API_TAG";
+    public static final String BURNER_SERVICE_COMPLAINT_VISIT_API_TAG = "BURNER_SERVICE_COMPLAINT_VISIT_API_TAG";
 
     public ComplaintViewModel(@NonNull Application application) {
         super(application);
@@ -71,8 +76,29 @@ public class ComplaintViewModel extends BaseViewModel {
                 case COMPLAINT_LIST_API_TAG:
                     callToComplaintList((HashMap<String, String>) params, apiTag, shouldShowLoader);
                     break;
+
                 case COMPLAINT_DETAIL_API_TAG:
                     callToComplaintDetail((HashMap<String, String>) params, apiTag, shouldShowLoader);
+                    break;
+
+                case BURNER_SERVICE_COMPLAINT_VISIT_API_TAG:
+                    callToBurnerServiceComplainVisit((HashMap<String, String>) params, apiTag, shouldShowLoader);
+                    break;
+
+                case BURNER_INSTALLATION_COMPLAINT_VISIT_API_TAG:
+                    callToBurnerInstallationComplainVisit((HashMap<String, String>) params, apiTag, shouldShowLoader);
+                    break;
+
+                case HEAT_PUMP_COMPLAIN_VISIT_API_TAG:
+                    callToHeatPumpComplainVisit((HashMap<String, String>) params, apiTag, shouldShowLoader);
+                    break;
+
+                case COMPLAIN_SCHEDULE_API_TAG:
+                    callToComplainSchedule((HashMap<String, String>) params, apiTag, shouldShowLoader);
+                    break;
+
+                case SCHEDULE_DATE_API_TAG:
+                    callToScheduleDate((HashMap<String, String>) params, apiTag, shouldShowLoader);
                     break;
             }
         } catch (Exception e) {
@@ -101,19 +127,6 @@ public class ComplaintViewModel extends BaseViewModel {
                                     if (jsonObject != null) {
                                         AppLog.error(TAG, "User Login :" + jsonObject.toString());
                                         JSONObject data = jsonObject.getJSONObject("data");
-                                        processUserData(data)
-                                                .subscribeOn(Schedulers.io())
-                                                .doOnComplete(() -> {
-                                                    if (shouldShowLoader) {
-                                                        getStatusBehaviorRelay().accept(ApiCallStatus.SUCCESS);
-                                                    }
-                                                    getResponseRelay().accept(new Pair<>(apiTag, jsonObject));
-                                                }).doOnError(throwable -> {
-                                            if (shouldShowLoader)
-                                                getStatusBehaviorRelay().accept(ApiCallStatus.ERROR);
-                                            getErrorRelay().accept(Objects.requireNonNull(throwable.getLocalizedMessage()));
-                                        }).subscribe();
-
                                     }
                                 } catch (Exception e) {
                                     e.printStackTrace();
@@ -147,19 +160,171 @@ public class ComplaintViewModel extends BaseViewModel {
                                         AppLog.error(TAG, "User Login :" + jsonObject.toString());
                                         JSONArray data = jsonObject.getJSONArray("data");
                                         processToComplaintList(data, apiTag, shouldShowLoader);
-//                                        processUserData(data)
-//                                                .subscribeOn(Schedulers.io())
-//                                                .doOnComplete(() -> {
-//                                                    if (shouldShowLoader) {
-//                                                        getStatusBehaviorRelay().accept(ApiCallStatus.SUCCESS);
-//                                                    }
-//                                                    getResponseRelay().accept(new Pair<>(apiTag, jsonObject));
-//                                                }).doOnError(throwable -> {
-//                                            if (shouldShowLoader)
-//                                                getStatusBehaviorRelay().accept(ApiCallStatus.ERROR);
-//                                            getErrorRelay().accept(Objects.requireNonNull(throwable.getLocalizedMessage()));
-//                                        }).subscribe();
+                                    }
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                    if (shouldShowLoader)
+                                        getStatusBehaviorRelay().accept(ApiCallStatus.ERROR);
+                                    getErrorRelay().accept(Objects.requireNonNull(e.getLocalizedMessage()));
+                                }
+                            }
 
+                            @Override
+                            public void onError(Throwable e) {
+                                e.printStackTrace();
+                                parseOnError(e, apiTag, shouldShowLoader);
+                            }
+                        }
+                ));
+    }
+
+    private void callToBurnerServiceComplainVisit(HashMap<String, String> params, String apiTag, boolean shouldShowLoader) {
+        getCompositeDisposable().add(
+                RestCallAPI.restCallAPI(
+                        EndPoints.BURNER_SERVICE_COMPLAINT_VISIT,
+                        getHeaders(),
+                        params,
+                        new DisposableSingleObserver<Response<ResponseBody>>() {
+                            @Override
+                            public void onSuccess(Response<ResponseBody> response) {
+                                try {
+                                    JSONObject jsonObject = parseOnSuccess(response, apiTag, shouldShowLoader);
+                                    if (jsonObject != null) {
+                                        AppLog.error(TAG, "User Login :" + jsonObject.toString());
+                                        JSONArray data = jsonObject.getJSONArray("data");
+                                        processToComplaintList(data, apiTag, shouldShowLoader);
+                                    }
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                    if (shouldShowLoader)
+                                        getStatusBehaviorRelay().accept(ApiCallStatus.ERROR);
+                                    getErrorRelay().accept(Objects.requireNonNull(e.getLocalizedMessage()));
+                                }
+                            }
+
+                            @Override
+                            public void onError(Throwable e) {
+                                e.printStackTrace();
+                                parseOnError(e, apiTag, shouldShowLoader);
+                            }
+                        }
+                ));
+    }
+
+    private void callToBurnerInstallationComplainVisit(HashMap<String, String> params, String apiTag, boolean shouldShowLoader) {
+        getCompositeDisposable().add(
+                RestCallAPI.restCallAPI(
+                        EndPoints.BURNER_INSTALLATION_COMPLAINT_VISIT,
+                        getHeaders(),
+                        params,
+                        new DisposableSingleObserver<Response<ResponseBody>>() {
+                            @Override
+                            public void onSuccess(Response<ResponseBody> response) {
+                                try {
+                                    JSONObject jsonObject = parseOnSuccess(response, apiTag, shouldShowLoader);
+                                    if (jsonObject != null) {
+                                        AppLog.error(TAG, "User Login :" + jsonObject.toString());
+                                        JSONArray data = jsonObject.getJSONArray("data");
+                                        processToComplaintList(data, apiTag, shouldShowLoader);
+                                    }
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                    if (shouldShowLoader)
+                                        getStatusBehaviorRelay().accept(ApiCallStatus.ERROR);
+                                    getErrorRelay().accept(Objects.requireNonNull(e.getLocalizedMessage()));
+                                }
+                            }
+
+                            @Override
+                            public void onError(Throwable e) {
+                                e.printStackTrace();
+                                parseOnError(e, apiTag, shouldShowLoader);
+                            }
+                        }
+                ));
+    }
+
+    private void callToHeatPumpComplainVisit(HashMap<String, String> params, String apiTag, boolean shouldShowLoader) {
+        getCompositeDisposable().add(
+                RestCallAPI.restCallAPI(
+                        EndPoints.HEAT_PUMP_COMPLAIN_VISIT,
+                        getHeaders(),
+                        params,
+                        new DisposableSingleObserver<Response<ResponseBody>>() {
+                            @Override
+                            public void onSuccess(Response<ResponseBody> response) {
+                                try {
+                                    JSONObject jsonObject = parseOnSuccess(response, apiTag, shouldShowLoader);
+                                    if (jsonObject != null) {
+                                        AppLog.error(TAG, "User Login :" + jsonObject.toString());
+                                        JSONArray data = jsonObject.getJSONArray("data");
+                                        processToComplaintList(data, apiTag, shouldShowLoader);
+                                    }
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                    if (shouldShowLoader)
+                                        getStatusBehaviorRelay().accept(ApiCallStatus.ERROR);
+                                    getErrorRelay().accept(Objects.requireNonNull(e.getLocalizedMessage()));
+                                }
+                            }
+
+                            @Override
+                            public void onError(Throwable e) {
+                                e.printStackTrace();
+                                parseOnError(e, apiTag, shouldShowLoader);
+                            }
+                        }
+                ));
+    }
+
+    private void callToComplainSchedule(HashMap<String, String> params, String apiTag, boolean shouldShowLoader) {
+        getCompositeDisposable().add(
+                RestCallAPI.restCallAPI(
+                        EndPoints.COMPLAIN_SCHEDULE,
+                        getHeaders(),
+                        params,
+                        new DisposableSingleObserver<Response<ResponseBody>>() {
+                            @Override
+                            public void onSuccess(Response<ResponseBody> response) {
+                                try {
+                                    JSONObject jsonObject = parseOnSuccess(response, apiTag, shouldShowLoader);
+                                    if (jsonObject != null) {
+                                        AppLog.error(TAG, "User Login :" + jsonObject.toString());
+                                        JSONArray data = jsonObject.getJSONArray("data");
+                                        processToComplaintList(data, apiTag, shouldShowLoader);
+                                    }
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                    if (shouldShowLoader)
+                                        getStatusBehaviorRelay().accept(ApiCallStatus.ERROR);
+                                    getErrorRelay().accept(Objects.requireNonNull(e.getLocalizedMessage()));
+                                }
+                            }
+
+                            @Override
+                            public void onError(Throwable e) {
+                                e.printStackTrace();
+                                parseOnError(e, apiTag, shouldShowLoader);
+                            }
+                        }
+                ));
+    }
+
+    private void callToScheduleDate(HashMap<String, String> params, String apiTag, boolean shouldShowLoader) {
+        getCompositeDisposable().add(
+                RestCallAPI.restCallAPI(
+                        EndPoints.SCHEDULE_DATE,
+                        getHeaders(),
+                        params,
+                        new DisposableSingleObserver<Response<ResponseBody>>() {
+                            @Override
+                            public void onSuccess(Response<ResponseBody> response) {
+                                try {
+                                    JSONObject jsonObject = parseOnSuccess(response, apiTag, shouldShowLoader);
+                                    if (jsonObject != null) {
+                                        AppLog.error(TAG, "User Login :" + jsonObject.toString());
+                                        JSONArray data = jsonObject.getJSONArray("data");
+                                        processToComplaintList(data, apiTag, shouldShowLoader);
                                     }
                                 } catch (Exception e) {
                                     e.printStackTrace();

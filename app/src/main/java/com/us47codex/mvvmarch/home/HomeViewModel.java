@@ -44,6 +44,7 @@ public class HomeViewModel extends BaseViewModel {
 
     public static final String POST_PROFILE_API_TAG = "post_profile_api_tag";
     public static final String CHANGE_PASSWORD_API_TAG = "change_password_api_tag";
+    public static final String DASHBOARD_API_TAG = "DASHBOARD_API_TAG";
 
     public HomeViewModel(@NonNull Application application) {
         super(application);
@@ -64,6 +65,9 @@ public class HomeViewModel extends BaseViewModel {
 //                            if (aBoolean) {
         try {
             switch ((apiTag)) {
+                case DASHBOARD_API_TAG:
+                    callToDashboard((HashMap<String, String>) params, apiTag, shouldShowLoader);
+                    break;
                 case POST_PROFILE_API_TAG:
                     callToUpdateProfile((HashMap<String, String>) params, apiTag, shouldShowLoader);
                     break;
@@ -163,6 +167,50 @@ public class HomeViewModel extends BaseViewModel {
                 ));
     }
 
+    private void callToDashboard(HashMap<String, String> params, String apiTag, boolean shouldShowLoader) {
+        getCompositeDisposable().add(
+                RestCallAPI.restGetCallAPI(
+                        EndPoints.DASHBOARD,
+                        getHeaders(),
+                        params,
+                        new DisposableSingleObserver<Response<ResponseBody>>() {
+                            @Override
+                            public void onSuccess(Response<ResponseBody> response) {
+                                try {
+                                    JSONObject jsonObject = parseOnSuccess(response, apiTag, shouldShowLoader);
+                                    if (jsonObject != null) {
+                                        AppLog.error(TAG, "User Login :" + jsonObject.toString());
+                                        JSONObject data = jsonObject.getJSONObject("data");
+//                                        processDashboardData(data)
+//                                                .subscribeOn(Schedulers.io())
+//                                                .doOnComplete(() -> {
+                                        if (shouldShowLoader) {
+                                            getStatusBehaviorRelay().accept(ApiCallStatus.SUCCESS);
+                                        }
+                                        getResponseRelay().accept(new Pair<>(apiTag, jsonObject));
+//                                                }).doOnError(throwable -> {
+//                                            if (shouldShowLoader)
+//                                                getStatusBehaviorRelay().accept(ApiCallStatus.ERROR);
+//                                            getErrorRelay().accept(Objects.requireNonNull(throwable.getLocalizedMessage()));
+//                                        }).subscribe();
+                                    }
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                    if (shouldShowLoader)
+                                        getStatusBehaviorRelay().accept(ApiCallStatus.ERROR);
+                                    getErrorRelay().accept(Objects.requireNonNull(e.getLocalizedMessage()));
+                                }
+                            }
+
+                            @Override
+                            public void onError(Throwable e) {
+                                e.printStackTrace();
+                                parseOnError(e, apiTag, shouldShowLoader);
+                            }
+                        }
+                ));
+    }
+
     private Completable processUserData(JSONObject data) {
         return Single.just(data)
                 .subscribeOn(Schedulers.computation())
@@ -190,6 +238,42 @@ public class HomeViewModel extends BaseViewModel {
                     getPreference().putStringValue(PREF_USER_PROFILE, user.getProfile());
                     getPreference().putStringValue(PREF_USER_DEPARTMENT, user.getDepartment());
 
+                    return Single.just(user);
+                })
+                .onErrorReturn(throwable -> {
+                    throwable.printStackTrace();
+                    return new User();
+                })
+                .filter(user -> user != null && user.getId() != 0)
+                .concatMapCompletable(user -> getDatabase().userDao().insertUser(user));
+    }
+
+    private Completable processDashboardData(JSONObject data) {
+        return Single.just(data)
+                .subscribeOn(Schedulers.computation())
+                .filter(jsonObject -> !(null == jsonObject))
+                .toObservable()
+                .concatMapSingle((Function<JSONObject, SingleSource<User>>) jsonObject -> {
+                    User user = new User();
+                    user.setId(jsonObject.optInt("id"));
+                    user.setFirst_name(jsonObject.getString("first_name"));
+                    user.setMiddle_name(jsonObject.getString("middle_name"));
+                    user.setLast_name(jsonObject.getString("last_name"));
+                    user.setUsername(jsonObject.getString("username"));
+                    user.setMno(jsonObject.getString("mno"));
+                    user.setEmail(jsonObject.getString("email"));
+                    user.setProfile(jsonObject.getString("profile"));
+                    user.setDepartment(jsonObject.getString("department"));
+
+                    getPreference().putStringValue(PREF_USER_ID, String.valueOf(user.getId()));
+                    getPreference().putStringValue(PREF_USER_FIRST_NAME, user.getFirst_name());
+                    getPreference().putStringValue(PREF_USER_MIDDLE_NAME, user.getMiddle_name());
+                    getPreference().putStringValue(PREF_USER_LAST_NAME, user.getLast_name());
+                    getPreference().putStringValue(PREF_USER_NAME, user.getUsername());
+                    getPreference().putStringValue(PREF_USER_MNO, user.getMno());
+                    getPreference().putStringValue(PREF_USER_EMAIL, user.getEmail());
+                    getPreference().putStringValue(PREF_USER_PROFILE, user.getProfile());
+                    getPreference().putStringValue(PREF_USER_DEPARTMENT, user.getDepartment());
 
                     return Single.just(user);
                 })

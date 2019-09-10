@@ -57,7 +57,7 @@
                             android:layout_height="@dimen/_70sdp"
                             android:background="@drawable/round_open_drawable"
                             android:gravity="center"
-                            android:text="13"
+                            android:text="0"
                             android:textColor="@color/white"
                             android:textSize="@dimen/_30ssp"
                             tools:ignore="HardcodedText" />
@@ -93,7 +93,7 @@
                             android:layout_height="@dimen/_70sdp"
                             android:background="@drawable/round_schedule_drawable"
                             android:gravity="center"
-                            android:text="5"
+                            android:text="0"
                             android:textColor="@color/white"
                             android:textSize="@dimen/_30ssp"
                             tools:ignore="HardcodedText" />
@@ -129,7 +129,7 @@
                             android:layout_height="@dimen/_70sdp"
                             android:background="@drawable/round_close_drawable"
                             android:gravity="center"
-                            android:text="10"
+                            android:text="0"
                             android:textColor="@color/white"
                             android:textSize="@dimen/_30ssp"
                             tools:ignore="HardcodedText" />
@@ -165,7 +165,7 @@
                             android:layout_height="@dimen/_70sdp"
                             android:background="@drawable/round_total_drawable"
                             android:gravity="center"
-                            android:text="15"
+                            android:text="0"
                             android:textColor="@color/white"
                             android:textSize="@dimen/_30ssp"
                             tools:ignore="HardcodedText" />
@@ -192,7 +192,8 @@
                         android:background="@drawable/rectangle_border4"
                         android:gravity="center"
                         android:orientation="horizontal"
-                        android:padding="@dimen/_5sdp">
+                        android:padding="@dimen/_5sdp"
+                        android:visibility="gone">
 
                         <androidx.appcompat.widget.AppCompatTextView
                             android:id="@+id/txtApprovalPendingCount"
@@ -235,4 +236,5 @@
         android:visibility="gone" />
 
     <include layout="@layout/layout_bottom_view" />
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

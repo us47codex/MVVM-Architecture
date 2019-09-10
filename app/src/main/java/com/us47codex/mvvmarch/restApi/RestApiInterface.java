@@ -8,9 +8,9 @@ import java.util.Map;
 
 import io.reactivex.Single;
 import okhttp3.ResponseBody;
-import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.http.Body;
+import retrofit2.http.GET;
 import retrofit2.http.HeaderMap;
 import retrofit2.http.POST;
 import retrofit2.http.Url;
@@ -25,6 +25,12 @@ public interface RestApiInterface {
             @Url String url,
             @HeaderMap Map<String, String> headers,
             @Body HashMap<String, String> params);
+
+
+    @GET()
+    Single<Response<ResponseBody>> callGetApi(
+            @Url String url,
+            @HeaderMap Map<String, String> headers);
 
     @POST(EndPoints.LOGIN)
     Single<Response<ResponseBody>> userLogin(@Body LoginParamModel params);

@@ -11,13 +11,25 @@ import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatTextView;
+import androidx.core.util.Pair;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.us47codex.mvvmarch.base.BaseFragment;
+import com.us47codex.mvvmarch.constant.Constants;
+import com.us47codex.mvvmarch.enums.ApiCallStatus;
+import com.us47codex.mvvmarch.home.HomeViewModel;
 
+import org.json.JSONObject;
+
+import java.util.HashMap;
 import java.util.Objects;
 
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.schedulers.Schedulers;
 
 
 /**
@@ -27,6 +39,10 @@ public class HomeFragment extends BaseFragment {
 
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
     private FrameLayout frameMain;
+    private AppCompatTextView txtApprovalPendingCount, txtTotalComplaintsCount, txtClosedComplaintsCount, txtScheduleComplaintsCount, txtOpenComplaintsCount;
+    private HomeViewModel homeViewModel;
+    private String total_complain, open_complain, closed_complain, today_schedule_complain;
+
 
     @Override
     protected int getLayoutId() {
@@ -65,7 +81,7 @@ public class HomeFragment extends BaseFragment {
 
     @Override
     protected boolean shouldLoaderImplement() {
-        return false;
+        return true;
     }
 
     @Override
@@ -86,7 +102,7 @@ public class HomeFragment extends BaseFragment {
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             window.setStatusBarColor(getResources().getColor(R.color.white));
         }
-//        loginViewModel = ViewModelProviders.of(this).get(LoginViewModel.class);
+        homeViewModel = ViewModelProviders.of(this).get(HomeViewModel.class);
     }
 
     @Nullable
@@ -99,11 +115,17 @@ public class HomeFragment extends BaseFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initView(view);
+        getDashboardDataFromServer();
         subscribeApiCallStatusObservable();
     }
 
     private void initView(View view) {
-
+        frameMain = view.findViewById(R.id.frameMain);
+        txtApprovalPendingCount = view.findViewById(R.id.txtApprovalPendingCount);
+        txtTotalComplaintsCount = view.findViewById(R.id.txtTotalComplaintsCount);
+        txtClosedComplaintsCount = view.findViewById(R.id.txtClosedComplaintsCount);
+        txtScheduleComplaintsCount = view.findViewById(R.id.txtScheduleComplaintsCount);
+        txtOpenComplaintsCount = view.findViewById(R.id.txtOpenComplaintsCount);
     }
 
     @Override
@@ -111,7 +133,68 @@ public class HomeFragment extends BaseFragment {
 
     }
 
-    private void subscribeApiCallStatusObservable() {
-
+    private void setData() {
+        txtTotalComplaintsCount.setText(total_complain);
+        txtClosedComplaintsCount.setText(closed_complain);
+        txtScheduleComplaintsCount.setText(today_schedule_complain);
+        txtOpenComplaintsCount.setText(open_complain);
     }
+
+    private void getDashboardDataFromServer() {
+        showProgressLoader();
+        homeViewModel.callToApi(new HashMap<>(), HomeViewModel.DASHBOARD_API_TAG, true);
+    }
+
+    private void subscribeApiCallStatusObservable() {
+        getCompositeDisposable().add(Observable.merge(homeViewModel.getStatusBehaviorRelay(),
+                homeViewModel.getErrorRelay(),
+                homeViewModel.getResponseRelay())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .onErrorReturn(throwable -> {
+                    throwable.printStackTrace();
+                    return new Object();
+                })
+                .filter(object -> !(null == object))
+                .doOnNext(object -> {
+                    try {
+                        if (object instanceof ApiCallStatus) {
+                            ApiCallStatus apiCallStatus = (ApiCallStatus) object;
+                            if (apiCallStatus == ApiCallStatus.ERROR) {
+                                hideProgressLoader();
+                            }
+                        } else if (object instanceof String) {
+                            String errorCode = (String) object;
+                            showDialogWithSingleButtons(getContext(), getString(R.string.app_name),
+                                    String.valueOf(object), Objects.requireNonNull(getActivity()).getString(R.string.ok), (dialog, which) -> {
+                                        enableDisableView(frameMain, true);
+                                    }, false);
+
+                        } else if (object instanceof Pair) {
+                            Pair pair = (Pair) object;
+                            if (pair.first != null) {
+                                if (pair.first.equals(HomeViewModel.DASHBOARD_API_TAG)) {
+                                    enableDisableView(frameMain, true);
+                                    hideProgressLoader();
+                                    JSONObject jsonObject = (JSONObject) pair.second;
+                                    if (jsonObject != null && jsonObject.getInt(Constants.KEY_SUCCESS) == 1) {
+                                        JSONObject data = jsonObject.getJSONObject("data");
+                                        total_complain = data.optString("total_complain", "0");
+                                        open_complain = data.optString("open_complain", "0");
+                                        closed_complain = data.optString("closed_complain", "0");
+                                        today_schedule_complain = data.optString("today_schedule_complain", "0");
+                                        setData();
+                                    }
+                                }
+                            }
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                })
+                .doOnError(Throwable::printStackTrace)
+                .subscribe()
+        );
+    }
+
 }
