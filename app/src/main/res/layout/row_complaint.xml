@@ -3,20 +3,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/_5sdp"
     android:layout_marginStart="@dimen/_5sdp"
     android:layout_marginEnd="@dimen/_5sdp"
     android:id="@+id/llComplaint"
-    android:background="@color/background_color_two"
+    android:background="@drawable/rectangle_border_gray"
     android:orientation="horizontal"
     android:weightSum="1">
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="0.2"
-        android:orientation="vertical"
-        android:padding="@dimen/_5sdp"
-        android:paddingBottom="@dimen/_8sdp">
+        android:layout_weight="0.25"
+        android:orientation="vertical">
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/txvComplaintNoLbl"
@@ -36,35 +35,35 @@
             android:layout_weight="1"
             android:gravity="center"
             android:textColor="@color/text_color"
-            android:textSize="@dimen/_16ssp"
+            android:textSize="@dimen/_22ssp"
             tools:text="127" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/txvStatus"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/reOpen_status"
+            android:background="@drawable/rectangle_border_red"
             android:ellipsize="end"
             android:gravity="center"
             android:maxLines="1"
-            android:padding="@dimen/_2sdp"
+            android:padding="@dimen/_3sdp"
             android:textAllCaps="true"
             android:textColor="@color/white"
             android:textSize="@dimen/_10ssp"
-            tools:text="Open" />
+            tools:text="Scheduled" />
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 
     <View
         android:layout_width="1dp"
         android:layout_height="match_parent"
-        android:background="@color/text_color_gray"
-        android:visibility="gone" />
+        android:background="@color/text_divider_color"
+        android:visibility="visible" />
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="0.8"
+        android:layout_weight="0.75"
         android:orientation="vertical"
         android:padding="@dimen/_5sdp">
 

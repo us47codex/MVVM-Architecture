@@ -19,6 +19,9 @@ public class Constants {
      * KEYs
      * */
     public static final String KEY_COMPLAIN_ID = "complain_id";
+    public static final String STATUS_CLOSED = "close";
+    public static final String STATUS_OPEN = "open";
+    public static final String STATUS_SCHEDULE = "schedule";
 
     /**
      * pagination

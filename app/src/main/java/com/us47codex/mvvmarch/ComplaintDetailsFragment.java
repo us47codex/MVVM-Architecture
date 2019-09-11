@@ -1,5 +1,6 @@
 package com.us47codex.mvvmarch;
 
+import android.app.Dialog;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -7,25 +8,33 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.core.util.Pair;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.github.florent37.singledateandtimepicker.SingleDateAndTimePicker;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.us47codex.mvvmarch.base.BaseFragment;
 import com.us47codex.mvvmarch.complaint.ComplaintViewModel;
 import com.us47codex.mvvmarch.constant.Constants;
 import com.us47codex.mvvmarch.enums.ApiCallStatus;
+import com.us47codex.mvvmarch.helper.AppLog;
 import com.us47codex.mvvmarch.home.HomeViewModel;
 import com.us47codex.mvvmarch.roomDatabase.Complaint;
 
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
@@ -47,8 +56,10 @@ public class ComplaintDetailsFragment extends BaseFragment {
     private AppCompatTextView txvComplaintNo, txvStatus, txvCustomerName, txvMobile, txvEmail, txvDealerName, txvMachineType,
             txvMachineModel, txvSerialNo, txvReferenceAlternateNumber, txvAddress, txvProblemDescription, txvComplaintBy,
             txvAssignee, txvComplaintDate, txvScheduleDate, txvCloseDate;
+    private AppCompatButton btnVisit, btnSchedule, btnVisitReport;
     private ComplaintViewModel complaintViewModel;
     private long complainId;
+    private Dialog dialogWakeUpCall;
 
     @Override
     protected int getLayoutId() {
@@ -171,8 +182,24 @@ public class ComplaintDetailsFragment extends BaseFragment {
         txvScheduleDate = view.findViewById(R.id.txvScheduleDate);
         txvCloseDate = view.findViewById(R.id.txvCloseDate);
 
+        btnSchedule = view.findViewById(R.id.btnSchedule);
+        btnVisit = view.findViewById(R.id.btnVisit);
+        btnVisitReport = view.findViewById(R.id.btnVisitReport);
+
         compositeDisposable.add(
-                RxView.clicks(txvComplaintNo).throttleFirst(500,
+                RxView.clicks(btnSchedule).throttleFirst(500,
+                        TimeUnit.MILLISECONDS).subscribe(o -> {
+                    showDialogForSchedule();
+                })
+        );
+        compositeDisposable.add(
+                RxView.clicks(btnVisit).throttleFirst(500,
+                        TimeUnit.MILLISECONDS).subscribe(o -> {
+
+                })
+        );
+        compositeDisposable.add(
+                RxView.clicks(btnVisitReport).throttleFirst(500,
                         TimeUnit.MILLISECONDS).subscribe(o -> {
 
                 })
@@ -197,7 +224,81 @@ public class ComplaintDetailsFragment extends BaseFragment {
         txvComplaintDate.setText(complaint.getAssignDate());
         txvScheduleDate.setText(complaint.getScheduleDate());
 //        txvCloseDate.setText(complaint.getclose());
+
+        if (complaint.getStatus().equalsIgnoreCase(Constants.STATUS_OPEN)) {
+            btnSchedule.setVisibility(View.VISIBLE);
+            btnVisit.setVisibility(View.GONE);
+            btnVisitReport.setVisibility(View.GONE);
+        } else if (complaint.getStatus().equalsIgnoreCase(Constants.STATUS_SCHEDULE)) {
+            btnSchedule.setVisibility(View.GONE);
+            btnVisit.setVisibility(View.VISIBLE);
+            btnVisitReport.setVisibility(View.GONE);
+        } else if (complaint.getStatus().equalsIgnoreCase(Constants.STATUS_CLOSED)) {
+            btnSchedule.setVisibility(View.GONE);
+            btnVisit.setVisibility(View.GONE);
+            btnVisitReport.setVisibility(View.VISIBLE);
+        } else {
+            btnSchedule.setVisibility(View.GONE);
+            btnVisit.setVisibility(View.GONE);
+            btnVisitReport.setVisibility(View.GONE);
+        }
     }
+
+    private void schedule() {
+
+    }
+
+    protected void showDialogForSchedule() {
+        if (dialogWakeUpCall != null) {
+            if (dialogWakeUpCall.isShowing()) {
+                return;
+            }
+        }
+        dialogWakeUpCall = new Dialog(getContext());
+        dialogWakeUpCall.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        // dialog.setContentView(R.layout.profile_preference_two);
+        dialogWakeUpCall.setContentView(R.layout.dialog_schedule);
+//        Objects.requireNonNull(dialogWakeUpCall.getWindow()).setBackgroundDrawableResource(R.drawable.settings_bg_gray);
+//        dialogWakeUpCall.getWindow().setLayout(Utils.getWidth(LandingPageActivity.this, 0.05), RelativeLayout.LayoutParams.WRAP_CONTENT);
+        dialogWakeUpCall.setCancelable(true);
+
+        Button btn_send = dialogWakeUpCall.findViewById(R.id.btnSetSchedule);
+        Button btn_cancel = dialogWakeUpCall.findViewById(R.id.btnCancel);
+        TextView txt_dialog_title = dialogWakeUpCall.findViewById(R.id.txt_dialog_title);
+
+        final SingleDateAndTimePicker wakeupDateAndTimePicker = dialogWakeUpCall.findViewById(R.id.single_day_picker);
+        wakeupDateAndTimePicker.setIsAmPm(true);
+        wakeupDateAndTimePicker.setStepMinutes(1);
+        wakeupDateAndTimePicker.setDayFormatter(new SimpleDateFormat("EEE dd MMM", Locale.ENGLISH));
+
+        Calendar minWakeUpDateTimeCalendar = Calendar.getInstance(Locale.ENGLISH);
+        minWakeUpDateTimeCalendar.add(Calendar.MINUTE, 5);
+        minWakeUpDateTimeCalendar.set(Calendar.SECOND, 0);
+        wakeupDateAndTimePicker.setMinDate(minWakeUpDateTimeCalendar.getTime());
+
+        btn_cancel.setOnClickListener(view -> {
+            dialogWakeUpCall.dismiss();
+            dialogWakeUpCall.cancel();
+        });
+        btn_send.setOnClickListener(view -> {
+            dialogWakeUpCall.dismiss();
+            dialogWakeUpCall.cancel();
+            try {
+
+
+            } catch (Exception e) {
+                AppLog.error("error", e.getMessage());
+            }
+        });
+
+        try {
+            dialogWakeUpCall.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
 
     private void getCommentFromDB() {
         getDatabase().complaintDao().getComplaintById(complainId)
