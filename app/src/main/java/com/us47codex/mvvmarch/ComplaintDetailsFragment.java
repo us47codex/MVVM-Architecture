@@ -289,14 +289,14 @@ public class ComplaintDetailsFragment extends BaseFragment {
             dialogWakeUpCall.dismiss();
             dialogWakeUpCall.cancel();
             try {
-                showProgressLoader();
+//                showProgressLoader();
                 HashMap<String, String> params = new HashMap<>();
                 params.put("schedule_date", AppUtils.convertDateToString(wakeupDateAndTimePicker.getDate(), "MM/dd/yyyy hh:mm a"));
                 params.put("schedule_id", String.valueOf(complainId));
                 complaintViewModel.callToApi(params, ComplaintViewModel.COMPLAIN_SCHEDULE_API_TAG, true);
 
             } catch (Exception e) {
-                AppLog.error("error", e.getMessage());
+                AppLog.error("error", e);
             }
         });
 
