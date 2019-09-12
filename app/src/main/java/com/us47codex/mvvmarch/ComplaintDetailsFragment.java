@@ -293,7 +293,7 @@ public class ComplaintDetailsFragment extends BaseFragment {
                 HashMap<String, String> params = new HashMap<>();
                 params.put("schedule_date", AppUtils.convertDateToString(wakeupDateAndTimePicker.getDate(), "MM/dd/yyyy hh:mm a"));
                 params.put("schedule_id", String.valueOf(complainId));
-                complaintViewModel.callToApi(params, ComplaintViewModel.COMPLAIN_SCHEDULE_API_TAG, true);
+                complaintViewModel.callToApi(params, ComplaintViewModel.COMPLAIN_SCHEDULE_API_TAG, false);
 
             } catch (Exception e) {
                 AppLog.error("error", e);
@@ -367,7 +367,6 @@ public class ComplaintDetailsFragment extends BaseFragment {
                             if (pair.first != null) {
                                 if (pair.first.equals(ComplaintViewModel.COMPLAIN_SCHEDULE_API_TAG)) {
                                     enableDisableView(frameMain, true);
-                                    hideProgressLoader();
                                     JSONObject jsonObject = (JSONObject) pair.second;
                                     if (jsonObject != null && jsonObject.getInt(Constants.KEY_SUCCESS) == 1) {
                                         String data = jsonObject.getString("data");
