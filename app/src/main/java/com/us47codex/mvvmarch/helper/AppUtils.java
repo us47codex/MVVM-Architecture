@@ -1,5 +1,6 @@
 package com.us47codex.mvvmarch.helper;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -33,6 +34,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Random;
+import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -272,4 +274,41 @@ public class AppUtils {
             SunTecApplication.getInstance().getPreferenceManager().clear();
         });
     }
+
+    /**
+     * Return Formatted  Date and Time to Show
+     *
+     * @param format Global format for AavGo app "MM-dd-yyyy hh:mm a"
+     */
+    public static String convertDateToString(Date date, String format) {
+        String resultDate = "00-00-0000 00:00";
+        boolean b = false;
+        try {
+            SimpleDateFormat dateFormatter = new SimpleDateFormat(format, Locale.ENGLISH); //this format changeable
+            dateFormatter.setTimeZone(TimeZone.getDefault());
+            resultDate = dateFormatter.format(date);
+        } catch (Exception e) {
+            e.printStackTrace();
+            AppLog.error(TAG, e);
+        }
+        return resultDate;
+    }
+
+    /**
+     * Return Formatted  Date and Time to Show
+     *
+     * @param format Global format for AavGo app "MM-dd-yyyy hh:mm a"
+     */
+    @SuppressLint("SimpleDateFormat")
+    public static Date convertDateStringToDate(String date, String format) {
+        Date resultDate = new Date();
+        try {
+            resultDate = new SimpleDateFormat(format).parse(date);
+        } catch (Exception e) {
+            e.printStackTrace();
+            AppLog.error(TAG, e);
+        }
+        return resultDate;
+    }
+
 }

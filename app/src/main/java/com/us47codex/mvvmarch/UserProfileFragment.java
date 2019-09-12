@@ -235,6 +235,12 @@ public class UserProfileFragment extends BaseFragment {
                     }
                 })
         );
+        compositeDisposable.add(
+                RxView.clicks(imgUserPic).throttleFirst(500,
+                        TimeUnit.MILLISECONDS).subscribe(o -> {
+                    requestAllPermissions();
+                })
+        );
     }
 
     private void handleView(boolean allowEdit) {
@@ -344,6 +350,8 @@ public class UserProfileFragment extends BaseFragment {
                             if (!hasPermissions(getActivity(), ALL_PERMISSIONS)) {
                                 ActivityCompat.requestPermissions(getActivity(), ALL_PERMISSIONS,
                                         ALL_PERMISSIONS_REQUEST_CODE);
+                            } else {
+                                initCameraIntent();
                             }
                         })
                         .subscribe()

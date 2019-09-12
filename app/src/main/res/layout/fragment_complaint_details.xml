@@ -524,50 +524,54 @@
                 android:layout_height="0.5dp"
                 android:background="@color/text_divider_color" />
 
-
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btnSchedule"
-                style="?android:attr/borderlessButtonStyle"
-                android:layout_width="wrap_content"
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
                 android:layout_marginTop="@dimen/space_thirty"
-                android:background="@drawable/round_square_button_drawable"
-                android:minWidth="@dimen/space_two_hundred"
-                android:text="Schedule"
-                android:textColor="@color/white"
-                android:textSize="@dimen/text_size_eighteen"
-                android:visibility="gone" />
+                android:orientation="horizontal"
+                android:weightSum="2">
 
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btnVisit"
-                style="?android:attr/borderlessButtonStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="@dimen/space_thirty"
-                android:background="@drawable/round_square_button_drawable"
-                android:minWidth="@dimen/space_two_hundred"
-                android:text="Visit"
-                android:textColor="@color/white"
-                android:textSize="@dimen/text_size_eighteen"
-                android:visibility="gone" />
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btnSchedule"
+                    style="?android:attr/borderlessButtonStyle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:background="@drawable/round_square_button_drawable"
+                    android:text="Schedule"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/text_size_eighteen"
+                    android:visibility="visible" />
 
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btnVisitReport"
-                style="?android:attr/borderlessButtonStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="@dimen/space_thirty"
-                android:background="@drawable/round_square_button_drawable"
-                android:minWidth="@dimen/space_two_hundred"
-                android:text="Visit Report"
-                android:textColor="@color/white"
-                android:textSize="@dimen/text_size_eighteen"
-                android:visibility="gone" />
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btnVisit"
+                    style="?android:attr/borderlessButtonStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:background="@drawable/round_square_button_drawable"
+                    android:minWidth="@dimen/space_two_hundred"
+                    android:text="Visit"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/text_size_eighteen"
+                    android:visibility="gone" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btnVisitReport"
+                    style="?android:attr/borderlessButtonStyle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:layout_weight="1"
+                    android:background="@drawable/round_square_button_drawable"
+                    android:text="Visit Report"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/text_size_eighteen"
+                    android:visibility="visible" />
+            </androidx.appcompat.widget.LinearLayoutCompat>
         </androidx.appcompat.widget.LinearLayoutCompat>
-
     </androidx.core.widget.NestedScrollView>
 
 </FrameLayout>

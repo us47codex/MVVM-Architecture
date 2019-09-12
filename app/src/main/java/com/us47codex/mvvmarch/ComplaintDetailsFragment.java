@@ -27,13 +27,14 @@ import com.us47codex.mvvmarch.complaint.ComplaintViewModel;
 import com.us47codex.mvvmarch.constant.Constants;
 import com.us47codex.mvvmarch.enums.ApiCallStatus;
 import com.us47codex.mvvmarch.helper.AppLog;
-import com.us47codex.mvvmarch.home.HomeViewModel;
+import com.us47codex.mvvmarch.helper.AppUtils;
 import com.us47codex.mvvmarch.roomDatabase.Complaint;
 
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
@@ -43,6 +44,8 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.observers.DisposableMaybeObserver;
 import io.reactivex.schedulers.Schedulers;
+
+import static com.us47codex.mvvmarch.constant.Constants.KEY_COMPLAIN_ID;
 
 /**
  * Created by Upendra Shah on 30 August, 2019 for
@@ -60,6 +63,7 @@ public class ComplaintDetailsFragment extends BaseFragment {
     private ComplaintViewModel complaintViewModel;
     private long complainId;
     private Dialog dialogWakeUpCall;
+    private Complaint complaint;
 
     @Override
     protected int getLayoutId() {
@@ -137,14 +141,14 @@ public class ComplaintDetailsFragment extends BaseFragment {
         super.onViewCreated(view, savedInstanceState);
         initActionBar(view);
         initView(view);
-        getCommentFromDB();
+        getComplainFromDB();
         subscribeApiCallStatusObservable();
     }
 
     private void initActionBar(View view) {
         ImageView imgBackButton = view.findViewById(R.id.imageBack);
         ImageView imageOne = view.findViewById(R.id.imageOne);
-        imageOne.setVisibility(View.VISIBLE);
+        imageOne.setVisibility(View.GONE);
         imageOne.setImageDrawable(Objects.requireNonNull(getContext()).getDrawable(R.drawable.ic_profile_edit));
 
         compositeDisposable.add(
@@ -201,12 +205,15 @@ public class ComplaintDetailsFragment extends BaseFragment {
         compositeDisposable.add(
                 RxView.clicks(btnVisitReport).throttleFirst(500,
                         TimeUnit.MILLISECONDS).subscribe(o -> {
-
+                    Bundle bundle = new Bundle();
+                    bundle.putLong(KEY_COMPLAIN_ID, complaint.getId());
+                    jumpToDestinationFragment(getCurrentFragmentId(), R.id.toVisitReportFragment, frameMain, bundle, false);
                 })
         );
     }
 
     private void setData(Complaint complaint) {
+        this.complaint = complaint;
         txvComplaintNo.setText(String.valueOf(complaint.getId()));
         txvStatus.setText(complaint.getStatus());
         txvCustomerName.setText(complaint.getCustomerFullName());
@@ -226,26 +233,24 @@ public class ComplaintDetailsFragment extends BaseFragment {
 //        txvCloseDate.setText(complaint.getclose());
 
         if (complaint.getStatus().equalsIgnoreCase(Constants.STATUS_OPEN)) {
+            btnSchedule.setText("Schedule");
             btnSchedule.setVisibility(View.VISIBLE);
             btnVisit.setVisibility(View.GONE);
             btnVisitReport.setVisibility(View.GONE);
         } else if (complaint.getStatus().equalsIgnoreCase(Constants.STATUS_SCHEDULE)) {
-            btnSchedule.setVisibility(View.GONE);
-            btnVisit.setVisibility(View.VISIBLE);
-            btnVisitReport.setVisibility(View.GONE);
-        } else if (complaint.getStatus().equalsIgnoreCase(Constants.STATUS_CLOSED)) {
-            btnSchedule.setVisibility(View.GONE);
+            btnSchedule.setText("Reschedule");
+            btnSchedule.setVisibility(View.VISIBLE);
             btnVisit.setVisibility(View.GONE);
             btnVisitReport.setVisibility(View.VISIBLE);
+//        } else if (complaint.getStatus().equalsIgnoreCase(Constants.STATUS_CLOSED)) {
+//            btnSchedule.setVisibility(View.GONE);
+//            btnVisit.setVisibility(View.GONE);
+//            btnVisitReport.setVisibility(View.VISIBLE);
         } else {
             btnSchedule.setVisibility(View.GONE);
             btnVisit.setVisibility(View.GONE);
             btnVisitReport.setVisibility(View.GONE);
         }
-    }
-
-    private void schedule() {
-
     }
 
     protected void showDialogForSchedule() {
@@ -284,7 +289,11 @@ public class ComplaintDetailsFragment extends BaseFragment {
             dialogWakeUpCall.dismiss();
             dialogWakeUpCall.cancel();
             try {
-
+                showProgressLoader();
+                HashMap<String, String> params = new HashMap<>();
+                params.put("schedule_date", AppUtils.convertDateToString(wakeupDateAndTimePicker.getDate(), "MM/dd/yyyy hh:mm a"));
+                params.put("schedule_id", String.valueOf(complainId));
+                complaintViewModel.callToApi(params, ComplaintViewModel.COMPLAIN_SCHEDULE_API_TAG, true);
 
             } catch (Exception e) {
                 AppLog.error("error", e.getMessage());
@@ -300,7 +309,7 @@ public class ComplaintDetailsFragment extends BaseFragment {
     }
 
 
-    private void getCommentFromDB() {
+    private void getComplainFromDB() {
         getDatabase().complaintDao().getComplaintById(complainId)
                 .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -356,13 +365,16 @@ public class ComplaintDetailsFragment extends BaseFragment {
                         } else if (object instanceof Pair) {
                             Pair pair = (Pair) object;
                             if (pair.first != null) {
-                                if (pair.first.equals(HomeViewModel.POST_PROFILE_API_TAG)) {
+                                if (pair.first.equals(ComplaintViewModel.COMPLAIN_SCHEDULE_API_TAG)) {
                                     enableDisableView(frameMain, true);
                                     hideProgressLoader();
                                     JSONObject jsonObject = (JSONObject) pair.second;
                                     if (jsonObject != null && jsonObject.getInt(Constants.KEY_SUCCESS) == 1) {
+                                        String data = jsonObject.getString("data");
                                         showDialogWithSingleButtons(getContext(), getString(R.string.app_name),
-                                                Objects.requireNonNull(getActivity()).getString(R.string.profile_update_msg), Objects.requireNonNull(getActivity()).getString(R.string.ok), (dialog, which) -> backToPreviousFragment(R.id.homeFragment, frameMain, false), false);
+                                                data, Objects.requireNonNull(getActivity()).getString(R.string.ok), (dialog, which) -> {
+                                                    backToPreviousFragment(R.id.complaintsFragment, frameMain, false);
+                                                }, false);
                                     }
                                 }
                             }

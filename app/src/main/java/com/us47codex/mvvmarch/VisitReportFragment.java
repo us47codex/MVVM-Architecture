@@ -9,12 +9,17 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.RadioGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatButton;
+import androidx.appcompat.widget.AppCompatImageView;
+import androidx.appcompat.widget.AppCompatTextView;
 import androidx.core.util.Pair;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.google.android.material.textfield.TextInputEditText;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.us47codex.mvvmarch.base.BaseFragment;
 import com.us47codex.mvvmarch.complaint.ComplaintViewModel;
@@ -24,7 +29,6 @@ import com.us47codex.mvvmarch.roomDatabase.Complaint;
 
 import org.json.JSONObject;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
@@ -32,7 +36,7 @@ import java.util.concurrent.TimeUnit;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.observers.DisposableSingleObserver;
+import io.reactivex.observers.DisposableMaybeObserver;
 import io.reactivex.schedulers.Schedulers;
 
 /**
@@ -46,6 +50,17 @@ public class VisitReportFragment extends BaseFragment {
     private FrameLayout frameMain;
     private ComplaintViewModel complaintViewModel;
     private List<Complaint> complaintList;
+    private TextInputEditText edtOEMDealerName, edtMonthYearOfInstallation, edtNoOfHWG, edtHWGModelSerialNo,
+            edtHeatPumpModelSerialNo, edtContactPerson, edtCustomerName, edtDate, edtReportNo, edtPartsReplaced,
+            edtCustomerRemark, edtSuggestionToCustomer, edtDescriptionOfWorkDone, edtObservation, edtNatureOfProblem,
+            edtTypeOfCallReceiveDate, edtComplaintNoDate, edtPONoDate, edtEquipment, edtDealerPhoneNo, edtDealerAddress,
+            edtDealerContactPerson, edtTax, edtConvayance, edtOthers, edtServiceCharge;
+    private AppCompatButton btnSubmitReport;
+    private AppCompatImageView imgMarketingProjectHead, imgSunteRepresentative, imgCustomerSign;
+    private AppCompatTextView txvMachineType;
+    private RadioGroup rdgQualityOfService, rdgWorkStatus;
+    private long complainId;
+    private Complaint complaint;
 
     @Override
     protected int getLayoutId() {
@@ -105,6 +120,10 @@ public class VisitReportFragment extends BaseFragment {
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             window.setStatusBarColor(getResources().getColor(R.color.white));
         }
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            complainId = bundle.getLong(Constants.KEY_COMPLAIN_ID, 0);
+        }
         complaintViewModel = ViewModelProviders.of(this).get(ComplaintViewModel.class);
     }
 
@@ -119,7 +138,7 @@ public class VisitReportFragment extends BaseFragment {
         super.onViewCreated(view, savedInstanceState);
         initActionBar(view);
         initView(view);
-        getCommentListFromServer();
+        getComplainFromDB();
         subscribeApiCallStatusObservable();
     }
 
@@ -135,7 +154,61 @@ public class VisitReportFragment extends BaseFragment {
 
     private void initView(View view) {
         frameMain = view.findViewById(R.id.frameMain);
+        txvMachineType = view.findViewById(R.id.txvMachineType);
 
+        edtOEMDealerName = view.findViewById(R.id.edtOEMDealerName);
+        edtMonthYearOfInstallation = view.findViewById(R.id.edtMonthYearOfInstallation);
+        edtNoOfHWG = view.findViewById(R.id.edtNoOfHWG);
+        edtHWGModelSerialNo = view.findViewById(R.id.edtHWGModelSerialNo);
+        edtHeatPumpModelSerialNo = view.findViewById(R.id.edtHeatPumpModelSerialNo);
+        edtContactPerson = view.findViewById(R.id.edtContactPerson);
+        edtCustomerName = view.findViewById(R.id.edtCustomerName);
+        edtDate = view.findViewById(R.id.edtDate);
+        edtReportNo = view.findViewById(R.id.edtReportNo);
+        edtPartsReplaced = view.findViewById(R.id.edtPartsReplaced);
+        edtCustomerRemark = view.findViewById(R.id.edtCustomerRemark);
+        edtSuggestionToCustomer = view.findViewById(R.id.edtSuggestionToCustomer);
+        edtDescriptionOfWorkDone = view.findViewById(R.id.edtDescriptionOfWorkDone);
+        edtObservation = view.findViewById(R.id.edtObservation);
+        edtNatureOfProblem = view.findViewById(R.id.edtNatureOfProblem);
+        edtTypeOfCallReceiveDate = view.findViewById(R.id.edtTypeOfCallReceiveDate);
+        edtComplaintNoDate = view.findViewById(R.id.edtComplaintNoDate);
+        edtPONoDate = view.findViewById(R.id.edtPONoDate);
+        edtEquipment = view.findViewById(R.id.edtEquipment);
+        edtDealerPhoneNo = view.findViewById(R.id.edtDealerPhoneNo);
+        edtDealerAddress = view.findViewById(R.id.edtDealerAddress);
+        edtDealerContactPerson = view.findViewById(R.id.edtDealerContactPerson);
+        edtTax = view.findViewById(R.id.edtTax);
+        edtConvayance = view.findViewById(R.id.edtConvayance);
+        edtOthers = view.findViewById(R.id.edtOthers);
+        edtServiceCharge = view.findViewById(R.id.edtServiceCharge);
+
+        imgMarketingProjectHead = view.findViewById(R.id.imgMarketingProjectHead);
+        imgSunteRepresentative = view.findViewById(R.id.imgSunteRepresentative);
+        imgCustomerSign = view.findViewById(R.id.imgCustomerSign);
+
+        btnSubmitReport = view.findViewById(R.id.btnSubmitReport);
+
+        compositeDisposable.add(
+                RxView.clicks(imgCustomerSign).throttleFirst(500,
+                        TimeUnit.MILLISECONDS).subscribe(o -> {
+                })
+        );
+        compositeDisposable.add(
+                RxView.clicks(imgSunteRepresentative).throttleFirst(500,
+                        TimeUnit.MILLISECONDS).subscribe(o -> {
+                })
+        );
+        compositeDisposable.add(
+                RxView.clicks(imgMarketingProjectHead).throttleFirst(500,
+                        TimeUnit.MILLISECONDS).subscribe(o -> {
+                })
+        );
+        compositeDisposable.add(
+                RxView.clicks(btnSubmitReport).throttleFirst(500,
+                        TimeUnit.MILLISECONDS).subscribe(o -> {
+                })
+        );
     }
 
     @Override
@@ -143,26 +216,35 @@ public class VisitReportFragment extends BaseFragment {
 
     }
 
-    private void getCommentListFromDB() {
-        getDatabase().complaintDao().getAllComplaints()
+    private void setData(Complaint complaint) {
+        this.complaint = complaint;
+        txvMachineType.setText(complaint.getMcType());
+        edtCustomerName.setText(complaint.getCustomerFullName());
+        edtComplaintNoDate.setText(complaint.getComplainNoDate());
+        edtOEMDealerName.setText(complaint.getDealerName());
+    }
+
+    private void getComplainFromDB() {
+        getDatabase().complaintDao().getComplaintById(complainId)
                 .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new DisposableSingleObserver<List<Complaint>>() {
+                .subscribe(new DisposableMaybeObserver<Complaint>() {
                                @Override
-                               public void onSuccess(List<Complaint> dbComplaintList) {
-
+                               public void onSuccess(Complaint complaint) {
+                                   setData(complaint);
                                }
 
                                @Override
                                public void onError(Throwable e) {
                                    e.printStackTrace();
                                }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
                            }
                 );
-    }
-
-    private void getCommentListFromServer() {
-        complaintViewModel.callToApi(new HashMap<>(), ComplaintViewModel.COMPLAINT_LIST_API_TAG, true);
     }
 
     private void subscribeApiCallStatusObservable() {
@@ -198,7 +280,7 @@ public class VisitReportFragment extends BaseFragment {
                                     hideProgressLoader();
                                     JSONObject jsonObject = (JSONObject) pair.second;
                                     if (jsonObject != null && jsonObject.getInt(Constants.KEY_SUCCESS) == 1) {
-                                        getCommentListFromDB();
+
                                     }
                                 }
                             }

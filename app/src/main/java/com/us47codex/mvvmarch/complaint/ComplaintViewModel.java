@@ -290,8 +290,12 @@ public class ComplaintViewModel extends BaseViewModel {
                                     JSONObject jsonObject = parseOnSuccess(response, apiTag, shouldShowLoader);
                                     if (jsonObject != null) {
                                         AppLog.error(TAG, "User Login :" + jsonObject.toString());
-                                        JSONArray data = jsonObject.getJSONArray("data");
-                                        processToComplaintList(data, apiTag, shouldShowLoader);
+                                        String data = jsonObject.getString("data");
+                                        if (shouldShowLoader) {
+                                            getStatusBehaviorRelay().accept(ApiCallStatus.SUCCESS);
+                                        }
+                                        getResponseRelay().accept(new Pair<>(apiTag, jsonObject));
+
                                     }
                                 } catch (Exception e) {
                                     e.printStackTrace();
