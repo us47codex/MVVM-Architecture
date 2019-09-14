@@ -20,8 +20,6 @@ import androidx.appcompat.widget.AppCompatTextView;
 import androidx.core.util.Pair;
 import androidx.lifecycle.ViewModelProviders;
 
-import com.afollestad.materialdialogs.DialogAction;
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.github.florent37.singledateandtimepicker.SingleDateAndTimePicker;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.us47codex.mvvmarch.base.BaseFragment;
@@ -215,10 +213,7 @@ public class ComplaintDetailsFragment extends BaseFragment {
                                     || complaint.getVisitType().equalsIgnoreCase(Constants.PRE_INSTALLED)) {
                                 jumpToDestinationFragment(getCurrentFragmentId(), R.id.toReportBurnerInstallationFragment, frameMain, bundle, false);
                             } else {
-                                showDialogWithSingleButtons(getContext(), getString(R.string.app_name),
-                                        Objects.requireNonNull(getActivity()).getString(R.string.coming_soon),
-                                        Objects.requireNonNull(getActivity()).getString(R.string.ok), (MaterialDialog dialog, DialogAction which) -> {
-                                        }, false);
+                                jumpToDestinationFragment(getCurrentFragmentId(), R.id.toReportBurnerServiceFragment, frameMain, bundle, false);
                             }
                         } else {
                             jumpToDestinationFragment(getCurrentFragmentId(), R.id.toVisitReportFragment, frameMain, bundle, false);

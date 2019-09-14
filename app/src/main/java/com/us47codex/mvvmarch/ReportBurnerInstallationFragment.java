@@ -10,7 +10,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -50,7 +49,6 @@ import com.us47codex.mvvmarch.roomDatabase.Complaint;
 
 import org.json.JSONObject;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -69,6 +67,8 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.observers.DisposableMaybeObserver;
 import io.reactivex.schedulers.Schedulers;
+
+import static com.us47codex.mvvmarch.helper.AppUtils.covertBitmapToBase64;
 
 /**
  * Created by Upendra Shah on 07 September, 2019 for
@@ -421,7 +421,10 @@ public class ReportBurnerInstallationFragment extends BaseFragment {
                                     hideProgressLoader();
                                     JSONObject jsonObject = (JSONObject) pair.second;
                                     if (jsonObject != null && jsonObject.getInt(Constants.KEY_SUCCESS) == 1) {
-
+                                        showDialogWithSingleButtons(getContext(), getString(R.string.app_name),
+                                                "Report submitted successfully", Objects.requireNonNull(getActivity()).getString(R.string.ok), (dialog, which) -> {
+                                                    backToPreviousFragment(R.id.complaintsFragment, frameMain, false);
+                                                }, false);
                                     }
                                 }
                             }
@@ -565,54 +568,6 @@ public class ReportBurnerInstallationFragment extends BaseFragment {
         }
     }
 
-    private void createParam() {
-        //Complain Visit Heat Pump, HOT Water Generator, Dyare
-
-
-        HashMap<String, String> params = new HashMap<>();
-        params.put("id", edtCustomerName.getText().toString());
-        params.put("resolve_image", edtCustomerName.getText().toString());
-        params.put("sign_marketing", edtCustomerName.getText().toString());
-        params.put("sign_repre", edtCustomerName.getText().toString());
-        params.put("checkout_date", edtCustomerName.getText().toString());
-        params.put("spare_replace", edtCustomerName.getText().toString());
-        params.put("work_date", edtCustomerName.getText().toString());
-        params.put("tax", edtCustomerName.getText().toString());
-        params.put("others", edtCustomerName.getText().toString());
-        params.put("to_form", edtCustomerName.getText().toString());
-        params.put("conveyance", edtCustomerName.getText().toString());
-        params.put("services_charges", edtCustomerName.getText().toString());
-        params.put("quality_service", edtCustomerName.getText().toString());
-        params.put("work_status", edtCustomerName.getText().toString());
-        params.put("customer_remark", edtCustomerName.getText().toString());
-        params.put("suggetion_customer", edtCustomerName.getText().toString());
-        params.put("description_work", edtCustomerName.getText().toString());
-        params.put("observation", edtCustomerName.getText().toString());
-        params.put("nature_problem", edtCustomerName.getText().toString());
-        params.put("courtesy_visit", edtCustomerName.getText().toString());
-        params.put("warranty", edtCustomerName.getText().toString());
-        params.put("chargeable", edtCustomerName.getText().toString());
-        params.put("commissioning", edtCustomerName.getText().toString());
-        params.put("installation", edtCustomerName.getText().toString());
-        params.put("pre_installation", edtCustomerName.getText().toString());
-        params.put("services", edtCustomerName.getText().toString());
-        params.put("type_of_call", edtCustomerName.getText().toString());
-        params.put("complain_no_date", edtCustomerName.getText().toString());
-        params.put("po_no_date", edtCustomerName.getText().toString());
-        params.put("equipment", edtCustomerName.getText().toString());
-        params.put("d_mno", edtCustomerName.getText().toString());
-        params.put("d_address", edtCustomerName.getText().toString());
-        params.put("d_contact_person", edtCustomerName.getText().toString());
-        params.put("oem_dealer_name", edtCustomerName.getText().toString());
-        params.put("month_year_insta", edtCustomerName.getText().toString());
-        params.put("no_of_hwg", edtCustomerName.getText().toString());
-        params.put("hwg_sr_no", edtCustomerName.getText().toString());
-        params.put("no_of_heat", edtCustomerName.getText().toString());
-        params.put("heat_p_sr_no", edtCustomerName.getText().toString());
-        params.put("contact_person", edtCustomerName.getText().toString());
-        params.put("report_no", edtCustomerName.getText().toString());
-    }
-
     private HashMap<String, String> prepareBurnerInstallationParams() {
         // Complain Visit Burner
         //installation & commissionin
@@ -661,65 +616,6 @@ public class ReportBurnerInstallationFragment extends BaseFragment {
         params.put("contact_person", edtContactPerson.getText().toString());
 
         return params;
-
-    }
-
-
-    private void createParam1() {
-//        Complain Visit Burner
-//        Service/Breakdown
-//        AND AMC
-
-        HashMap<String, String> params = new HashMap<>();
-        params.put("spare_replace", edtCustomerName.getText().toString());
-        params.put("action_taken", edtCustomerName.getText().toString());
-        params.put("root_of_cause", edtCustomerName.getText().toString());
-        params.put("nature_problem", edtCustomerName.getText().toString());
-        params.put("observation", edtCustomerName.getText().toString());
-        params.put("bflame_safe", edtCustomerName.getText().toString());
-        params.put("bcontrol_type", edtCustomerName.getText().toString());
-        params.put("bflue_loss", edtCustomerName.getText().toString());
-        params.put("bexcess_air", edtCustomerName.getText().toString());
-        params.put("bcoppm", edtCustomerName.getText().toString());
-        params.put("bco2", edtCustomerName.getText().toString());
-        params.put("bo2", edtCustomerName.getText().toString());
-        params.put("bservo_motor", edtCustomerName.getText().toString());
-        params.put("bdamper_pos", edtCustomerName.getText().toString());
-        params.put("id", edtCustomerName.getText().toString());
-        params.put("resolve_image", edtCustomerName.getText().toString());
-        params.put("sign_repre", edtCustomerName.getText().toString());
-        params.put("sign_customer", edtCustomerName.getText().toString());
-        params.put("tax", edtCustomerName.getText().toString());
-        params.put("others", edtCustomerName.getText().toString());
-        params.put("to_form", edtCustomerName.getText().toString());
-        params.put("conveyance", edtCustomerName.getText().toString());
-        params.put("services_charges", edtCustomerName.getText().toString());
-        params.put("training_given_by", edtCustomerName.getText().toString());
-        params.put("training_given", training);
-        params.put("checkout_date", edtCustomerName.getText().toString());
-        params.put("customer_remark", edtCustomerName.getText().toString());
-        params.put("rate_communication", edtCustomerName.getText().toString());
-        params.put("rate_problem", edtCustomerName.getText().toString());
-        params.put("rate_behaviour", edtCustomerName.getText().toString());
-        params.put("rate_work", edtCustomerName.getText().toString());
-        params.put("rate_cooperation", edtCustomerName.getText().toString());
-        params.put("rate_knowladge", edtCustomerName.getText().toString());
-        params.put("crate", edtCustomerName.getText().toString());
-        params.put("engineer_remark", edtCustomerName.getText().toString());
-        params.put("bgas_pr_sw", edtCustomerName.getText().toString());
-        params.put("bair_pr_sw", edtCustomerName.getText().toString());
-        params.put("bgas_pre", edtCustomerName.getText().toString());
-        params.put("bfg_temp", edtCustomerName.getText().toString());
-        params.put("bair_temp", edtCustomerName.getText().toString());
-        params.put("btemp_press", edtCustomerName.getText().toString());
-        params.put("bfuel", edtCustomerName.getText().toString());
-        params.put("btype", edtCustomerName.getText().toString());
-        params.put("bsrno", edtCustomerName.getText().toString());
-        params.put("bcode", edtCustomerName.getText().toString());
-        params.put("bquantity", edtCustomerName.getText().toString());
-        params.put("bmodel", edtCustomerName.getText().toString());
-        params.put("bapplication", edtCustomerName.getText().toString());
-        params.put("contact_person", edtCustomerName.getText().toString());
 
     }
 
@@ -773,20 +669,6 @@ public class ReportBurnerInstallationFragment extends BaseFragment {
             e.printStackTrace();
         }
     }
-
-    private String covertBitmapToBase64(Bitmap bitmap) {
-        try {
-            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
-            byte[] byteArray = byteArrayOutputStream.toByteArray();
-
-            return Base64.encodeToString(byteArray, Base64.DEFAULT);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return "";
-        }
-    }
-
 }
 
 

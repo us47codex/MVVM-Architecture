@@ -83,6 +83,9 @@
         <action
             android:id="@+id/toReportBurnerInstallationFragment"
             app:destination="@id/reportBurnerInstallationFragment" />
+        <action
+            android:id="@+id/toReportBurnerServiceFragment"
+            app:destination="@id/reportBurnerServiceFragment" />
     </fragment>
     <fragment
         android:id="@+id/visitReportFragment"
@@ -94,4 +97,9 @@
         android:name="com.us47codex.mvvmarch.ReportBurnerInstallationFragment"
         android:label="fragment_report_burner_installation"
         tools:layout="@layout/fragment_report_burner_installation" />
+    <fragment
+        android:id="@+id/reportBurnerServiceFragment"
+        android:name="com.us47codex.mvvmarch.ReportBurnerServiceFragment"
+        android:label="fragment_report_burner_service"
+        tools:layout="@layout/fragment_report_burner_service" />
 </navigation>
