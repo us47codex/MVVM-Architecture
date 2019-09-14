@@ -82,13 +82,14 @@ public class ReportBurnerInstallationFragment extends BaseFragment {
     private ComplaintViewModel complaintViewModel;
     private List<Complaint> complaintList;
 
-    private TextInputEditText edtQuantity, edtModel, edtCustomerAddress, edtContactPerson, edtCustomerName,
+    private TextInputEditText edtAttnBy, edtClient, edtAddress, edtQuantity, edtModel, edtCustomerAddress, edtContactPerson, edtCustomerName,
             edtReportNo, edtFuel, edtType, edtSerialNo, edtCode, edtEngineerRemark, edtCommissioningWorkDoneDescription,
             edtInstallationWorkDoneDescription,
             edtProductJobKnowledge, edtCooperationWithYou, edtTimelyCompletion, edtSiteBehaviour, edtPresenceOfMind, edtEffectiveCommunication,
             edtCustomerRemarks, edtName, edtServiceCharge, edtTransport, edtConveyance, edtFoods, edtHotelBill;
 
-    private TextInputLayout tilQuantity, tilCustomerAddress, tilModel, tilContactPerson, tilCustomerName, tilDate, tilReportNo, tilEngineerRemark,
+    private TextInputLayout tilAttnBy, tilClient,
+            tilAddress, tilQuantity, tilCustomerAddress, tilModel, tilContactPerson, tilCustomerName, tilDate, tilReportNo, tilEngineerRemark,
             tilCommissioningWorkDoneDescription, tilCommissioningDateEnd, tilCommissioningDateStart, tilInstallationWorkDoneDescription,
             tilInstallationDateEnd, tilInstallationDateStart, tilFuel, tilType, tilSerialNo, tilCode, tilHotelBill, tilConveyance,
             tilTransport, tilServiceCharge, tilName, tilCheckoutDateTime, tilCustomerRemarks, tilEffectiveCommunication, tilPresenceOfMind,
@@ -129,7 +130,7 @@ public class ReportBurnerInstallationFragment extends BaseFragment {
 
     @Override
     protected String getToolbarTitle() {
-        return getString(R.string.visit_report);
+        return getString(R.string.visit);
     }
 
     @Override
@@ -221,7 +222,9 @@ public class ReportBurnerInstallationFragment extends BaseFragment {
         txvInstallationDateEnd = view.findViewById(R.id.txvInstallationDateEnd);
         txvDate = view.findViewById(R.id.txvDate);
 
-        edtQuantity = view.findViewById(R.id.edtQuantity);
+        edtAttnBy = view.findViewById(R.id.edtAttnBy);
+        edtClient = view.findViewById(R.id.edtClient);
+        edtAddress = view.findViewById(R.id.edtAddress);
         edtModel = view.findViewById(R.id.edtModel);
         edtCustomerAddress = view.findViewById(R.id.edtCustomerAddress);
         edtContactPerson = view.findViewById(R.id.edtContactPerson);
@@ -622,6 +625,9 @@ public class ReportBurnerInstallationFragment extends BaseFragment {
         params.put("resolve_image", "");
         params.put("sign_repre", covertBitmapToBase64(bitmapSignatureAndStamp));
         params.put("sign_customer", covertBitmapToBase64(bitmapCustomerSign));
+        params.put("battn_by", edtAttnBy.getText().toString());
+        params.put("bclient", edtClient.getText().toString());
+        params.put("badress", edtAddress.getText().toString());
         params.put("tax", edtFoods.getText().toString());
         params.put("others", edtHotelBill.getText().toString());
         params.put("to_form", edtTransport.getText().toString());

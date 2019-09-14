@@ -164,6 +164,25 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilNoOfHeatPumps"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="No. of Heat Pumps"
+                app:hintTextAppearance="@style/TextInputLayout.gray">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edtNoOfHeatPumps"
+                    style="@style/editTextTheme"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="@dimen/_10sdp"
+                    android:inputType="text"
+                    android:textColor="@color/text_color"
+                    android:textColorHint="@color/text_color_gray" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/tilHWGModelSerialNo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -369,6 +388,70 @@
                     android:inputType="text"
                     android:textColor="@color/text_color"
                     android:textColorHint="@color/text_color_gray" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <CheckBox
+                            android:id="@+id/chkService"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Service" />
+
+                        <CheckBox
+                            android:id="@+id/chkPreInstallation"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Pre-Installation" />
+
+                        <CheckBox
+                            android:id="@+id/chkInstallation"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Installation" />
+
+                        <CheckBox
+                            android:id="@+id/chkCommissioning"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Commissioning" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <CheckBox
+                            android:id="@+id/chkChargeable"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Chargeable" />
+
+                        <CheckBox
+                            android:id="@+id/chkWarranty"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Warranty" />
+
+                        <CheckBox
+                            android:id="@+id/chkCourtesyVisit"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Courtesy Visit" />
+
+                    </LinearLayout>
+                </LinearLayout>
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -712,6 +795,42 @@
                 android:orientation="vertical">
 
                 <androidx.appcompat.widget.AppCompatTextView
+                    style="@style/TextInputLayout.gray"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:paddingStart="@dimen/_5sdp"
+                    android:paddingEnd="@dimen/_5sdp"
+                    android:text="Checkout Date Time"
+                    android:textColor="@color/text_color_gray"
+                    android:textSize="@dimen/_12ssp"
+                    tools:ignore="HardcodedText" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/txvCheckoutDateTime"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:hint="Select Date"
+                    android:padding="@dimen/_5sdp"
+                    android:textColor="@color/text_color"
+                    android:textSize="@dimen/_16ssp"
+                    tools:ignore="HardcodedText" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/text_divider_color" />
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <androidx.appcompat.widget.AppCompatTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_5sdp"
@@ -815,12 +934,12 @@
                 style="?android:attr/borderlessButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:layout_marginStart="@dimen/_10sdp"
                 android:layout_marginTop="@dimen/_20sdp"
                 android:layout_marginEnd="@dimen/_10sdp"
                 android:background="@drawable/round_square_button_drawable"
                 android:minWidth="@dimen/space_two_hundred"
-                android:layout_gravity="center"
                 android:text="Submit Report"
                 android:textColor="@color/white"
                 android:textSize="@dimen/text_size_eighteen" />
@@ -835,10 +954,10 @@
                 <androidx.appcompat.widget.AppCompatTextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
                     android:layout_marginTop="@dimen/_5sdp"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
-                    android:layout_gravity="center_vertical"
                     android:paddingStart="@dimen/_5sdp"
                     android:paddingEnd="@dimen/_5sdp"
                     android:text="Signature"
@@ -850,8 +969,8 @@
                     android:id="@+id/linSignature"
                     android:layout_width="0dp"
                     android:layout_height="@dimen/_50sdp"
-                    android:layout_weight="1"
                     android:layout_gravity="center"
+                    android:layout_weight="1"
                     android:orientation="vertical">
 
                     <androidx.appcompat.widget.AppCompatImageView

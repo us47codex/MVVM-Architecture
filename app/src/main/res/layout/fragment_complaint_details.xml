@@ -534,7 +534,7 @@
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/btnSchedule"
                     style="?android:attr/borderlessButtonStyle"
-                    android:layout_width="0dp"
+                    android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_weight="1"
@@ -566,10 +566,10 @@
                     android:layout_marginStart="@dimen/_10sdp"
                     android:layout_weight="1"
                     android:background="@drawable/round_square_button_drawable"
-                    android:text="Visit Report"
+                    android:text="@string/visit"
                     android:textColor="@color/white"
                     android:textSize="@dimen/text_size_eighteen"
-                    android:visibility="visible" />
+                    android:visibility="gone" />
             </androidx.appcompat.widget.LinearLayoutCompat>
         </androidx.appcompat.widget.LinearLayoutCompat>
     </androidx.core.widget.NestedScrollView>

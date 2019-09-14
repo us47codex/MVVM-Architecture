@@ -85,5 +85,6 @@
     <string name="signature">signature</string>
     <string name="dialog_title">Create Signature</string>
     <string name="clear_pad">clear</string>
+    <string name="visit">Visit</string>
 
 </resources>

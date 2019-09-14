@@ -106,7 +106,7 @@ public class VisitReportFragment extends BaseFragment {
 
     @Override
     protected String getToolbarTitle() {
-        return getString(R.string.visit_report);
+        return getString(R.string.visit);
     }
 
     @Override
