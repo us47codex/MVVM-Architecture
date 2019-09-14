@@ -10,6 +10,7 @@ import androidx.appcompat.widget.AppCompatTextView;
 import androidx.appcompat.widget.LinearLayoutCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.us47codex.mvvmarch.helper.AppUtils;
 import com.us47codex.mvvmarch.interfaces.OnItemClickListener;
 import com.us47codex.mvvmarch.roomDatabase.Complaint;
 
@@ -44,7 +45,7 @@ public class ComplaintsAdapter extends RecyclerView.Adapter<ComplaintsAdapter.Co
         Complaint complaint = complaintList.get(position);
         holder.txvComplaintNo.setText(String.valueOf(complaint.getId()));
         holder.txvCustomerName.setText(complaint.getCustomerFullName());
-        holder.txvMachineType.setText(complaint.getMcType());
+        holder.txvMachineType.setText(String.format("%s %s", complaint.getMcType(), AppUtils.isEmpty(complaint.getVisitType()) ? "" : ": " + complaint.getVisitType()));
         holder.txvStatus.setText(complaint.getStatus());
         holder.txvDate.setText(complaint.getUpdatedAt());
 

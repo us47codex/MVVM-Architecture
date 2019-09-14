@@ -23,14 +23,14 @@
 
     <style name="TextInputLayout.gray" parent="@android:style/TextAppearance">
         <item name="android:textColor">@color/text_color_gray</item>
-        <item name="android:textSize">@dimen/text_size_twelve</item>
+        <item name="android:textSize">@dimen/_12ssp</item>
     </style>
 
     <style name="editTextTheme" parent="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
         <item name="android:paddingTop">@dimen/space_ten</item>
         <item name="android:paddingBottom">@dimen/space_twenty</item>
         <item name="android:paddingStart">@dimen/space_five</item>
-        <item name="android:textSize">@dimen/text_size_sixteen</item>
+        <item name="android:textSize">@dimen/_16ssp</item>
         <item name="android:backgroundTint">@color/text_divider_color</item>
     </style>
 

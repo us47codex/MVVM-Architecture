@@ -235,6 +235,8 @@
         android:textSize="@dimen/_16ssp"
         android:visibility="gone" />
 
-    <include layout="@layout/layout_bottom_view" />
+    <include
+        layout="@layout/layout_bottom_view"
+        android:visibility="gone" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -10,15 +10,18 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -32,25 +35,32 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.github.florent37.singledateandtimepicker.SingleDateAndTimePicker;
 import com.github.gcacace.signaturepad.views.SignaturePad;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.us47codex.mvvmarch.base.BaseFragment;
 import com.us47codex.mvvmarch.complaint.ComplaintViewModel;
 import com.us47codex.mvvmarch.constant.Constants;
 import com.us47codex.mvvmarch.enums.ApiCallStatus;
+import com.us47codex.mvvmarch.helper.AppLog;
 import com.us47codex.mvvmarch.helper.AppUtils;
 import com.us47codex.mvvmarch.roomDatabase.Complaint;
 
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
@@ -66,28 +76,41 @@ import io.reactivex.schedulers.Schedulers;
  * Company : US47Codex
  * Email : us47codex@gmail.com
  **/
-public class VisitReportFragment extends BaseFragment {
+public class ReportBurnerInstallationFragment extends BaseFragment {
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
     private FrameLayout frameMain;
     private ComplaintViewModel complaintViewModel;
     private List<Complaint> complaintList;
-    private TextInputEditText edtOEMDealerName, edtMonthYearOfInstallation, edtNoOfHWG, edtHWGModelSerialNo,
-            edtHeatPumpModelSerialNo, edtContactPerson, edtCustomerName, edtDate, edtReportNo, edtPartsReplaced,
-            edtCustomerRemark, edtSuggestionToCustomer, edtDescriptionOfWorkDone, edtObservation, edtNatureOfProblem,
-            edtTypeOfCallReceiveDate, edtComplaintNoDate, edtPONoDate, edtEquipment, edtDealerPhoneNo, edtDealerAddress,
-            edtDealerContactPerson, edtTax, edtConvayance, edtOthers, edtServiceCharge;
+
+    private TextInputEditText edtQuantity, edtModel, edtCustomerAddress, edtContactPerson, edtCustomerName,
+            edtReportNo, edtFuel, edtType, edtSerialNo, edtCode, edtEngineerRemark, edtCommissioningWorkDoneDescription,
+            edtInstallationWorkDoneDescription,
+            edtProductJobKnowledge, edtCooperationWithYou, edtTimelyCompletion, edtSiteBehaviour, edtPresenceOfMind, edtEffectiveCommunication,
+            edtCustomerRemarks, edtName, edtServiceCharge, edtTransport, edtConveyance, edtFoods, edtHotelBill;
+
+    private TextInputLayout tilQuantity, tilCustomerAddress, tilModel, tilContactPerson, tilCustomerName, tilDate, tilReportNo, tilEngineerRemark,
+            tilCommissioningWorkDoneDescription, tilCommissioningDateEnd, tilCommissioningDateStart, tilInstallationWorkDoneDescription,
+            tilInstallationDateEnd, tilInstallationDateStart, tilFuel, tilType, tilSerialNo, tilCode, tilHotelBill, tilConveyance,
+            tilTransport, tilServiceCharge, tilName, tilCheckoutDateTime, tilCustomerRemarks, tilEffectiveCommunication, tilPresenceOfMind,
+            tilSiteBehaviour, tilTimelyCompletion, tilCooperationWithYou, tilProductJobKnowledge, tilFoods;
+
+    private AppCompatTextView txvMachineType, txvCommissioningDetail, txvBurnerDetail, txvCheckoutDateTime, txvInstallationDateEnd, txvCommissioningDateStart,
+            txvCommissioningDateEnd, txvInstallationDateStart, txvDate;
+    private RadioGroup rdgCustomerFeedback, rdgTraining;
+
     private AppCompatButton btnSubmitReport;
-    private AppCompatImageView imgMarketingProjectHead, imgSunteRepresentative, imgCustomerSign;
-    private AppCompatTextView txvMachineType;
-    private RadioGroup rdgQualityOfService, rdgWorkStatus;
+    private AppCompatImageView imgSignatureAndStamp, imgCustomerSign;
+    private Bitmap bitmapSignatureAndStamp, bitmapCustomerSign;
     private long complainId;
     private Complaint complaint;
     private boolean isSignatureCreate;
     private String SignatureFilePath = "";
     private AppCompatImageView signatureImage;
-    ArrayList<String> imgMarketingProjectHeadsignatureList = new ArrayList<>();
     ArrayList<String> customerimageSignatureList = new ArrayList<>();
-    ArrayList<String> imgSunteRepresentativeSignatureList = new ArrayList<>();
+    ArrayList<String> signatureAndStampList = new ArrayList<>();
+
+    private String customerFeedback, training;
+    private Dialog dialogWakeUpCall;
 
 
     private int customerSignature = 0;
@@ -96,7 +119,7 @@ public class VisitReportFragment extends BaseFragment {
 
     @Override
     protected int getLayoutId() {
-        return R.layout.fragment_visit_report;
+        return R.layout.fragment_report_burner_installation;
     }
 
     @Override
@@ -141,7 +164,7 @@ public class VisitReportFragment extends BaseFragment {
 
     @Override
     protected int getCurrentFragmentId() {
-        return R.id.visitReportFragment;
+        return R.id.reportBurnerInstallationFragment;
     }
 
     @Override
@@ -162,7 +185,7 @@ public class VisitReportFragment extends BaseFragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_visit_report, container, false);
+        return inflater.inflate(R.layout.fragment_report_burner_installation, container, false);
     }
 
     @Override
@@ -189,38 +212,46 @@ public class VisitReportFragment extends BaseFragment {
         LinearLayoutCompat linSignature = view.findViewById(R.id.linSignature);
 
         txvMachineType = view.findViewById(R.id.txvMachineType);
+        txvBurnerDetail = view.findViewById(R.id.txvBurnerDetail);
+        txvCommissioningDetail = view.findViewById(R.id.txvCommissioningDetail);
+        txvInstallationDateStart = view.findViewById(R.id.txvInstallationDateStart);
+        txvCommissioningDateEnd = view.findViewById(R.id.txvCommissioningDateEnd);
+        txvCheckoutDateTime = view.findViewById(R.id.txvCheckoutDateTime);
+        txvCommissioningDateStart = view.findViewById(R.id.txvCommissioningDateStart);
+        txvInstallationDateEnd = view.findViewById(R.id.txvInstallationDateEnd);
+        txvDate = view.findViewById(R.id.txvDate);
 
-        edtOEMDealerName = view.findViewById(R.id.edtOEMDealerName);
-        edtMonthYearOfInstallation = view.findViewById(R.id.edtMonthYearOfInstallation);
-        edtNoOfHWG = view.findViewById(R.id.edtNoOfHWG);
-        edtHWGModelSerialNo = view.findViewById(R.id.edtHWGModelSerialNo);
-        edtHeatPumpModelSerialNo = view.findViewById(R.id.edtHeatPumpModelSerialNo);
+        edtQuantity = view.findViewById(R.id.edtQuantity);
+        edtModel = view.findViewById(R.id.edtModel);
+        edtCustomerAddress = view.findViewById(R.id.edtCustomerAddress);
         edtContactPerson = view.findViewById(R.id.edtContactPerson);
         edtCustomerName = view.findViewById(R.id.edtCustomerName);
-        edtDate = view.findViewById(R.id.edtDate);
         edtReportNo = view.findViewById(R.id.edtReportNo);
-        edtPartsReplaced = view.findViewById(R.id.edtPartsReplaced);
-        edtCustomerRemark = view.findViewById(R.id.edtCustomerRemark);
-        edtSuggestionToCustomer = view.findViewById(R.id.edtSuggestionToCustomer);
-        edtDescriptionOfWorkDone = view.findViewById(R.id.edtDescriptionOfWorkDone);
-        edtObservation = view.findViewById(R.id.edtObservation);
-        edtNatureOfProblem = view.findViewById(R.id.edtNatureOfProblem);
-        edtTypeOfCallReceiveDate = view.findViewById(R.id.edtTypeOfCallReceiveDate);
-        edtComplaintNoDate = view.findViewById(R.id.edtComplaintNoDate);
-        edtPONoDate = view.findViewById(R.id.edtPONoDate);
-        edtEquipment = view.findViewById(R.id.edtEquipment);
-        edtDealerPhoneNo = view.findViewById(R.id.edtDealerPhoneNo);
-        edtDealerAddress = view.findViewById(R.id.edtDealerAddress);
-        edtDealerContactPerson = view.findViewById(R.id.edtDealerContactPerson);
-        edtTax = view.findViewById(R.id.edtTax);
-        edtConvayance = view.findViewById(R.id.edtConvayance);
-        edtOthers = view.findViewById(R.id.edtOthers);
+        edtFuel = view.findViewById(R.id.edtFuel);
+        edtType = view.findViewById(R.id.edtType);
+        edtSerialNo = view.findViewById(R.id.edtSerialNo);
+        edtCode = view.findViewById(R.id.edtCode);
+        edtEngineerRemark = view.findViewById(R.id.edtEngineerRemark);
+        edtCommissioningWorkDoneDescription = view.findViewById(R.id.edtCommissioningWorkDoneDescription);
+        edtInstallationWorkDoneDescription = view.findViewById(R.id.edtInstallationWorkDoneDescription);
+        edtProductJobKnowledge = view.findViewById(R.id.edtProductJobKnowledge);
+        edtCooperationWithYou = view.findViewById(R.id.edtCooperationWithYou);
+        edtTimelyCompletion = view.findViewById(R.id.edtTimelyCompletion);
+        edtSiteBehaviour = view.findViewById(R.id.edtSiteBehaviour);
+        edtPresenceOfMind = view.findViewById(R.id.edtPresenceOfMind);
+        edtEffectiveCommunication = view.findViewById(R.id.edtEffectiveCommunication);
+        edtCustomerRemarks = view.findViewById(R.id.edtCustomerRemarks);
+        edtName = view.findViewById(R.id.edtName);
         edtServiceCharge = view.findViewById(R.id.edtServiceCharge);
-        signatureImage = view.findViewById(R.id.signatureImage);
+        edtTransport = view.findViewById(R.id.edtTransport);
+        edtConveyance = view.findViewById(R.id.edtConveyance);
+        edtFoods = view.findViewById(R.id.edtFoods);
+        edtHotelBill = view.findViewById(R.id.edtHotelBill);
 
-        imgMarketingProjectHead = view.findViewById(R.id.imgMarketingProjectHead);
-        imgSunteRepresentative = view.findViewById(R.id.imgSunteRepresentative);
+        imgSignatureAndStamp = view.findViewById(R.id.imgSignatureAndStamp);
         imgCustomerSign = view.findViewById(R.id.imgCustomerSign);
+        rdgCustomerFeedback = view.findViewById(R.id.rdgCustomerFeedback);
+        rdgTraining = view.findViewById(R.id.rdgTraining);
 
         btnSubmitReport = view.findViewById(R.id.btnSubmitReport);
 
@@ -231,22 +262,87 @@ public class VisitReportFragment extends BaseFragment {
                 })
         );
         getCompositeDisposable().add(
-                RxView.clicks(imgSunteRepresentative).throttleFirst(500,
+                RxView.clicks(imgSignatureAndStamp).throttleFirst(500,
                         TimeUnit.MILLISECONDS).subscribe(o -> {
                     openSignatureDialog(imgSunteRepresentativeSignature);
                 })
         );
         getCompositeDisposable().add(
-                RxView.clicks(imgMarketingProjectHead).throttleFirst(500,
+                RxView.clicks(btnSubmitReport).throttleFirst(500,
                         TimeUnit.MILLISECONDS).subscribe(o -> {
-                    openSignatureDialog(imgMarketingProjectHeadsignature);
+                    submitReport();
                 })
         );
         getCompositeDisposable().add(
-                RxView.clicks(btnSubmitReport).throttleFirst(500,
+                RxView.clicks(txvCheckoutDateTime).throttleFirst(500,
                         TimeUnit.MILLISECONDS).subscribe(o -> {
+                    showDialogSelectDate(txvCheckoutDateTime);
                 })
         );
+        getCompositeDisposable().add(
+                RxView.clicks(txvInstallationDateStart).throttleFirst(500,
+                        TimeUnit.MILLISECONDS).subscribe(o -> {
+                    showDialogSelectDate(txvInstallationDateStart);
+                })
+        );
+        getCompositeDisposable().add(
+                RxView.clicks(txvInstallationDateEnd).throttleFirst(500,
+                        TimeUnit.MILLISECONDS).subscribe(o -> {
+                    showDialogSelectDate(txvInstallationDateEnd);
+                })
+        );
+        getCompositeDisposable().add(
+                RxView.clicks(txvCommissioningDateStart).throttleFirst(500,
+                        TimeUnit.MILLISECONDS).subscribe(o -> {
+                    showDialogSelectDate(txvCommissioningDateStart);
+                })
+        );
+        getCompositeDisposable().add(
+                RxView.clicks(txvCommissioningDateEnd).throttleFirst(500,
+                        TimeUnit.MILLISECONDS).subscribe(o -> {
+                    showDialogSelectDate(txvCommissioningDateEnd);
+                })
+        );
+        getCompositeDisposable().add(
+                RxView.clicks(txvDate).throttleFirst(500,
+                        TimeUnit.MILLISECONDS).subscribe(o -> {
+                    showDialogSelectDate(txvDate);
+                })
+        );
+
+        rdgCustomerFeedback.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                switch (checkedId) {
+                    case R.id.rdbOne:
+                        customerFeedback = "1";
+                        break;
+                    case R.id.rdbTwo:
+                        customerFeedback = "2";
+                        break;
+                    case R.id.rdbThree:
+                        customerFeedback = "3";
+                        break;
+                    case R.id.rdbFour:
+                        customerFeedback = "4";
+                        break;
+                    case R.id.rdbFive:
+                        customerFeedback = "5";
+                        break;
+                }
+            }
+        });
+        rdgTraining.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                switch (checkedId) {
+                    case R.id.rdbTrainingYes:
+                        training = "Yes";
+                        break;
+                    case R.id.rdbTrainingNo:
+                        training = "No";
+                        break;
+                }
+            }
+        });
     }
 
     @Override
@@ -254,12 +350,16 @@ public class VisitReportFragment extends BaseFragment {
 
     }
 
+    private void submitReport() {
+        complaintViewModel.callToApi(prepareBurnerInstallationParams(), ComplaintViewModel.BURNER_INSTALLATION_COMPLAINT_VISIT_API_TAG, true);
+    }
+
     private void setData(Complaint complaint) {
         this.complaint = complaint;
-        txvMachineType.setText(complaint.getMcType());
+        txvMachineType.setText(String.format("%s %s", complaint.getMcType(), AppUtils.isEmpty(complaint.getVisitType()) ? "" : ": " + complaint.getVisitType()));
         edtCustomerName.setText(complaint.getCustomerFullName());
-        edtComplaintNoDate.setText(complaint.getComplainNoDate());
-        edtOEMDealerName.setText(complaint.getDealerName());
+        edtCustomerAddress.setText(complaint.getAddress());
+        edtReportNo.setText(String.valueOf(complaint.getId()));
     }
 
     private void getComplainFromDB() {
@@ -277,10 +377,10 @@ public class VisitReportFragment extends BaseFragment {
                                    e.printStackTrace();
                                }
 
-                    @Override
-                    public void onComplete() {
+                               @Override
+                               public void onComplete() {
 
-                    }
+                               }
                            }
                 );
     }
@@ -313,7 +413,7 @@ public class VisitReportFragment extends BaseFragment {
                         } else if (object instanceof Pair) {
                             Pair pair = (Pair) object;
                             if (pair.first != null) {
-                                if (pair.first.equals(ComplaintViewModel.COMPLAINT_LIST_API_TAG)) {
+                                if (pair.first.equals(ComplaintViewModel.BURNER_INSTALLATION_COMPLAINT_VISIT_API_TAG)) {
                                     enableDisableView(frameMain, true);
                                     hideProgressLoader();
                                     JSONObject jsonObject = (JSONObject) pair.second;
@@ -381,12 +481,7 @@ public class VisitReportFragment extends BaseFragment {
                         return;
                     }
                 } else if (type == 1) {
-                    if (imgSunteRepresentativeSignatureList == null) {
-                        Toast.makeText(getContext(), "Please Signature here...", Toast.LENGTH_LONG).show();
-                        return;
-                    }
-                } else if (type == 3) {
-                    if (imgMarketingProjectHeadsignatureList == null) {
+                    if (signatureAndStampList == null) {
                         Toast.makeText(getContext(), "Please Signature here...", Toast.LENGTH_LONG).show();
                         return;
                     }
@@ -398,23 +493,18 @@ public class VisitReportFragment extends BaseFragment {
                 RequestOptions requestOptions = new RequestOptions();
 
                 if (type == 0) {
+                    bitmapCustomerSign = signatureBitmap;
                     Glide.with(this)
                             .setDefaultRequestOptions(requestOptions)
                             .load(signatureBitmap)
                             .into(imgCustomerSign);
                 } else if (type == 1) {
+                    bitmapSignatureAndStamp = signatureBitmap;
                     Glide.with(this)
                             .setDefaultRequestOptions(requestOptions)
                             .load(signatureBitmap)
-                            .into(imgSunteRepresentative);
-                } else if (type == 2) {
-                    Glide.with(this)
-                            .setDefaultRequestOptions(requestOptions)
-                            .load(signatureBitmap)
-                            .into(imgMarketingProjectHead);
+                            .into(imgSignatureAndStamp);
                 }
-
-
                 dialog.dismiss();
             }
         });
@@ -468,9 +558,7 @@ public class VisitReportFragment extends BaseFragment {
         if (type == 0) {
             customerimageSignatureList.add(str_image1);
         } else if (type == 1) {
-            imgSunteRepresentativeSignatureList.add(str_image1);
-        } else if (type == 2) {
-            imgMarketingProjectHeadsignatureList.add(str_image1);
+            signatureAndStampList.add(str_image1);
         }
     }
 
@@ -522,7 +610,7 @@ public class VisitReportFragment extends BaseFragment {
         params.put("report_no", edtCustomerName.getText().toString());
     }
 
-    private void prepareParams() {
+    private HashMap<String, String> prepareBurnerInstallationParams() {
         // Complain Visit Burner
         //installation & commissionin
         //AND
@@ -530,40 +618,43 @@ public class VisitReportFragment extends BaseFragment {
 
 
         HashMap<String, String> params = new HashMap<>();
-        params.put("id", edtCustomerName.getText().toString());
-        params.put("resolve_image", edtCustomerName.getText().toString());
-        params.put("sign_repre", edtCustomerName.getText().toString());
-        params.put("sign_customer", edtCustomerName.getText().toString());
-        params.put("tax", edtCustomerName.getText().toString());
-        params.put("others", edtCustomerName.getText().toString());
-        params.put("to_form", edtCustomerName.getText().toString());
-        params.put("conveyance", edtCustomerName.getText().toString());
-        params.put("services_charges", edtCustomerName.getText().toString());
-        params.put("training_given_by", edtCustomerName.getText().toString());
-        params.put("checkout_date", edtCustomerName.getText().toString());
-        params.put("customer_remark", edtCustomerName.getText().toString());
-        params.put("rate_communication", edtCustomerName.getText().toString());
-        params.put("rate_problem", edtCustomerName.getText().toString());
-        params.put("rate_behaviour", edtCustomerName.getText().toString());
-        params.put("rate_work", edtCustomerName.getText().toString());
-        params.put("rate_cooperation", edtCustomerName.getText().toString());
-        params.put("rate_knowladge", edtCustomerName.getText().toString());
-        params.put("crate", edtCustomerName.getText().toString());
-        params.put("engineer_remark", edtCustomerName.getText().toString());
-        params.put("bcom_work_done", edtCustomerName.getText().toString());
-        params.put("com_end_date", edtCustomerName.getText().toString());
-        params.put("com_start_date", edtCustomerName.getText().toString());
-        params.put("bin_work_des", edtCustomerName.getText().toString());
-        params.put("in_end_date", edtCustomerName.getText().toString());
-        params.put("in_start_date", edtCustomerName.getText().toString());
-        params.put("bfuel", edtCustomerName.getText().toString());
-        params.put("btype", edtCustomerName.getText().toString());
-        params.put("bsrno", edtCustomerName.getText().toString());
-        params.put("bcode", edtCustomerName.getText().toString());
-        params.put("bquantity", edtCustomerName.getText().toString());
-        params.put("bmodel", edtCustomerName.getText().toString());
-        params.put("bapplication", edtCustomerName.getText().toString());
-        params.put("contact_person", edtCustomerName.getText().toString());
+        params.put("id", String.valueOf(complaint.getId()));
+        params.put("resolve_image", "");
+        params.put("sign_repre", covertBitmapToBase64(bitmapSignatureAndStamp));
+        params.put("sign_customer", covertBitmapToBase64(bitmapCustomerSign));
+        params.put("tax", edtFoods.getText().toString());
+        params.put("others", edtHotelBill.getText().toString());
+        params.put("to_form", edtTransport.getText().toString());
+        params.put("conveyance", edtConveyance.getText().toString());
+        params.put("services_charges", edtServiceCharge.getText().toString());
+        params.put("training_given_by", edtName.getText().toString());
+        params.put("training_given", training);
+        params.put("checkout_date", txvCheckoutDateTime.getText().toString());
+        params.put("customer_remark", edtCustomerRemarks.getText().toString());
+        params.put("rate_communication", edtEffectiveCommunication.getText().toString());
+        params.put("rate_problem", edtPresenceOfMind.getText().toString());
+        params.put("rate_behaviour", edtSiteBehaviour.getText().toString());
+        params.put("rate_work", edtTimelyCompletion.getText().toString());
+        params.put("rate_cooperation", edtCooperationWithYou.getText().toString());
+        params.put("rate_knowladge", edtProductJobKnowledge.getText().toString());
+        params.put("crate", customerFeedback);
+        params.put("engineer_remark", edtEngineerRemark.getText().toString());
+        params.put("bcom_work_done", edtCommissioningWorkDoneDescription.getText().toString());
+        params.put("com_end_date", txvCommissioningDateEnd.getText().toString());
+        params.put("com_start_date", txvCommissioningDateStart.getText().toString());
+        params.put("bin_work_des", edtInstallationWorkDoneDescription.getText().toString());
+        params.put("in_end_date", txvInstallationDateEnd.getText().toString());
+        params.put("in_start_date", txvInstallationDateStart.getText().toString());
+        params.put("bfuel", edtFuel.getText().toString());
+        params.put("btype", edtType.getText().toString());
+        params.put("bsrno", edtSerialNo.getText().toString());
+        params.put("bcode", edtCode.getText().toString());
+        params.put("bquantity", edtQuantity.getText().toString());
+        params.put("bmodel", edtModel.getText().toString());
+        params.put("bapplication", "");
+        params.put("contact_person", edtContactPerson.getText().toString());
+
+        return params;
 
     }
 
@@ -598,7 +689,7 @@ public class VisitReportFragment extends BaseFragment {
         params.put("conveyance", edtCustomerName.getText().toString());
         params.put("services_charges", edtCustomerName.getText().toString());
         params.put("training_given_by", edtCustomerName.getText().toString());
-        params.put("training_given", edtCustomerName.getText().toString());
+        params.put("training_given", training);
         params.put("checkout_date", edtCustomerName.getText().toString());
         params.put("customer_remark", edtCustomerName.getText().toString());
         params.put("rate_communication", edtCustomerName.getText().toString());
@@ -625,6 +716,71 @@ public class VisitReportFragment extends BaseFragment {
         params.put("contact_person", edtCustomerName.getText().toString());
 
     }
+
+    protected void showDialogSelectDate(AppCompatTextView appCompatTextView) {
+        if (dialogWakeUpCall != null) {
+            if (dialogWakeUpCall.isShowing()) {
+                return;
+            }
+        }
+        dialogWakeUpCall = new Dialog(getContext());
+        dialogWakeUpCall.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        // dialog.setContentView(R.layout.profile_preference_two);
+        dialogWakeUpCall.setContentView(R.layout.dialog_select_date);
+//        Objects.requireNonNull(dialogWakeUpCall.getWindow()).setBackgroundDrawableResource(R.drawable.settings_bg_gray);
+//        dialogWakeUpCall.getWindow().setLayout(Utils.getWidth(LandingPageActivity.this, 0.05), RelativeLayout.LayoutParams.WRAP_CONTENT);
+        dialogWakeUpCall.setCancelable(true);
+
+        Button btn_send = dialogWakeUpCall.findViewById(R.id.btnSetSchedule);
+        Button btn_cancel = dialogWakeUpCall.findViewById(R.id.btnCancel);
+        TextView txt_dialog_title = dialogWakeUpCall.findViewById(R.id.txt_dialog_title);
+
+        final SingleDateAndTimePicker wakeupDateAndTimePicker = dialogWakeUpCall.findViewById(R.id.single_day_picker);
+        wakeupDateAndTimePicker.setIsAmPm(true);
+        wakeupDateAndTimePicker.setStepMinutes(1);
+        wakeupDateAndTimePicker.setDayFormatter(new SimpleDateFormat("EEE dd MMM", Locale.ENGLISH));
+
+        Calendar minWakeUpDateTimeCalendar = Calendar.getInstance(Locale.ENGLISH);
+        minWakeUpDateTimeCalendar.add(Calendar.MINUTE, 5);
+        minWakeUpDateTimeCalendar.set(Calendar.SECOND, 0);
+        wakeupDateAndTimePicker.setMinDate(minWakeUpDateTimeCalendar.getTime());
+
+        btn_cancel.setOnClickListener(view -> {
+            dialogWakeUpCall.dismiss();
+            dialogWakeUpCall.cancel();
+        });
+        btn_send.setOnClickListener(view -> {
+            dialogWakeUpCall.dismiss();
+            dialogWakeUpCall.cancel();
+            try {
+//                showProgressLoader();
+                appCompatTextView.setText(AppUtils.convertDateToString(wakeupDateAndTimePicker.getDate(), "MM/dd/yyyy"));
+
+            } catch (Exception e) {
+                AppLog.error("error", e);
+            }
+        });
+
+        try {
+            dialogWakeUpCall.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private String covertBitmapToBase64(Bitmap bitmap) {
+        try {
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+            byte[] byteArray = byteArrayOutputStream.toByteArray();
+
+            return Base64.encodeToString(byteArray, Base64.DEFAULT);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "";
+        }
+    }
+
 }
 
 

@@ -58,6 +58,7 @@ public class ComplaintsFragment extends BaseFragment {
     private ComplaintViewModel complaintViewModel;
     private List<Complaint> complaintList;
     private SwipeRefreshLayout swipeRefreshLayout;
+    private String FILTER_COMPLAINT = "all";
 
     @Override
     protected int getLayoutId() {
@@ -116,6 +117,10 @@ public class ComplaintsFragment extends BaseFragment {
             Window window = Objects.requireNonNull(getActivity()).getWindow();
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             window.setStatusBarColor(getResources().getColor(R.color.white));
+        }
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            FILTER_COMPLAINT = bundle.getString(Constants.KEY_FILTER_COMPLAINT, "all");
         }
         complaintViewModel = ViewModelProviders.of(this).get(ComplaintViewModel.class);
     }
@@ -203,23 +208,43 @@ public class ComplaintsFragment extends BaseFragment {
     }
 
     private void getCommentListFromDB() {
-        getDatabase().complaintDao().getAllComplaints()
-                .subscribeOn(Schedulers.computation())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new DisposableSingleObserver<List<Complaint>>() {
-                               @Override
-                               public void onSuccess(List<Complaint> dbComplaintList) {
-                                   complaintList.clear();
-                                   complaintList.addAll(dbComplaintList);
-                                   complaintsAdapter.notifyDataSetChanged();
-                               }
+        if (FILTER_COMPLAINT.equalsIgnoreCase(Constants.STATUS_ALL)) {
+            getDatabase().complaintDao().getAllComplaints()
+                    .subscribeOn(Schedulers.computation())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new DisposableSingleObserver<List<Complaint>>() {
+                                   @Override
+                                   public void onSuccess(List<Complaint> dbComplaintList) {
+                                       complaintList.clear();
+                                       complaintList.addAll(dbComplaintList);
+                                       complaintsAdapter.notifyDataSetChanged();
+                                   }
 
-                               @Override
-                               public void onError(Throwable e) {
-                                   e.printStackTrace();
+                                   @Override
+                                   public void onError(Throwable e) {
+                                       e.printStackTrace();
+                                   }
                                }
-                           }
-                );
+                    );
+        } else {
+            getDatabase().complaintDao().getAllComplaintsByStatus(FILTER_COMPLAINT)
+                    .subscribeOn(Schedulers.computation())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new DisposableSingleObserver<List<Complaint>>() {
+                                   @Override
+                                   public void onSuccess(List<Complaint> dbComplaintList) {
+                                       complaintList.clear();
+                                       complaintList.addAll(dbComplaintList);
+                                       complaintsAdapter.notifyDataSetChanged();
+                                   }
+
+                                   @Override
+                                   public void onError(Throwable e) {
+                                       e.printStackTrace();
+                                   }
+                               }
+                    );
+        }
     }
 
     private void getCommentListFromServer() {

@@ -43,6 +43,9 @@ public interface ComplaintDao {
     @Query("SELECT * FROM tbl_complaints")
     Single<List<Complaint>> getAllComplaints();
 
+    @Query("SELECT * FROM tbl_complaints WHERE status = :status")
+    Single<List<Complaint>> getAllComplaintsByStatus(String status);
+
     @Query("DELETE FROM tbl_complaints")
     void deleteAllComplaint();
 

@@ -82,5 +82,8 @@
     <string name="password_must_be_same">Password must be same</string>
     <string name="password_updated_successfully">Password updated successfully</string>
     <string name="ticket_scheduled_successfully">Ticket Scheduled Successfully</string>
+    <string name="signature">signature</string>
+    <string name="dialog_title">Create Signature</string>
+    <string name="clear_pad">clear</string>
 
 </resources>

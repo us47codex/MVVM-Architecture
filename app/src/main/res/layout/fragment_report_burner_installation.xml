@@ -61,31 +61,48 @@
                         android:layout_height="wrap_content"
                         android:drawablePadding="@dimen/_10sdp"
                         android:inputType="text"
+                        android:text="123"
                         android:textColor="@color/text_color"
                         android:textColorHint="@color/text_color_gray" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/tilDate"
+                <androidx.appcompat.widget.LinearLayoutCompat
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_5sdp"
                     android:layout_weight="1"
-                    android:hint="Date"
-                    app:hintTextAppearance="@style/TextInputLayout.gray">
+                    android:orientation="vertical">
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/edtDate"
-                        style="@style/editTextTheme"
+                    <androidx.appcompat.widget.AppCompatTextView
+                        style="@style/TextInputLayout.gray"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+                        android:paddingStart="@dimen/_5sdp"
+                        android:paddingEnd="@dimen/_5sdp"
+                        android:text="Date"
+                        android:textColor="@color/text_color_gray"
+                        android:textSize="@dimen/_12ssp"
+                        tools:ignore="HardcodedText" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/txvDate"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:drawablePadding="@dimen/_10sdp"
-                        android:inputType="text"
+                        android:gravity="start"
+                        android:hint="Select Date"
+                        android:padding="@dimen/_5sdp"
                         android:textColor="@color/text_color"
-                        android:textColorHint="@color/text_color_gray" />
+                        android:textSize="@dimen/_16ssp"
+                        tools:ignore="HardcodedText" />
 
-                </com.google.android.material.textfield.TextInputLayout>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/text_divider_color" />
+
+                </androidx.appcompat.widget.LinearLayoutCompat>
+
             </androidx.appcompat.widget.LinearLayoutCompat>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -151,10 +168,10 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:padding="@dimen/_5sdp"
+                android:text="Burner Detail"
                 android:textColor="@color/text_color"
                 android:textSize="@dimen/_16ssp"
-                tools:ignore="HardcodedText"
-                tools:text="Burner Detail" />
+                tools:ignore="HardcodedText" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/tilModel"
@@ -255,11 +272,11 @@
                 android:id="@+id/tilFuel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Dealer Contact Person"
+                android:hint="Fuel"
                 app:hintTextAppearance="@style/TextInputLayout.gray">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/edtDealerContactPerson"
+                    android:id="@+id/edtFuel"
                     style="@style/editTextTheme"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -276,10 +293,10 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:padding="@dimen/_5sdp"
+                android:text="Installation Detail"
                 android:textColor="@color/text_color"
                 android:textSize="@dimen/_16ssp"
-                tools:ignore="HardcodedText"
-                tools:text="Installation Detail" />
+                tools:ignore="HardcodedText" />
 
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:layout_width="match_parent"
@@ -287,47 +304,80 @@
                 android:orientation="horizontal"
                 android:weightSum="2">
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/tilInstallationDateStart"
+                <androidx.appcompat.widget.LinearLayoutCompat
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="@dimen/_5sdp"
                     android:layout_weight="1"
-                    android:hint="Start Date"
-                    app:hintTextAppearance="@style/TextInputLayout.gray">
+                    android:orientation="vertical">
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/edtInstallationDateStart"
-                        style="@style/editTextTheme"
+                    <androidx.appcompat.widget.AppCompatTextView
+                        style="@style/TextInputLayout.gray"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+                        android:paddingStart="@dimen/_5sdp"
+                        android:paddingEnd="@dimen/_5sdp"
+                        android:text="Start Date"
+                        android:textColor="@color/text_color_gray"
+                        android:textSize="@dimen/_12ssp"
+                        tools:ignore="HardcodedText" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/txvInstallationDateStart"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:drawablePadding="@dimen/_10sdp"
-                        android:inputType="text"
+                        android:gravity="start"
+                        android:hint="Select Date"
+                        android:padding="@dimen/_5sdp"
                         android:textColor="@color/text_color"
-                        android:textColorHint="@color/text_color_gray" />
+                        android:textSize="@dimen/_16ssp"
+                        tools:ignore="HardcodedText" />
 
-                </com.google.android.material.textfield.TextInputLayout>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/text_divider_color" />
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/tilInstallationDateEnd"
+                </androidx.appcompat.widget.LinearLayoutCompat>
+
+                <androidx.appcompat.widget.LinearLayoutCompat
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_5sdp"
                     android:layout_weight="1"
-                    android:hint="End Date"
-                    app:hintTextAppearance="@style/TextInputLayout.gray">
+                    android:orientation="vertical">
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/edtInstallationDateEnd"
-                        style="@style/editTextTheme"
+                    <androidx.appcompat.widget.AppCompatTextView
+                        style="@style/TextInputLayout.gray"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:drawablePadding="@dimen/_10sdp"
-                        android:inputType="text"
-                        android:textColor="@color/text_color"
-                        android:textColorHint="@color/text_color_gray" />
+                        android:gravity="start"
+                        android:paddingStart="@dimen/_5sdp"
+                        android:paddingEnd="@dimen/_5sdp"
+                        android:text="End Date"
+                        android:textColor="@color/text_color_gray"
+                        android:textSize="@dimen/_12ssp"
+                        tools:ignore="HardcodedText" />
 
-                </com.google.android.material.textfield.TextInputLayout>
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/txvInstallationDateEnd"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+                        android:hint="Select Date"
+                        android:padding="@dimen/_5sdp"
+                        android:textColor="@color/text_color"
+                        android:textSize="@dimen/_16ssp"
+                        tools:ignore="HardcodedText" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/text_divider_color" />
+
+                </androidx.appcompat.widget.LinearLayoutCompat>
+
             </androidx.appcompat.widget.LinearLayoutCompat>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -355,10 +405,10 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:padding="@dimen/_5sdp"
+                android:text="Commissioning Detail"
                 android:textColor="@color/text_color"
                 android:textSize="@dimen/_16ssp"
-                tools:ignore="HardcodedText"
-                tools:text="Commissioning Detail" />
+                tools:ignore="HardcodedText" />
 
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:layout_width="match_parent"
@@ -366,47 +416,80 @@
                 android:orientation="horizontal"
                 android:weightSum="2">
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/tilCommissioningDateStart"
+                <androidx.appcompat.widget.LinearLayoutCompat
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="@dimen/_5sdp"
                     android:layout_weight="1"
-                    android:hint="Start Date"
-                    app:hintTextAppearance="@style/TextInputLayout.gray">
+                    android:orientation="vertical">
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/edtCommissioningDateStart"
-                        style="@style/editTextTheme"
+                    <androidx.appcompat.widget.AppCompatTextView
+                        style="@style/TextInputLayout.gray"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+                        android:paddingStart="@dimen/_5sdp"
+                        android:paddingEnd="@dimen/_5sdp"
+                        android:text="Start Date"
+                        android:textColor="@color/text_color_gray"
+                        android:textSize="@dimen/_12ssp"
+                        tools:ignore="HardcodedText" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/txvCommissioningDateStart"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:drawablePadding="@dimen/_10sdp"
-                        android:inputType="text"
+                        android:gravity="start"
+                        android:hint="Select Date"
+                        android:padding="@dimen/_5sdp"
                         android:textColor="@color/text_color"
-                        android:textColorHint="@color/text_color_gray" />
+                        android:textSize="@dimen/_16ssp"
+                        tools:ignore="HardcodedText" />
 
-                </com.google.android.material.textfield.TextInputLayout>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/text_divider_color" />
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/tilCommissioningDateEnd"
+                </androidx.appcompat.widget.LinearLayoutCompat>
+
+                <androidx.appcompat.widget.LinearLayoutCompat
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_5sdp"
                     android:layout_weight="1"
-                    android:hint="End Date"
-                    app:hintTextAppearance="@style/TextInputLayout.gray">
+                    android:orientation="vertical">
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/edtCommissioningDateEnd"
-                        style="@style/editTextTheme"
+                    <androidx.appcompat.widget.AppCompatTextView
+                        style="@style/TextInputLayout.gray"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+                        android:paddingStart="@dimen/_5sdp"
+                        android:paddingEnd="@dimen/_5sdp"
+                        android:text="End Date"
+                        android:textColor="@color/text_color_gray"
+                        android:textSize="@dimen/_12ssp"
+                        tools:ignore="HardcodedText" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/txvCommissioningDateEnd"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:drawablePadding="@dimen/_10sdp"
-                        android:inputType="text"
+                        android:gravity="start"
+                        android:hint="Select Date"
+                        android:padding="@dimen/_5sdp"
                         android:textColor="@color/text_color"
-                        android:textColorHint="@color/text_color_gray" />
+                        android:textSize="@dimen/_16ssp"
+                        tools:ignore="HardcodedText" />
 
-                </com.google.android.material.textfield.TextInputLayout>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/text_divider_color" />
+
+                </androidx.appcompat.widget.LinearLayoutCompat>
+
             </androidx.appcompat.widget.LinearLayoutCompat>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -462,7 +545,7 @@
                     android:paddingEnd="@dimen/_5sdp"
                     android:text="Customer Feedback"
                     android:textColor="@color/text_color_gray"
-                    android:textSize="@dimen/_10ssp"
+                    android:textSize="@dimen/_12ssp"
                     tools:ignore="HardcodedText" />
 
                 <RadioGroup
@@ -653,25 +736,41 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/tilCheckoutDateTime"
+            <androidx.appcompat.widget.LinearLayoutCompat
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Checkout Date Time"
-                app:hintTextAppearance="@style/TextInputLayout.gray">
+                android:layout_weight="1"
+                android:orientation="vertical">
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/edtCustomerRemark"
-                    style="@style/editTextTheme"
+                <androidx.appcompat.widget.AppCompatTextView
+                    style="@style/TextInputLayout.gray"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:paddingStart="@dimen/_5sdp"
+                    android:paddingEnd="@dimen/_5sdp"
+                    android:text="Checkout Date Time"
+                    android:textColor="@color/text_color_gray"
+                    android:textSize="@dimen/_12ssp"
+                    tools:ignore="HardcodedText" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/txvCheckoutDateTime"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:drawablePadding="@dimen/_10sdp"
-                    android:inputType="text"
-                    android:minLines="2"
+                    android:gravity="start"
+                    android:hint="Select Date"
+                    android:padding="@dimen/_5sdp"
                     android:textColor="@color/text_color"
-                    android:textColorHint="@color/text_color_gray" />
+                    android:textSize="@dimen/_16ssp"
+                    tools:ignore="HardcodedText" />
 
-            </com.google.android.material.textfield.TextInputLayout>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/text_divider_color" />
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
 
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:layout_width="match_parent"
@@ -688,15 +787,16 @@
                     android:paddingEnd="@dimen/_5sdp"
                     android:text="Training Given to Customer Employee"
                     android:textColor="@color/text_color_gray"
-                    android:textSize="@dimen/_10ssp"
+                    android:textSize="@dimen/_12ssp"
                     tools:ignore="HardcodedText" />
 
                 <RadioGroup
                     android:id="@+id/rdgTraining"
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:weightSum="2">
 
                     <RadioButton
                         android:id="@+id/rdbTrainingYes"
@@ -881,7 +981,7 @@
                     android:paddingEnd="@dimen/_5sdp"
                     android:text="Sign of Customer with Seal"
                     android:textColor="@color/text_color_gray"
-                    android:textSize="@dimen/_10ssp"
+                    android:textSize="@dimen/_12ssp"
                     tools:ignore="HardcodedText" />
 
                 <androidx.appcompat.widget.AppCompatImageView
@@ -916,7 +1016,7 @@
                     android:paddingEnd="@dimen/_5sdp"
                     android:text="Signature and Stamp"
                     android:textColor="@color/text_color_gray"
-                    android:textSize="@dimen/_10ssp"
+                    android:textSize="@dimen/_12ssp"
                     tools:ignore="HardcodedText" />
 
                 <androidx.appcompat.widget.AppCompatImageView

@@ -20,6 +20,8 @@ import androidx.appcompat.widget.AppCompatTextView;
 import androidx.core.util.Pair;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.github.florent37.singledateandtimepicker.SingleDateAndTimePicker;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.us47codex.mvvmarch.base.BaseFragment;
@@ -205,9 +207,23 @@ public class ComplaintDetailsFragment extends BaseFragment {
         compositeDisposable.add(
                 RxView.clicks(btnVisitReport).throttleFirst(500,
                         TimeUnit.MILLISECONDS).subscribe(o -> {
-                    Bundle bundle = new Bundle();
-                    bundle.putLong(KEY_COMPLAIN_ID, complaint.getId());
-                    jumpToDestinationFragment(getCurrentFragmentId(), R.id.toVisitReportFragment, frameMain, bundle, false);
+                    if (complaint != null) {
+                        Bundle bundle = new Bundle();
+                        bundle.putLong(KEY_COMPLAIN_ID, complaint.getId());
+                        if (complaint.getMcType().equalsIgnoreCase(Constants.BURNER)) {
+                            if (complaint.getVisitType().equalsIgnoreCase(Constants.INSTALLATION_AND_COMMISSIONING)
+                                    || complaint.getVisitType().equalsIgnoreCase(Constants.PRE_INSTALLED)) {
+                                jumpToDestinationFragment(getCurrentFragmentId(), R.id.toReportBurnerInstallationFragment, frameMain, bundle, false);
+                            } else {
+                                showDialogWithSingleButtons(getContext(), getString(R.string.app_name),
+                                        Objects.requireNonNull(getActivity()).getString(R.string.coming_soon),
+                                        Objects.requireNonNull(getActivity()).getString(R.string.ok), (MaterialDialog dialog, DialogAction which) -> {
+                                        }, false);
+                            }
+                        } else {
+                            jumpToDestinationFragment(getCurrentFragmentId(), R.id.toVisitReportFragment, frameMain, bundle, false);
+                        }
+                    }
                 })
         );
     }
@@ -251,6 +267,24 @@ public class ComplaintDetailsFragment extends BaseFragment {
             btnVisit.setVisibility(View.GONE);
             btnVisitReport.setVisibility(View.GONE);
         }
+
+        txvComplaintNo.setText(complaint.getId() != 0 ? String.valueOf(complaint.getId()) : "0");
+        txvStatus.setText(!AppUtils.isEmpty(complaint.getStatus()) ? complaint.getStatus() : "--");
+        txvCustomerName.setText(!AppUtils.isEmpty(complaint.getCustomerFullName()) ? complaint.getCustomerFullName() : "--");
+        txvMobile.setText(!AppUtils.isEmpty(complaint.getMno()) ? complaint.getMno() : "--");
+        txvEmail.setText(!AppUtils.isEmpty(complaint.getEmail()) ? complaint.getEmail() : "--");
+        txvDealerName.setText(!AppUtils.isEmpty(complaint.getDealerName()) ? complaint.getDealerName() : "--");
+        txvMachineType.setText(!AppUtils.isEmpty(complaint.getMcType()) ? complaint.getMcType() : "--");
+        txvMachineModel.setText(!AppUtils.isEmpty(complaint.getMcModel()) ? complaint.getMcModel() : "--");
+        txvSerialNo.setText(!AppUtils.isEmpty(complaint.getSrNo()) ? complaint.getSrNo() : "--");
+        txvReferenceAlternateNumber.setText(!AppUtils.isEmpty(complaint.getAlternateNum()) ? complaint.getAlternateNum() : "--");
+        txvAddress.setText(!AppUtils.isEmpty(complaint.getAddress()) ? complaint.getAddress() : "--");
+        txvProblemDescription.setText(!AppUtils.isEmpty(complaint.getDescription()) ? complaint.getDescription() : "--");
+        txvComplaintBy.setText(!AppUtils.isEmpty(complaint.getComplainForm()) ? complaint.getComplainForm() : "-");
+        txvAssignee.setText(!AppUtils.isEmpty(complaint.getComplainTo()) ? complaint.getComplainTo() : "--");
+        txvComplaintDate.setText(!AppUtils.isEmpty(complaint.getAssignDate()) ? complaint.getAssignDate() : "--");
+        txvScheduleDate.setText(!AppUtils.isEmpty(complaint.getScheduleDate()) ? complaint.getScheduleDate() : "--");
+        txvCloseDate.setText("--");
     }
 
     protected void showDialogForSchedule() {

@@ -471,6 +471,7 @@ public class ComplaintViewModel extends BaseViewModel {
                             complaint.setComplainFormLastName(commentJsonObject.optString("complain_form_last_name"));
                             complaint.setEngineerFirstName(commentJsonObject.optString("engineer_first_name"));
                             complaint.setEngineerLastName(commentJsonObject.optString("engineer_last_name"));
+                            complaint.setVisitType(commentJsonObject.optString("visit_type"));
                             return complaint;
                         })
                         .onErrorReturn(throwable -> {

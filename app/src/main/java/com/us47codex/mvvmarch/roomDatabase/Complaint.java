@@ -238,6 +238,9 @@ public class Complaint {
     @ColumnInfo(name = "engineer_last_name")
     private String engineerLastName;
 
+    @ColumnInfo(name = "visit_type")
+    private String visitType;
+
     public Complaint() {
     }
 
@@ -926,4 +929,11 @@ public class Complaint {
         this.engineerLastName = engineerLastName;
     }
 
+    public String getVisitType() {
+        return visitType;
+    }
+
+    public void setVisitType(String visitType) {
+        this.visitType = visitType;
+    }
 }

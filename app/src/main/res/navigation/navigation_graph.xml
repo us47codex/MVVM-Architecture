@@ -51,7 +51,7 @@
         android:id="@+id/userProfileFragment"
         android:name="com.us47codex.mvvmarch.UserProfileFragment"
         android:label="fragment_user_profile"
-        tools:layout="@layout/fragment_user_profile"></fragment>
+        tools:layout="@layout/fragment_user_profile" />
 
     <fragment
         android:id="@+id/changePasswordFragment"
@@ -80,10 +80,18 @@
         <action
             android:id="@+id/toVisitReportFragment"
             app:destination="@id/visitReportFragment" />
+        <action
+            android:id="@+id/toReportBurnerInstallationFragment"
+            app:destination="@id/reportBurnerInstallationFragment" />
     </fragment>
     <fragment
         android:id="@+id/visitReportFragment"
         android:name="com.us47codex.mvvmarch.VisitReportFragment"
         android:label="fragment_visit_report"
         tools:layout="@layout/fragment_visit_report" />
+    <fragment
+        android:id="@+id/reportBurnerInstallationFragment"
+        android:name="com.us47codex.mvvmarch.ReportBurnerInstallationFragment"
+        android:label="fragment_report_burner_installation"
+        tools:layout="@layout/fragment_report_burner_installation" />
 </navigation>

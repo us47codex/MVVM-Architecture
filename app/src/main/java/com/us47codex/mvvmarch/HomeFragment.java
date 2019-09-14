@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -16,6 +17,7 @@ import androidx.core.util.Pair;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.jakewharton.rxbinding2.view.RxView;
 import com.us47codex.mvvmarch.base.BaseFragment;
 import com.us47codex.mvvmarch.constant.Constants;
 import com.us47codex.mvvmarch.enums.ApiCallStatus;
@@ -25,11 +27,14 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
+
+import static com.us47codex.mvvmarch.constant.Constants.KEY_FILTER_COMPLAINT;
 
 
 /**
@@ -40,6 +45,7 @@ public class HomeFragment extends BaseFragment {
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
     private FrameLayout frameMain;
     private AppCompatTextView txtApprovalPendingCount, txtTotalComplaintsCount, txtClosedComplaintsCount, txtScheduleComplaintsCount, txtOpenComplaintsCount;
+    private LinearLayout llTotalComplaints, llClosedComplaints, llScheduleComplaints, llOpenComplaints;
     private HomeViewModel homeViewModel;
     private String total_complain, open_complain, closed_complain, today_schedule_complain;
 
@@ -126,6 +132,44 @@ public class HomeFragment extends BaseFragment {
         txtClosedComplaintsCount = view.findViewById(R.id.txtClosedComplaintsCount);
         txtScheduleComplaintsCount = view.findViewById(R.id.txtScheduleComplaintsCount);
         txtOpenComplaintsCount = view.findViewById(R.id.txtOpenComplaintsCount);
+
+        llOpenComplaints = view.findViewById(R.id.llOpenComplaints);
+        llScheduleComplaints = view.findViewById(R.id.llScheduleComplaints);
+        llClosedComplaints = view.findViewById(R.id.llClosedComplaints);
+        llTotalComplaints = view.findViewById(R.id.llTotalComplaints);
+
+        compositeDisposable.add(
+                RxView.clicks(llOpenComplaints).throttleFirst(500,
+                        TimeUnit.MILLISECONDS).subscribe(o -> {
+                    Bundle bundle = new Bundle();
+                    bundle.putString(KEY_FILTER_COMPLAINT, Constants.STATUS_OPEN);
+                    jumpToDestinationFragment(getCurrentFragmentId(), R.id.toComplaintsFragment, frameMain, bundle, false);
+                })
+        );
+        compositeDisposable.add(
+                RxView.clicks(llScheduleComplaints).throttleFirst(500,
+                        TimeUnit.MILLISECONDS).subscribe(o -> {
+                    Bundle bundle = new Bundle();
+                    bundle.putString(KEY_FILTER_COMPLAINT, Constants.STATUS_SCHEDULE);
+                    jumpToDestinationFragment(getCurrentFragmentId(), R.id.toComplaintsFragment, frameMain, bundle, false);
+                })
+        );
+        compositeDisposable.add(
+                RxView.clicks(llClosedComplaints).throttleFirst(500,
+                        TimeUnit.MILLISECONDS).subscribe(o -> {
+                    Bundle bundle = new Bundle();
+                    bundle.putString(KEY_FILTER_COMPLAINT, Constants.STATUS_CLOSED);
+                    jumpToDestinationFragment(getCurrentFragmentId(), R.id.toComplaintsFragment, frameMain, bundle, false);
+                })
+        );
+        compositeDisposable.add(
+                RxView.clicks(llTotalComplaints).throttleFirst(500,
+                        TimeUnit.MILLISECONDS).subscribe(o -> {
+                    Bundle bundle = new Bundle();
+                    bundle.putString(KEY_FILTER_COMPLAINT, Constants.STATUS_ALL);
+                    jumpToDestinationFragment(getCurrentFragmentId(), R.id.toComplaintsFragment, frameMain, bundle, false);
+                })
+        );
     }
 
     @Override

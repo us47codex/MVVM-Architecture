@@ -19,9 +19,19 @@ public class Constants {
      * KEYs
      * */
     public static final String KEY_COMPLAIN_ID = "complain_id";
-    public static final String STATUS_CLOSED = "close";
+    public static final String KEY_FILTER_COMPLAINT = "filter_complaint";
+    public static final String STATUS_CLOSED = "closed";
     public static final String STATUS_OPEN = "open";
     public static final String STATUS_SCHEDULE = "schedule";
+    public static final String STATUS_ALL = "all";
+    public static final String BURNER = "burner";
+    public static final String HEAT_PUMP = "heat pump";
+    public static final String DRYER = "dryer";
+    public static final String HOT_WATER_GENERATOR = "hot water generator";
+    public static final String PRE_INSTALLED = "pre-installed";
+    public static final String INSTALLATION_AND_COMMISSIONING = "installation & commissioning";
+    public static final String SERVICE_BREAKDOWN = "service/breakdown";
+    public static final String AMC = "amc";
 
     /**
      * pagination
