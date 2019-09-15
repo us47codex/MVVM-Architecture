@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RadioGroup;
@@ -37,7 +38,6 @@ import com.bumptech.glide.request.RequestOptions;
 import com.github.florent37.singledateandtimepicker.SingleDateAndTimePicker;
 import com.github.gcacace.signaturepad.views.SignaturePad;
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.textfield.TextInputLayout;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.us47codex.mvvmarch.base.BaseFragment;
 import com.us47codex.mvvmarch.complaint.ComplaintViewModel;
@@ -68,57 +68,49 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.observers.DisposableMaybeObserver;
 import io.reactivex.schedulers.Schedulers;
 
+import static com.us47codex.mvvmarch.helper.AppUtils.covertBitmapToBase64;
+
 /**
  * Created by Upendra Shah on 07 September, 2019 for
  * Project : MVVM-Architecture
  * Company : US47Codex
  * Email : us47codex@gmail.com
  **/
-public class ReportBurnerServiceFragment extends BaseFragment {
+public class VisitOthersFragment extends BaseFragment {
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
     private FrameLayout frameMain;
     private ComplaintViewModel complaintViewModel;
     private List<Complaint> complaintList;
-
-    private TextInputEditText edtAttnBy, edtClient, edtAddress, edtQuantity, edtModel, edtCustomerAddress, edtContactPerson, edtCustomerName,
-            edtReportNo, edtFuel, edtType, edtSerialNo, edtCode, edtEngineerRemark, edtCommissioningWorkDoneDescription,
-            edtInstallationWorkDoneDescription,
-            edtProductJobKnowledge, edtCooperationWithYou, edtTimelyCompletion, edtSiteBehaviour, edtPresenceOfMind, edtEffectiveCommunication,
-            edtCustomerRemarks, edtName, edtServiceCharge, edtTransport, edtConveyance, edtFoods, edtHotelBill;
-
-    private TextInputLayout tilAttnBy, tilClient,
-            tilAddress, tilQuantity, tilCustomerAddress, tilModel, tilContactPerson, tilCustomerName, tilDate, tilReportNo, tilEngineerRemark,
-            tilCommissioningWorkDoneDescription, tilCommissioningDateEnd, tilCommissioningDateStart, tilInstallationWorkDoneDescription,
-            tilInstallationDateEnd, tilInstallationDateStart, tilFuel, tilType, tilSerialNo, tilCode, tilHotelBill, tilConveyance,
-            tilTransport, tilServiceCharge, tilName, tilCheckoutDateTime, tilCustomerRemarks, tilEffectiveCommunication, tilPresenceOfMind,
-            tilSiteBehaviour, tilTimelyCompletion, tilCooperationWithYou, tilProductJobKnowledge, tilFoods;
-
-    private AppCompatTextView txvMachineType, txvCommissioningDetail, txvBurnerDetail, txvCheckoutDateTime, txvInstallationDateEnd, txvCommissioningDateStart,
-            txvCommissioningDateEnd, txvInstallationDateStart, txvDate;
-    private RadioGroup rdgCustomerFeedback, rdgTraining;
-
+    private TextInputEditText edtOEMDealerName, edtMonthYearOfInstallation, edtNoOfHWG, edtHWGModelSerialNo,
+            edtHeatPumpModelSerialNo, edtContactPerson, edtCustomerName, edtReportNo, edtPartsReplaced,
+            edtCustomerRemark, edtSuggestionToCustomer, edtDescriptionOfWorkDone, edtObservation, edtNatureOfProblem,
+            edtComplaintNoDate, edtPONoDate, edtEquipment, edtDealerPhoneNo, edtDealerAddress, edtNoOfHeatPumps,
+            edtDealerContactPerson, edtTax, edtConvayance, edtOthers, edtServiceCharge, edtToFrom, edtRemark;
     private AppCompatButton btnSubmitReport;
-    private AppCompatImageView imgSignatureAndStamp, imgCustomerSign;
-    private Bitmap bitmapSignatureAndStamp, bitmapCustomerSign;
+    private AppCompatImageView imgMarketingProjectHead, imgSunteRepresentative, imgCustomerSign;
+    private AppCompatTextView txvMachineType, txvDate, txvCheckoutDateTime, txvWorkDateTime;
+    private RadioGroup rdgQualityOfService, rdgWorkStatus;
+    private CheckBox chkCourtesyVisit, chkWarranty, chkChargeable, chkCommissioning, chkInstallation, chkPreInstallation, chkService;
     private long complainId;
     private Complaint complaint;
     private boolean isSignatureCreate;
     private String SignatureFilePath = "";
     private AppCompatImageView signatureImage;
+    ArrayList<String> imgMarketingProjectHeadsignatureList = new ArrayList<>();
     ArrayList<String> customerimageSignatureList = new ArrayList<>();
-    ArrayList<String> signatureAndStampList = new ArrayList<>();
+    ArrayList<String> imgSunteRepresentativeSignatureList = new ArrayList<>();
 
-    private String customerFeedback, training;
+    private Bitmap bitmapMarketingProjectHead, bitmapSunteRepresentative, bitmapCustomerSign;
     private Dialog dialogWakeUpCall;
-
 
     private int customerSignature = 0;
     private int imgSunteRepresentativeSignature = 1;
     private int imgMarketingProjectHeadsignature = 2;
+    private String workStatus, qualityOfService;
 
     @Override
     protected int getLayoutId() {
-        return R.layout.fragment_report_burner_service;
+        return R.layout.fragment_visit_others;
     }
 
     @Override
@@ -163,7 +155,7 @@ public class ReportBurnerServiceFragment extends BaseFragment {
 
     @Override
     protected int getCurrentFragmentId() {
-        return R.id.reportBurnerServiceFragment;
+        return R.id.visitOthersFragment;
     }
 
     @Override
@@ -184,7 +176,7 @@ public class ReportBurnerServiceFragment extends BaseFragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_report_burner_service, container, false);
+        return inflater.inflate(R.layout.fragment_visit_others, container, false);
     }
 
     @Override
@@ -211,50 +203,84 @@ public class ReportBurnerServiceFragment extends BaseFragment {
         LinearLayoutCompat linSignature = view.findViewById(R.id.linSignature);
 
         txvMachineType = view.findViewById(R.id.txvMachineType);
-        txvBurnerDetail = view.findViewById(R.id.txvBurnerDetail);
-        txvCommissioningDetail = view.findViewById(R.id.txvCommissioningDetail);
-        txvInstallationDateStart = view.findViewById(R.id.txvInstallationDateStart);
-        txvCommissioningDateEnd = view.findViewById(R.id.txvCommissioningDateEnd);
-        txvCheckoutDateTime = view.findViewById(R.id.txvCheckoutDateTime);
-        txvCommissioningDateStart = view.findViewById(R.id.txvCommissioningDateStart);
-        txvInstallationDateEnd = view.findViewById(R.id.txvInstallationDateEnd);
         txvDate = view.findViewById(R.id.txvDate);
+        txvCheckoutDateTime = view.findViewById(R.id.txvCheckoutDateTime);
+        txvWorkDateTime = view.findViewById(R.id.txvWorkDateTime);
 
-        edtAttnBy = view.findViewById(R.id.edtAttnBy);
-        edtClient = view.findViewById(R.id.edtClient);
-        edtAddress = view.findViewById(R.id.edtAddress);
-        edtModel = view.findViewById(R.id.edtModel);
-        edtCustomerAddress = view.findViewById(R.id.edtCustomerAddress);
+        edtOEMDealerName = view.findViewById(R.id.edtOEMDealerName);
+        edtMonthYearOfInstallation = view.findViewById(R.id.edtMonthYearOfInstallation);
+        edtNoOfHWG = view.findViewById(R.id.edtNoOfHWG);
+        edtHWGModelSerialNo = view.findViewById(R.id.edtHWGModelSerialNo);
+        edtHeatPumpModelSerialNo = view.findViewById(R.id.edtHeatPumpModelSerialNo);
         edtContactPerson = view.findViewById(R.id.edtContactPerson);
         edtCustomerName = view.findViewById(R.id.edtCustomerName);
         edtReportNo = view.findViewById(R.id.edtReportNo);
-        edtFuel = view.findViewById(R.id.edtFuel);
-        edtType = view.findViewById(R.id.edtType);
-        edtSerialNo = view.findViewById(R.id.edtSerialNo);
-        edtCode = view.findViewById(R.id.edtCode);
-        edtEngineerRemark = view.findViewById(R.id.edtEngineerRemark);
-        edtCommissioningWorkDoneDescription = view.findViewById(R.id.edtCommissioningWorkDoneDescription);
-        edtInstallationWorkDoneDescription = view.findViewById(R.id.edtInstallationWorkDoneDescription);
-        edtProductJobKnowledge = view.findViewById(R.id.edtProductJobKnowledge);
-        edtCooperationWithYou = view.findViewById(R.id.edtCooperationWithYou);
-        edtTimelyCompletion = view.findViewById(R.id.edtTimelyCompletion);
-        edtSiteBehaviour = view.findViewById(R.id.edtSiteBehaviour);
-        edtPresenceOfMind = view.findViewById(R.id.edtPresenceOfMind);
-        edtEffectiveCommunication = view.findViewById(R.id.edtEffectiveCommunication);
-        edtCustomerRemarks = view.findViewById(R.id.edtCustomerRemarks);
-        edtName = view.findViewById(R.id.edtName);
+        edtPartsReplaced = view.findViewById(R.id.edtPartsReplaced);
+        edtCustomerRemark = view.findViewById(R.id.edtCustomerRemark);
+        edtSuggestionToCustomer = view.findViewById(R.id.edtSuggestionToCustomer);
+        edtDescriptionOfWorkDone = view.findViewById(R.id.edtDescriptionOfWorkDone);
+        edtObservation = view.findViewById(R.id.edtObservation);
+        edtNatureOfProblem = view.findViewById(R.id.edtNatureOfProblem);
+        edtComplaintNoDate = view.findViewById(R.id.edtComplaintNoDate);
+        edtPONoDate = view.findViewById(R.id.edtPONoDate);
+        edtEquipment = view.findViewById(R.id.edtEquipment);
+        edtDealerPhoneNo = view.findViewById(R.id.edtDealerPhoneNo);
+        edtDealerAddress = view.findViewById(R.id.edtDealerAddress);
+        edtDealerContactPerson = view.findViewById(R.id.edtDealerContactPerson);
+        edtTax = view.findViewById(R.id.edtTax);
+        edtConvayance = view.findViewById(R.id.edtConvayance);
+        edtOthers = view.findViewById(R.id.edtOthers);
         edtServiceCharge = view.findViewById(R.id.edtServiceCharge);
-        edtTransport = view.findViewById(R.id.edtTransport);
-        edtConveyance = view.findViewById(R.id.edtConveyance);
-        edtFoods = view.findViewById(R.id.edtFoods);
-        edtHotelBill = view.findViewById(R.id.edtHotelBill);
+        edtToFrom = view.findViewById(R.id.edtToFrom);
+        edtNoOfHeatPumps = view.findViewById(R.id.edtNoOfHeatPumps);
+        edtRemark = view.findViewById(R.id.edtRemark);
 
-        imgSignatureAndStamp = view.findViewById(R.id.imgSignatureAndStamp);
+        chkCourtesyVisit = view.findViewById(R.id.chkCourtesyVisit);
+        chkWarranty = view.findViewById(R.id.chkWarranty);
+        chkChargeable = view.findViewById(R.id.chkChargeable);
+        chkCommissioning = view.findViewById(R.id.chkCommissioning);
+        chkInstallation = view.findViewById(R.id.chkInstallation);
+        chkPreInstallation = view.findViewById(R.id.chkPreInstallation);
+        chkService = view.findViewById(R.id.chkService);
+
+        rdgWorkStatus = view.findViewById(R.id.rdgWorkStatus);
+        rdgQualityOfService = view.findViewById(R.id.rdgQualityOfService);
+
+        signatureImage = view.findViewById(R.id.signatureImage);
+
+        imgMarketingProjectHead = view.findViewById(R.id.imgMarketingProjectHead);
+        imgSunteRepresentative = view.findViewById(R.id.imgSunteRepresentative);
         imgCustomerSign = view.findViewById(R.id.imgCustomerSign);
-        rdgCustomerFeedback = view.findViewById(R.id.rdgCustomerFeedback);
-        rdgTraining = view.findViewById(R.id.rdgTraining);
 
         btnSubmitReport = view.findViewById(R.id.btnSubmitReport);
+
+        rdgWorkStatus.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                switch (checkedId) {
+                    case R.id.rdbComplete:
+                        workStatus = "Complete";
+                        break;
+                    case R.id.rdbIncomplete:
+                        workStatus = "Incompelete";
+                        break;
+                }
+            }
+        });
+        rdgQualityOfService.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                switch (checkedId) {
+                    case R.id.rdbExcellent:
+                        qualityOfService = "Excellent";
+                        break;
+                    case R.id.rdbGood:
+                        qualityOfService = "Good";
+                        break;
+                    case R.id.rdbPoor:
+                        qualityOfService = "Poor";
+                        break;
+                }
+            }
+        });
 
         getCompositeDisposable().add(
                 RxView.clicks(imgCustomerSign).throttleFirst(500,
@@ -263,15 +289,21 @@ public class ReportBurnerServiceFragment extends BaseFragment {
                 })
         );
         getCompositeDisposable().add(
-                RxView.clicks(imgSignatureAndStamp).throttleFirst(500,
+                RxView.clicks(imgSunteRepresentative).throttleFirst(500,
                         TimeUnit.MILLISECONDS).subscribe(o -> {
                     openSignatureDialog(imgSunteRepresentativeSignature);
                 })
         );
         getCompositeDisposable().add(
-                RxView.clicks(btnSubmitReport).throttleFirst(500,
+                RxView.clicks(imgMarketingProjectHead).throttleFirst(500,
                         TimeUnit.MILLISECONDS).subscribe(o -> {
-                    submitReport();
+                    openSignatureDialog(imgMarketingProjectHeadsignature);
+                })
+        );
+        getCompositeDisposable().add(
+                RxView.clicks(txvDate).throttleFirst(500,
+                        TimeUnit.MILLISECONDS).subscribe(o -> {
+                    showDialogSelectDate(txvDate);
                 })
         );
         getCompositeDisposable().add(
@@ -281,69 +313,17 @@ public class ReportBurnerServiceFragment extends BaseFragment {
                 })
         );
         getCompositeDisposable().add(
-                RxView.clicks(txvInstallationDateStart).throttleFirst(500,
+                RxView.clicks(txvWorkDateTime).throttleFirst(500,
                         TimeUnit.MILLISECONDS).subscribe(o -> {
-                    showDialogSelectDate(txvInstallationDateStart);
+                    showDialogSelectDate(txvWorkDateTime);
                 })
         );
         getCompositeDisposable().add(
-                RxView.clicks(txvInstallationDateEnd).throttleFirst(500,
+                RxView.clicks(btnSubmitReport).throttleFirst(500,
                         TimeUnit.MILLISECONDS).subscribe(o -> {
-                    showDialogSelectDate(txvInstallationDateEnd);
+                    submitReport();
                 })
         );
-        getCompositeDisposable().add(
-                RxView.clicks(txvCommissioningDateStart).throttleFirst(500,
-                        TimeUnit.MILLISECONDS).subscribe(o -> {
-                    showDialogSelectDate(txvCommissioningDateStart);
-                })
-        );
-        getCompositeDisposable().add(
-                RxView.clicks(txvCommissioningDateEnd).throttleFirst(500,
-                        TimeUnit.MILLISECONDS).subscribe(o -> {
-                    showDialogSelectDate(txvCommissioningDateEnd);
-                })
-        );
-        getCompositeDisposable().add(
-                RxView.clicks(txvDate).throttleFirst(500,
-                        TimeUnit.MILLISECONDS).subscribe(o -> {
-                    showDialogSelectDate(txvDate);
-                })
-        );
-
-        rdgCustomerFeedback.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                switch (checkedId) {
-                    case R.id.rdbOne:
-                        customerFeedback = "1";
-                        break;
-                    case R.id.rdbTwo:
-                        customerFeedback = "2";
-                        break;
-                    case R.id.rdbThree:
-                        customerFeedback = "3";
-                        break;
-                    case R.id.rdbFour:
-                        customerFeedback = "4";
-                        break;
-                    case R.id.rdbFive:
-                        customerFeedback = "5";
-                        break;
-                }
-            }
-        });
-        rdgTraining.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                switch (checkedId) {
-                    case R.id.rdbTrainingYes:
-                        training = "Yes";
-                        break;
-                    case R.id.rdbTrainingNo:
-                        training = "No";
-                        break;
-                }
-            }
-        });
     }
 
     @Override
@@ -351,16 +331,12 @@ public class ReportBurnerServiceFragment extends BaseFragment {
 
     }
 
-    private void submitReport() {
-        complaintViewModel.callToApi(prepareBurnerServiceParams(), ComplaintViewModel.BURNER_SERVICE_COMPLAINT_VISIT_API_TAG, true);
-    }
-
     private void setData(Complaint complaint) {
         this.complaint = complaint;
         txvMachineType.setText(String.format("%s %s", complaint.getMcType(), AppUtils.isEmpty(complaint.getVisitType()) ? "" : ": " + complaint.getVisitType()));
         edtCustomerName.setText(complaint.getCustomerFullName());
-        edtCustomerAddress.setText(complaint.getAddress());
-        edtReportNo.setText(String.valueOf(complaint.getId()));
+        edtComplaintNoDate.setText(complaint.getComplainNoDate());
+        edtOEMDealerName.setText(complaint.getDealerName());
     }
 
     private void getComplainFromDB() {
@@ -378,10 +354,10 @@ public class ReportBurnerServiceFragment extends BaseFragment {
                                    e.printStackTrace();
                                }
 
-                               @Override
-                               public void onComplete() {
+                    @Override
+                    public void onComplete() {
 
-                               }
+                    }
                            }
                 );
     }
@@ -414,7 +390,7 @@ public class ReportBurnerServiceFragment extends BaseFragment {
                         } else if (object instanceof Pair) {
                             Pair pair = (Pair) object;
                             if (pair.first != null) {
-                                if (pair.first.equals(ComplaintViewModel.BURNER_SERVICE_COMPLAINT_VISIT_API_TAG)) {
+                                if (pair.first.equals(ComplaintViewModel.HEAT_PUMP_COMPLAIN_VISIT_API_TAG)) {
                                     enableDisableView(frameMain, true);
                                     hideProgressLoader();
                                     JSONObject jsonObject = (JSONObject) pair.second;
@@ -485,7 +461,12 @@ public class ReportBurnerServiceFragment extends BaseFragment {
                         return;
                     }
                 } else if (type == 1) {
-                    if (signatureAndStampList == null) {
+                    if (imgSunteRepresentativeSignatureList == null) {
+                        Toast.makeText(getContext(), "Please Signature here...", Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                } else if (type == 3) {
+                    if (imgMarketingProjectHeadsignatureList == null) {
                         Toast.makeText(getContext(), "Please Signature here...", Toast.LENGTH_LONG).show();
                         return;
                     }
@@ -503,12 +484,20 @@ public class ReportBurnerServiceFragment extends BaseFragment {
                             .load(signatureBitmap)
                             .into(imgCustomerSign);
                 } else if (type == 1) {
-                    bitmapSignatureAndStamp = signatureBitmap;
+                    bitmapSunteRepresentative = signatureBitmap;
                     Glide.with(this)
                             .setDefaultRequestOptions(requestOptions)
                             .load(signatureBitmap)
-                            .into(imgSignatureAndStamp);
+                            .into(imgSunteRepresentative);
+                } else if (type == 2) {
+                    bitmapMarketingProjectHead = signatureBitmap;
+                    Glide.with(this)
+                            .setDefaultRequestOptions(requestOptions)
+                            .load(signatureBitmap)
+                            .into(imgMarketingProjectHead);
                 }
+
+
                 dialog.dismiss();
             }
         });
@@ -562,68 +551,65 @@ public class ReportBurnerServiceFragment extends BaseFragment {
         if (type == 0) {
             customerimageSignatureList.add(str_image1);
         } else if (type == 1) {
-            signatureAndStampList.add(str_image1);
+            imgSunteRepresentativeSignatureList.add(str_image1);
+        } else if (type == 2) {
+            imgMarketingProjectHeadsignatureList.add(str_image1);
         }
     }
 
-    private HashMap<String, String> prepareBurnerServiceParams() {
-        //        Complain Visit Burner
-//        Service/Breakdown
-//        AND AMC
+    private void submitReport() {
+        complaintViewModel.callToApi(prepareParam(), ComplaintViewModel.HEAT_PUMP_COMPLAIN_VISIT_API_TAG, true);
+    }
+
+    private HashMap<String, String> prepareParam() {
+        //Complain Visit Heat Pump, HOT Water Generator, Dyare
+
 
         HashMap<String, String> params = new HashMap<>();
-        params.put("spare_replace", edtCustomerName.getText().toString());
-        params.put("action_taken", edtCustomerName.getText().toString());
-        params.put("root_of_cause", edtCustomerName.getText().toString());
-        params.put("nature_problem", edtCustomerName.getText().toString());
-        params.put("observation", edtCustomerName.getText().toString());
-        params.put("bflame_safe", edtCustomerName.getText().toString());
-        params.put("bcontrol_type", edtCustomerName.getText().toString());
-        params.put("bflue_loss", edtCustomerName.getText().toString());
-        params.put("bexcess_air", edtCustomerName.getText().toString());
-        params.put("bcoppm", edtCustomerName.getText().toString());
-        params.put("bco2", edtCustomerName.getText().toString());
-        params.put("bo2", edtCustomerName.getText().toString());
-        params.put("bservo_motor", edtCustomerName.getText().toString());
-        params.put("bdamper_pos", edtCustomerName.getText().toString());
-        params.put("id", edtCustomerName.getText().toString());
-        params.put("resolve_image", edtCustomerName.getText().toString());
-        params.put("sign_repre", edtCustomerName.getText().toString());
-        params.put("sign_customer", edtCustomerName.getText().toString());
-        params.put("tax", edtCustomerName.getText().toString());
-        params.put("others", edtCustomerName.getText().toString());
-        params.put("to_form", edtCustomerName.getText().toString());
-        params.put("conveyance", edtCustomerName.getText().toString());
-        params.put("services_charges", edtCustomerName.getText().toString());
-        params.put("training_given_by", edtCustomerName.getText().toString());
-        params.put("training_given", edtCustomerName.getText().toString());
-        params.put("checkout_date", edtCustomerName.getText().toString());
-        params.put("customer_remark", edtCustomerName.getText().toString());
-        params.put("rate_communication", edtCustomerName.getText().toString());
-        params.put("rate_problem", edtCustomerName.getText().toString());
-        params.put("rate_behaviour", edtCustomerName.getText().toString());
-        params.put("rate_work", edtCustomerName.getText().toString());
-        params.put("rate_cooperation", edtCustomerName.getText().toString());
-        params.put("rate_knowladge", edtCustomerName.getText().toString());
-        params.put("crate", edtCustomerName.getText().toString());
-        params.put("engineer_remark", edtCustomerName.getText().toString());
-        params.put("bgas_pr_sw", edtCustomerName.getText().toString());
-        params.put("bair_pr_sw", edtCustomerName.getText().toString());
-        params.put("bgas_pre", edtCustomerName.getText().toString());
-        params.put("bfg_temp", edtCustomerName.getText().toString());
-        params.put("bair_temp", edtCustomerName.getText().toString());
-        params.put("btemp_press", edtCustomerName.getText().toString());
-        params.put("bfuel", edtCustomerName.getText().toString());
-        params.put("btype", edtCustomerName.getText().toString());
-        params.put("bsrno", edtCustomerName.getText().toString());
-        params.put("bcode", edtCustomerName.getText().toString());
-        params.put("bquantity", edtCustomerName.getText().toString());
-        params.put("bmodel", edtCustomerName.getText().toString());
-        params.put("bapplication", edtCustomerName.getText().toString());
-        params.put("contact_person", edtCustomerName.getText().toString());
+        params.put("id", String.valueOf(complaint.getId()));
+        params.put("resolve_image", "");
+        params.put("sign_customer", covertBitmapToBase64(bitmapCustomerSign));
+        params.put("sign_marketing", covertBitmapToBase64(bitmapMarketingProjectHead));
+        params.put("sign_repre", covertBitmapToBase64(bitmapSunteRepresentative));
+        params.put("checkout_date", txvCheckoutDateTime.getText().toString());
+        params.put("spare_replace", edtPartsReplaced.getText().toString());
+        params.put("work_date", txvWorkDateTime.getText().toString());
+        params.put("tax", edtTax.getText().toString());
+        params.put("others", edtOthers.getText().toString());
+        params.put("to_form", edtToFrom.getText().toString());
+        params.put("conveyance", edtConvayance.getText().toString());
+        params.put("services_charges", edtServiceCharge.getText().toString());
+        params.put("quality_service", qualityOfService);
+        params.put("work_status", workStatus);
+        params.put("customer_remark", edtCustomerRemark.getText().toString());
+        params.put("suggetion_customer", edtSuggestionToCustomer.getText().toString());
+        params.put("description_work", edtDescriptionOfWorkDone.getText().toString());
+        params.put("observation", edtObservation.getText().toString());
+        params.put("nature_problem", edtNatureOfProblem.getText().toString());
+        params.put("courtesy_visit", chkCourtesyVisit.getText().toString());
+        params.put("warranty", chkWarranty.getText().toString());
+        params.put("chargeable", chkChargeable.getText().toString());
+        params.put("commissioning", chkCommissioning.getText().toString());
+        params.put("installation", chkInstallation.getText().toString());
+        params.put("pre_installation", chkPreInstallation.getText().toString());
+        params.put("services", chkService.getText().toString());
+        params.put("type_of_call", edtRemark.getText().toString());
+        params.put("complain_no_date", edtComplaintNoDate.getText().toString());
+        params.put("po_no_date", edtPONoDate.getText().toString());
+        params.put("equipment", edtEquipment.getText().toString());
+        params.put("d_mno", edtDealerPhoneNo.getText().toString());
+        params.put("d_address", edtDealerAddress.getText().toString());
+        params.put("d_contact_person", edtDealerContactPerson.getText().toString());
+        params.put("oem_dealer_name", edtOEMDealerName.getText().toString());
+        params.put("month_year_insta", edtMonthYearOfInstallation.getText().toString());
+        params.put("no_of_hwg", edtNoOfHWG.getText().toString());
+        params.put("hwg_sr_no", edtHWGModelSerialNo.getText().toString());
+        params.put("no_of_heat", edtNoOfHeatPumps.getText().toString());
+        params.put("heat_p_sr_no", edtHeatPumpModelSerialNo.getText().toString());
+        params.put("contact_person", edtContactPerson.getText().toString());
+        params.put("report_no", edtReportNo.getText().toString());
 
         return params;
-
     }
 
     protected void showDialogSelectDate(AppCompatTextView appCompatTextView) {
@@ -676,6 +662,7 @@ public class ReportBurnerServiceFragment extends BaseFragment {
             e.printStackTrace();
         }
     }
+
 }
 
 

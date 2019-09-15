@@ -78,28 +78,28 @@
         android:label="fragment_complaint_details"
         tools:layout="@layout/fragment_complaint_details">
         <action
-            android:id="@+id/toVisitReportFragment"
-            app:destination="@id/visitReportFragment" />
+            android:id="@+id/toVisitOthersFragment"
+            app:destination="@id/visitOthersFragment" />
         <action
-            android:id="@+id/toReportBurnerInstallationFragment"
-            app:destination="@id/reportBurnerInstallationFragment" />
+            android:id="@+id/toVisitBurnerServiceFragment"
+            app:destination="@id/visitBurnerServiceFragment" />
         <action
-            android:id="@+id/toReportBurnerServiceFragment"
-            app:destination="@id/reportBurnerServiceFragment" />
+            android:id="@+id/toVisitBurnerInstallationFragment"
+            app:destination="@id/visitBurnerInstallationFragment" />
     </fragment>
     <fragment
-        android:id="@+id/visitReportFragment"
-        android:name="com.us47codex.mvvmarch.VisitReportFragment"
-        android:label="fragment_visit_report"
-        tools:layout="@layout/fragment_visit_report" />
+        android:id="@+id/visitBurnerInstallationFragment"
+        android:name="com.us47codex.mvvmarch.VisitBurnerInstallationFragment"
+        android:label="fragment_visit_burner_installation"
+        tools:layout="@layout/fragment_visit_burner_installation" />
     <fragment
-        android:id="@+id/reportBurnerInstallationFragment"
-        android:name="com.us47codex.mvvmarch.ReportBurnerInstallationFragment"
-        android:label="fragment_report_burner_installation"
-        tools:layout="@layout/fragment_report_burner_installation" />
+        android:id="@+id/visitBurnerServiceFragment"
+        android:name="com.us47codex.mvvmarch.VisitBurnerServiceFragment"
+        android:label="fragment_visit_burner_service"
+        tools:layout="@layout/fragment_visit_burner_service" />
     <fragment
-        android:id="@+id/reportBurnerServiceFragment"
-        android:name="com.us47codex.mvvmarch.ReportBurnerServiceFragment"
-        android:label="fragment_report_burner_service"
-        tools:layout="@layout/fragment_report_burner_service" />
+        android:id="@+id/visitOthersFragment"
+        android:name="com.us47codex.mvvmarch.VisitOthersFragment"
+        android:label="fragment_visit_others"
+        tools:layout="@layout/fragment_visit_others" />
 </navigation>

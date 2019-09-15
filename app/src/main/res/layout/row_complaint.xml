@@ -112,6 +112,8 @@
                 android:id="@+id/txvMachineType"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:ellipsize="end"
                 android:textColor="@color/text_color"
                 android:textSize="@dimen/_12ssp"
                 tools:text="Heat Pump" />

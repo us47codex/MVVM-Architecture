@@ -61,7 +61,7 @@
                         android:layout_height="wrap_content"
                         android:drawablePadding="@dimen/_10sdp"
                         android:inputType="text"
-                        android:text="123"
+                        tools:text="123"
                         android:textColor="@color/text_color"
                         android:textColorHint="@color/text_color_gray" />
 
@@ -345,12 +345,12 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/txvInstallationDetail"
+                android:id="@+id/txvObservationDetail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:padding="@dimen/_5sdp"
-                android:text="Installation Detail"
+                android:text="Observation Detail"
                 android:textColor="@color/text_color"
                 android:textSize="@dimen/_16ssp"
                 tools:ignore="HardcodedText" />
@@ -361,91 +361,494 @@
                 android:orientation="horizontal"
                 android:weightSum="2">
 
-                <androidx.appcompat.widget.LinearLayoutCompat
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tilApplicationTempPres"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="@dimen/_5sdp"
                     android:layout_weight="1"
-                    android:orientation="vertical">
+                    android:hint="Application Temp/Pres"
+                    app:hintTextAppearance="@style/TextInputLayout.gray">
 
-                    <androidx.appcompat.widget.AppCompatTextView
-                        style="@style/TextInputLayout.gray"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="start"
-                        android:paddingStart="@dimen/_5sdp"
-                        android:paddingEnd="@dimen/_5sdp"
-                        android:text="Start Date"
-                        android:textColor="@color/text_color_gray"
-                        android:textSize="@dimen/_12ssp"
-                        tools:ignore="HardcodedText" />
-
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:id="@+id/txvInstallationDateStart"
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edtApplicationTempPres"
+                        style="@style/editTextTheme"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="start"
-                        android:hint="Select Date"
-                        android:padding="@dimen/_5sdp"
+                        android:drawablePadding="@dimen/_10sdp"
+                        android:inputType="numberDecimal"
+                        tools:text="123"
                         android:textColor="@color/text_color"
-                        android:textSize="@dimen/_16ssp"
-                        tools:ignore="HardcodedText" />
+                        android:textColorHint="@color/text_color_gray" />
 
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="@color/text_divider_color" />
+                </com.google.android.material.textfield.TextInputLayout>
 
-                </androidx.appcompat.widget.LinearLayoutCompat>
-
-                <androidx.appcompat.widget.LinearLayoutCompat
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tilAirTemp"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_5sdp"
+                    android:layout_marginEnd="@dimen/_5sdp"
                     android:layout_weight="1"
-                    android:orientation="vertical">
+                    android:hint="Air Temp"
+                    app:hintTextAppearance="@style/TextInputLayout.gray">
 
-                    <androidx.appcompat.widget.AppCompatTextView
-                        style="@style/TextInputLayout.gray"
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edtAirTemp"
+                        style="@style/editTextTheme"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="start"
-                        android:paddingStart="@dimen/_5sdp"
-                        android:paddingEnd="@dimen/_5sdp"
-                        android:text="End Date"
-                        android:textColor="@color/text_color_gray"
-                        android:textSize="@dimen/_12ssp"
-                        tools:ignore="HardcodedText" />
-
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:id="@+id/txvInstallationDateEnd"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="start"
-                        android:hint="Select Date"
-                        android:padding="@dimen/_5sdp"
+                        android:drawablePadding="@dimen/_10sdp"
+                        android:inputType="numberDecimal"
+                        tools:text="123"
                         android:textColor="@color/text_color"
-                        android:textSize="@dimen/_16ssp"
-                        tools:ignore="HardcodedText" />
+                        android:textColorHint="@color/text_color_gray" />
 
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="@color/text_divider_color" />
-
-                </androidx.appcompat.widget.LinearLayoutCompat>
+                </com.google.android.material.textfield.TextInputLayout>
 
             </androidx.appcompat.widget.LinearLayoutCompat>
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/tilInstallationWorkDoneDescription"
+            <androidx.appcompat.widget.LinearLayoutCompat
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Work Done / Condition Description"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tilFGTemp"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/_5sdp"
+                    android:layout_weight="1"
+                    android:hint="F.G. Temp"
+                    app:hintTextAppearance="@style/TextInputLayout.gray">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edtFGTemp"
+                        style="@style/editTextTheme"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawablePadding="@dimen/_10sdp"
+                        android:inputType="numberDecimal"
+                        tools:text="123"
+                        android:textColor="@color/text_color"
+                        android:textColorHint="@color/text_color_gray" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tilGasPressure"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/_5sdp"
+                    android:layout_weight="1"
+                    android:hint="Gas Pressure"
+                    app:hintTextAppearance="@style/TextInputLayout.gray">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edtGasPressure"
+                        style="@style/editTextTheme"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawablePadding="@dimen/_10sdp"
+                        android:inputType="numberDecimal"
+                        tools:text="123"
+                        android:textColor="@color/text_color"
+                        android:textColorHint="@color/text_color_gray" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tilAirPrSw"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/_5sdp"
+                    android:layout_weight="1"
+                    android:hint="Air Pr, Sw"
+                    app:hintTextAppearance="@style/TextInputLayout.gray">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edtAirPrSw"
+                        style="@style/editTextTheme"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawablePadding="@dimen/_10sdp"
+                        android:inputType="numberDecimal"
+                        tools:text="123"
+                        android:textColor="@color/text_color"
+                        android:textColorHint="@color/text_color_gray" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tilGasPrSw"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/_5sdp"
+                    android:layout_weight="1"
+                    android:hint="Gas Pr, Sw"
+                    app:hintTextAppearance="@style/TextInputLayout.gray">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edtGasPrSw"
+                        style="@style/editTextTheme"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawablePadding="@dimen/_10sdp"
+                        android:inputType="numberDecimal"
+                        tools:text="123"
+                        android:textColor="@color/text_color"
+                        android:textColorHint="@color/text_color_gray" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:gravity="start"
+                    android:paddingStart="@dimen/_5sdp"
+                    android:paddingEnd="@dimen/_5sdp"
+                    android:text="Dammper Position"
+                    android:textColor="@color/text_color_gray"
+                    android:textSize="@dimen/_12ssp"
+                    tools:ignore="HardcodedText" />
+
+                <RadioGroup
+                    android:id="@+id/rdgDammperPosition"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+
+                    <RadioButton
+                        android:id="@+id/rdbDammperPositionTrue"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="True" />
+
+                    <RadioButton
+                        android:id="@+id/rdbDammperPositionFalse"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="False" />
+
+                </RadioGroup>
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/text_divider_color" />
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:gravity="start"
+                    android:paddingStart="@dimen/_5sdp"
+                    android:paddingEnd="@dimen/_5sdp"
+                    android:text="Servo Motor"
+                    android:textColor="@color/text_color_gray"
+                    android:textSize="@dimen/_12ssp"
+                    tools:ignore="HardcodedText" />
+
+                <RadioGroup
+                    android:id="@+id/rdgServoMotor"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+
+                    <RadioButton
+                        android:id="@+id/rdbServoMotorTrue"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="True" />
+
+                    <RadioButton
+                        android:id="@+id/rdbServoMotorFalse"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="False" />
+
+                </RadioGroup>
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/text_divider_color" />
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:gravity="start"
+                    android:paddingStart="@dimen/_5sdp"
+                    android:paddingEnd="@dimen/_5sdp"
+                    android:text="O2 %"
+                    android:textColor="@color/text_color_gray"
+                    android:textSize="@dimen/_12ssp"
+                    tools:ignore="HardcodedText" />
+
+                <RadioGroup
+                    android:id="@+id/rdgO2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+
+                    <RadioButton
+                        android:id="@+id/rdbO2True"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="True" />
+
+                    <RadioButton
+                        android:id="@+id/rdbO2False"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="False" />
+
+                </RadioGroup>
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/text_divider_color" />
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:gravity="start"
+                    android:paddingStart="@dimen/_5sdp"
+                    android:paddingEnd="@dimen/_5sdp"
+                    android:text="Co2 %"
+                    android:textColor="@color/text_color_gray"
+                    android:textSize="@dimen/_12ssp"
+                    tools:ignore="HardcodedText" />
+
+                <RadioGroup
+                    android:id="@+id/rdgCo2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+
+                    <RadioButton
+                        android:id="@+id/rdbCo2True"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="True" />
+
+                    <RadioButton
+                        android:id="@+id/rdbCo2False"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="False" />
+
+                </RadioGroup>
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/text_divider_color" />
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:gravity="start"
+                    android:paddingStart="@dimen/_5sdp"
+                    android:paddingEnd="@dimen/_5sdp"
+                    android:text="Co2 PPM"
+                    android:textColor="@color/text_color_gray"
+                    android:textSize="@dimen/_12ssp"
+                    tools:ignore="HardcodedText" />
+
+                <RadioGroup
+                    android:id="@+id/rdgCo2Ppm"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+
+                    <RadioButton
+                        android:id="@+id/rdbCo2PpmTrue"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="True" />
+
+                    <RadioButton
+                        android:id="@+id/rdbCo2PpmFalse"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="False" />
+
+                </RadioGroup>
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/text_divider_color" />
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:gravity="start"
+                    android:paddingStart="@dimen/_5sdp"
+                    android:paddingEnd="@dimen/_5sdp"
+                    android:text="Excess Air %"
+                    android:textColor="@color/text_color_gray"
+                    android:textSize="@dimen/_12ssp"
+                    tools:ignore="HardcodedText" />
+
+                <RadioGroup
+                    android:id="@+id/rdgExcessAir"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+
+                    <RadioButton
+                        android:id="@+id/rdbExcessAirTrue"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="True" />
+
+                    <RadioButton
+                        android:id="@+id/rdbExcessAirFalse"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="False" />
+
+                </RadioGroup>
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/text_divider_color" />
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:gravity="start"
+                    android:paddingStart="@dimen/_5sdp"
+                    android:paddingEnd="@dimen/_5sdp"
+                    android:text="Flue Gas Loss %"
+                    android:textColor="@color/text_color_gray"
+                    android:textSize="@dimen/_12ssp"
+                    tools:ignore="HardcodedText" />
+
+                <RadioGroup
+                    android:id="@+id/rdgFlueGasLoss"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+
+                    <RadioButton
+                        android:id="@+id/rdbFlueGasLossTrue"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="True" />
+
+                    <RadioButton
+                        android:id="@+id/rdbFlueGasLossFalse"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="False" />
+
+                </RadioGroup>
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/text_divider_color" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilControlType"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Control Type"
                 app:hintTextAppearance="@style/TextInputLayout.gray">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/edtInstallationWorkDoneDescription"
+                    android:id="@+id/edtControlType"
                     style="@style/editTextTheme"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -456,113 +859,100 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/txvCommissioningDetail"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:padding="@dimen/_5sdp"
-                android:text="Commissioning Detail"
-                android:textColor="@color/text_color"
-                android:textSize="@dimen/_16ssp"
-                tools:ignore="HardcodedText" />
-
-            <androidx.appcompat.widget.LinearLayoutCompat
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:weightSum="2">
-
-                <androidx.appcompat.widget.LinearLayoutCompat
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/_5sdp"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <androidx.appcompat.widget.AppCompatTextView
-                        style="@style/TextInputLayout.gray"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="start"
-                        android:paddingStart="@dimen/_5sdp"
-                        android:paddingEnd="@dimen/_5sdp"
-                        android:text="Start Date"
-                        android:textColor="@color/text_color_gray"
-                        android:textSize="@dimen/_12ssp"
-                        tools:ignore="HardcodedText" />
-
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:id="@+id/txvCommissioningDateStart"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="start"
-                        android:hint="Select Date"
-                        android:padding="@dimen/_5sdp"
-                        android:textColor="@color/text_color"
-                        android:textSize="@dimen/_16ssp"
-                        tools:ignore="HardcodedText" />
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="@color/text_divider_color" />
-
-                </androidx.appcompat.widget.LinearLayoutCompat>
-
-                <androidx.appcompat.widget.LinearLayoutCompat
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_5sdp"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <androidx.appcompat.widget.AppCompatTextView
-                        style="@style/TextInputLayout.gray"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="start"
-                        android:paddingStart="@dimen/_5sdp"
-                        android:paddingEnd="@dimen/_5sdp"
-                        android:text="End Date"
-                        android:textColor="@color/text_color_gray"
-                        android:textSize="@dimen/_12ssp"
-                        tools:ignore="HardcodedText" />
-
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:id="@+id/txvCommissioningDateEnd"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="start"
-                        android:hint="Select Date"
-                        android:padding="@dimen/_5sdp"
-                        android:textColor="@color/text_color"
-                        android:textSize="@dimen/_16ssp"
-                        tools:ignore="HardcodedText" />
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="@color/text_divider_color" />
-
-                </androidx.appcompat.widget.LinearLayoutCompat>
-
-            </androidx.appcompat.widget.LinearLayoutCompat>
-
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/tilCommissioningWorkDoneDescription"
+                android:id="@+id/tilFlameSafeguard"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Work Done / Condition Description"
+                android:hint="Flame Safeguard"
                 app:hintTextAppearance="@style/TextInputLayout.gray">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/edtCommissioningWorkDoneDescription"
+                    android:id="@+id/edtFlameSafeguard"
                     style="@style/editTextTheme"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:drawablePadding="@dimen/_10sdp"
                     android:inputType="text"
+                    android:textColor="@color/text_color"
+                    android:textColorHint="@color/text_color_gray" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilObservation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Observation"
+                app:hintTextAppearance="@style/TextInputLayout.gray">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edtObservation"
+                    style="@style/editTextTheme"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="@dimen/_10sdp"
+                    android:inputType="text"
+                    android:minLines="2"
+                    android:textColor="@color/text_color"
+                    android:textColorHint="@color/text_color_gray" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilNatureOfProblem"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Nature Of Problem"
+                app:hintTextAppearance="@style/TextInputLayout.gray">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edtNatureOfProblem"
+                    style="@style/editTextTheme"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="@dimen/_10sdp"
+                    android:inputType="text"
+                    android:minLines="2"
+                    android:textColor="@color/text_color"
+                    android:textColorHint="@color/text_color_gray" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilRootOfCause"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Root Of Cause"
+                app:hintTextAppearance="@style/TextInputLayout.gray">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edtRootOfCause"
+                    style="@style/editTextTheme"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="@dimen/_10sdp"
+                    android:inputType="text"
+                    android:minLines="2"
+                    android:textColor="@color/text_color"
+                    android:textColorHint="@color/text_color_gray" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilActionTakenWork"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Action Taken / Work To Be Done"
+                app:hintTextAppearance="@style/TextInputLayout.gray">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edtActionTakenWork"
+                    style="@style/editTextTheme"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="@dimen/_10sdp"
+                    android:inputType="text"
+                    android:minLines="2"
                     android:textColor="@color/text_color"
                     android:textColorHint="@color/text_color_gray" />
 
@@ -586,7 +976,6 @@
                     android:textColorHint="@color/text_color_gray" />
 
             </com.google.android.material.textfield.TextInputLayout>
-
 
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:layout_width="match_parent"
@@ -782,6 +1171,26 @@
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/edtCustomerRemarks"
+                    style="@style/editTextTheme"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="@dimen/_10sdp"
+                    android:inputType="text"
+                    android:minLines="2"
+                    android:textColor="@color/text_color"
+                    android:textColorHint="@color/text_color_gray" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilSpareReplace"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Spare Replace"
+                app:hintTextAppearance="@style/TextInputLayout.gray">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edtSpareReplace"
                     style="@style/editTextTheme"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -996,7 +1405,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:drawablePadding="@dimen/_10sdp"
-                        android:inputType="text"
+                        android:inputType="numberDecimal"
                         android:textColor="@color/text_color"
                         android:textColorHint="@color/text_color_gray" />
 

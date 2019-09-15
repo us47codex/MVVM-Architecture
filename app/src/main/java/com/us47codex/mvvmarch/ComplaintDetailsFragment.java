@@ -160,7 +160,20 @@ public class ComplaintDetailsFragment extends BaseFragment {
         compositeDisposable.add(
                 RxView.clicks(imageOne).throttleFirst(500,
                         TimeUnit.MILLISECONDS).subscribe(o -> {
-                    jumpToDestinationFragment(getCurrentFragmentId(), R.id.toVisitReportFragment, frameMain, null, false);
+                    if (complaint != null) {
+                        Bundle bundle = new Bundle();
+                        bundle.putLong(KEY_COMPLAIN_ID, complaint.getId());
+                        if (complaint.getMcType().equalsIgnoreCase(Constants.BURNER)) {
+                            if (complaint.getVisitType().equalsIgnoreCase(Constants.INSTALLATION_AND_COMMISSIONING)
+                                    || complaint.getVisitType().equalsIgnoreCase(Constants.PRE_INSTALLED)) {
+                                jumpToDestinationFragment(getCurrentFragmentId(), R.id.toVisitBurnerInstallationFragment, frameMain, bundle, false);
+                            } else {
+                                jumpToDestinationFragment(getCurrentFragmentId(), R.id.toVisitBurnerServiceFragment, frameMain, bundle, false);
+                            }
+                        } else {
+                            jumpToDestinationFragment(getCurrentFragmentId(), R.id.toVisitOthersFragment, frameMain, bundle, false);
+                        }
+                    }
                 })
         );
     }
@@ -211,12 +224,12 @@ public class ComplaintDetailsFragment extends BaseFragment {
                         if (complaint.getMcType().equalsIgnoreCase(Constants.BURNER)) {
                             if (complaint.getVisitType().equalsIgnoreCase(Constants.INSTALLATION_AND_COMMISSIONING)
                                     || complaint.getVisitType().equalsIgnoreCase(Constants.PRE_INSTALLED)) {
-                                jumpToDestinationFragment(getCurrentFragmentId(), R.id.toReportBurnerInstallationFragment, frameMain, bundle, false);
+                                jumpToDestinationFragment(getCurrentFragmentId(), R.id.toVisitBurnerInstallationFragment, frameMain, bundle, false);
                             } else {
-                                jumpToDestinationFragment(getCurrentFragmentId(), R.id.toReportBurnerServiceFragment, frameMain, bundle, false);
+                                jumpToDestinationFragment(getCurrentFragmentId(), R.id.toVisitBurnerServiceFragment, frameMain, bundle, false);
                             }
                         } else {
-                            jumpToDestinationFragment(getCurrentFragmentId(), R.id.toVisitReportFragment, frameMain, bundle, false);
+                            jumpToDestinationFragment(getCurrentFragmentId(), R.id.toVisitOthersFragment, frameMain, bundle, false);
                         }
                     }
                 })

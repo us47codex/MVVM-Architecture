@@ -40,10 +40,10 @@ public interface ComplaintDao {
     @Query("SELECT * FROM tbl_complaints WHERE id=:id")
     Maybe<Complaint> getComplaintById(long id);
 
-    @Query("SELECT * FROM tbl_complaints")
+    @Query("SELECT * FROM tbl_complaints ORDER BY created_at DESC")
     Single<List<Complaint>> getAllComplaints();
 
-    @Query("SELECT * FROM tbl_complaints WHERE status = :status")
+    @Query("SELECT * FROM tbl_complaints WHERE status = :status ORDER BY created_at DESC")
     Single<List<Complaint>> getAllComplaintsByStatus(String status);
 
     @Query("DELETE FROM tbl_complaints")
