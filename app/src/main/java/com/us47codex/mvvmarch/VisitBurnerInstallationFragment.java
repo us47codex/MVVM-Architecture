@@ -86,7 +86,7 @@ public class VisitBurnerInstallationFragment extends BaseFragment {
             edtReportNo, edtFuel, edtType, edtSerialNo, edtCode, edtEngineerRemark, edtCommissioningWorkDoneDescription,
             edtInstallationWorkDoneDescription,
             edtProductJobKnowledge, edtCooperationWithYou, edtTimelyCompletion, edtSiteBehaviour, edtPresenceOfMind, edtEffectiveCommunication,
-            edtCustomerRemarks, edtName, edtServiceCharge, edtTransport, edtConveyance, edtFoods, edtHotelBill;
+            edtCustomerRemarks, edtName, edtServiceCharge, edtTransport, edtConveyance, edtFoods, edtHotelBill, edtApplication;
 
     private TextInputLayout tilAttnBy, tilClient,
             tilAddress, tilQuantity, tilCustomerAddress, tilModel, tilContactPerson, tilCustomerName, tilDate, tilReportNo, tilEngineerRemark,
@@ -250,6 +250,7 @@ public class VisitBurnerInstallationFragment extends BaseFragment {
         edtConveyance = view.findViewById(R.id.edtConveyance);
         edtFoods = view.findViewById(R.id.edtFoods);
         edtHotelBill = view.findViewById(R.id.edtHotelBill);
+        edtApplication = view.findViewById(R.id.edtApplication);
 
         imgSignatureAndStamp = view.findViewById(R.id.imgSignatureAndStamp);
         imgCustomerSign = view.findViewById(R.id.imgCustomerSign);
@@ -612,7 +613,7 @@ public class VisitBurnerInstallationFragment extends BaseFragment {
         params.put("bcode", edtCode.getText().toString());
         params.put("bquantity", edtQuantity.getText().toString());
         params.put("bmodel", edtModel.getText().toString());
-        params.put("bapplication", "");
+        params.put("bapplication", edtApplication.getText().toString());
         params.put("contact_person", edtContactPerson.getText().toString());
 
         return params;

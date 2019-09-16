@@ -404,65 +404,190 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:weightSum="2">
+                android:orientation="vertical">
 
-                <LinearLayout
-                    android:layout_width="0dp"
+                <CheckBox
+                    android:id="@+id/chkService"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
+                    android:text="Service" />
 
-                    <CheckBox
-                        android:id="@+id/chkService"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Service" />
-
-                    <CheckBox
-                        android:id="@+id/chkPreInstallation"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Pre-Installation" />
-
-                    <CheckBox
-                        android:id="@+id/chkInstallation"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Installation" />
-
-                    <CheckBox
-                        android:id="@+id/chkCommissioning"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Commissioning" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="0dp"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tilService"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
+                    android:hint="Service"
+                    android:visibility="gone"
+                    app:hintTextAppearance="@style/TextInputLayout.gray">
 
-                    <CheckBox
-                        android:id="@+id/chkChargeable"
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edtService"
+                        style="@style/editTextTheme"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Chargeable" />
+                        android:drawablePadding="@dimen/_10sdp"
+                        android:inputType="text"
+                        android:textColor="@color/text_color"
+                        android:textColorHint="@color/text_color_gray" />
 
-                    <CheckBox
-                        android:id="@+id/chkWarranty"
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <CheckBox
+                    android:id="@+id/chkPreInstallation"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Pre-Installation" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tilPreInstallation"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Pre-Installation"
+                    android:visibility="gone"
+                    app:hintTextAppearance="@style/TextInputLayout.gray">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edtPreInstallation"
+                        style="@style/editTextTheme"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Warranty" />
+                        android:drawablePadding="@dimen/_10sdp"
+                        android:inputType="text"
+                        android:textColor="@color/text_color"
+                        android:textColorHint="@color/text_color_gray" />
 
-                    <CheckBox
-                        android:id="@+id/chkCourtesyVisit"
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <CheckBox
+                    android:id="@+id/chkInstallation"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Installation" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tilInstallation"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Installation"
+                    android:visibility="gone"
+                    app:hintTextAppearance="@style/TextInputLayout.gray">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edtInstallation"
+                        style="@style/editTextTheme"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Courtesy Visit" />
+                        android:drawablePadding="@dimen/_10sdp"
+                        android:inputType="text"
+                        android:textColor="@color/text_color"
+                        android:textColorHint="@color/text_color_gray" />
 
-                </LinearLayout>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <CheckBox
+                    android:id="@+id/chkCommissioning"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Commissioning" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tilCommissioning"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Commissioning"
+                    android:visibility="gone"
+                    app:hintTextAppearance="@style/TextInputLayout.gray">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edtCommissioning"
+                        style="@style/editTextTheme"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawablePadding="@dimen/_10sdp"
+                        android:inputType="text"
+                        android:textColor="@color/text_color"
+                        android:textColorHint="@color/text_color_gray" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <CheckBox
+                    android:id="@+id/chkChargeable"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Chargeable" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tilChargeable"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Chargeable"
+                    android:visibility="gone"
+                    app:hintTextAppearance="@style/TextInputLayout.gray">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edtChargeable"
+                        style="@style/editTextTheme"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawablePadding="@dimen/_10sdp"
+                        android:inputType="text"
+                        android:textColor="@color/text_color"
+                        android:textColorHint="@color/text_color_gray" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <CheckBox
+                    android:id="@+id/chkWarranty"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Warranty" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tilWarranty"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Warranty"
+                    android:visibility="gone"
+                    app:hintTextAppearance="@style/TextInputLayout.gray">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edtWarranty"
+                        style="@style/editTextTheme"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawablePadding="@dimen/_10sdp"
+                        android:inputType="text"
+                        android:textColor="@color/text_color"
+                        android:textColorHint="@color/text_color_gray" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <CheckBox
+                    android:id="@+id/chkCourtesyVisit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Courtesy Visit" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tilCourtesyVisit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="CourtesyVisit"
+                    android:visibility="gone"
+                    app:hintTextAppearance="@style/TextInputLayout.gray">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edtCourtesyVisit"
+                        style="@style/editTextTheme"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawablePadding="@dimen/_10sdp"
+                        android:inputType="text"
+                        android:textColor="@color/text_color"
+                        android:textColorHint="@color/text_color_gray" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
             </LinearLayout>
 
             <View

@@ -38,6 +38,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.github.florent37.singledateandtimepicker.SingleDateAndTimePicker;
 import com.github.gcacace.signaturepad.views.SignaturePad;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.us47codex.mvvmarch.base.BaseFragment;
 import com.us47codex.mvvmarch.complaint.ComplaintViewModel;
@@ -85,7 +86,9 @@ public class VisitOthersFragment extends BaseFragment {
             edtHeatPumpModelSerialNo, edtContactPerson, edtCustomerName, edtReportNo, edtPartsReplaced,
             edtCustomerRemark, edtSuggestionToCustomer, edtDescriptionOfWorkDone, edtObservation, edtNatureOfProblem,
             edtComplaintNoDate, edtPONoDate, edtEquipment, edtDealerPhoneNo, edtDealerAddress, edtNoOfHeatPumps,
-            edtDealerContactPerson, edtTax, edtConvayance, edtOthers, edtServiceCharge, edtToFrom, edtRemark;
+            edtDealerContactPerson, edtTax, edtConvayance, edtOthers, edtServiceCharge, edtToFrom, edtRemark,
+            edtService, edtPreInstallation, edtInstallation, edtCommissioning, edtChargeable, edtWarranty, edtCourtesyVisit;
+    private TextInputLayout tilService, tilPreInstallation, tilInstallation, tilCommissioning, tilChargeable, tilWarranty, tilCourtesyVisit;
     private AppCompatButton btnSubmitReport;
     private AppCompatImageView imgMarketingProjectHead, imgSunteRepresentative, imgCustomerSign;
     private AppCompatTextView txvMachineType, txvDate, txvCheckoutDateTime, txvWorkDateTime;
@@ -107,6 +110,7 @@ public class VisitOthersFragment extends BaseFragment {
     private int imgSunteRepresentativeSignature = 1;
     private int imgMarketingProjectHeadsignature = 2;
     private String workStatus, qualityOfService;
+    private ArrayList<String> typeOfCall = new ArrayList<>();
 
     @Override
     protected int getLayoutId() {
@@ -234,6 +238,21 @@ public class VisitOthersFragment extends BaseFragment {
         edtToFrom = view.findViewById(R.id.edtToFrom);
         edtNoOfHeatPumps = view.findViewById(R.id.edtNoOfHeatPumps);
         edtRemark = view.findViewById(R.id.edtRemark);
+        edtService = view.findViewById(R.id.edtService);
+        edtPreInstallation = view.findViewById(R.id.edtPreInstallation);
+        edtInstallation = view.findViewById(R.id.edtInstallation);
+        edtCommissioning = view.findViewById(R.id.edtCommissioning);
+        edtChargeable = view.findViewById(R.id.edtChargeable);
+        edtWarranty = view.findViewById(R.id.edtWarranty);
+        edtCourtesyVisit = view.findViewById(R.id.edtCourtesyVisit);
+
+        tilService = view.findViewById(R.id.tilService);
+        tilPreInstallation = view.findViewById(R.id.tilPreInstallation);
+        tilInstallation = view.findViewById(R.id.tilInstallation);
+        tilCommissioning = view.findViewById(R.id.tilCommissioning);
+        tilChargeable = view.findViewById(R.id.tilChargeable);
+        tilWarranty = view.findViewById(R.id.tilWarranty);
+        tilCourtesyVisit = view.findViewById(R.id.tilCourtesyVisit);
 
         chkCourtesyVisit = view.findViewById(R.id.chkCourtesyVisit);
         chkWarranty = view.findViewById(R.id.chkWarranty);
@@ -253,6 +272,41 @@ public class VisitOthersFragment extends BaseFragment {
         imgCustomerSign = view.findViewById(R.id.imgCustomerSign);
 
         btnSubmitReport = view.findViewById(R.id.btnSubmitReport);
+        chkCourtesyVisit.setOnCheckedChangeListener((compoundButton, b) -> {
+            tilCourtesyVisit.setVisibility(b ? View.VISIBLE : View.GONE);
+            if (b) typeOfCall.add("Courtesy Visit");
+            else typeOfCall.remove("Courtesy Visit");
+        });
+        chkWarranty.setOnCheckedChangeListener((compoundButton, b) -> {
+            tilWarranty.setVisibility(b ? View.VISIBLE : View.GONE);
+            if (b) typeOfCall.add("Warranty");
+            else typeOfCall.remove("Warranty");
+        });
+        chkChargeable.setOnCheckedChangeListener((compoundButton, b) -> {
+            tilChargeable.setVisibility(b ? View.VISIBLE : View.GONE);
+            if (b) typeOfCall.add("Chargeable");
+            else typeOfCall.remove("Chargeable");
+        });
+        chkCommissioning.setOnCheckedChangeListener((compoundButton, b) -> {
+            tilCommissioning.setVisibility(b ? View.VISIBLE : View.GONE);
+            if (b) typeOfCall.add("Commissioning");
+            else typeOfCall.remove("Commissioning");
+        });
+        chkInstallation.setOnCheckedChangeListener((compoundButton, b) -> {
+            tilInstallation.setVisibility(b ? View.VISIBLE : View.GONE);
+            if (b) typeOfCall.add("Installation");
+            else typeOfCall.remove("Installation");
+        });
+        chkPreInstallation.setOnCheckedChangeListener((compoundButton, b) -> {
+            tilPreInstallation.setVisibility(b ? View.VISIBLE : View.GONE);
+            if (b) typeOfCall.add("Pre-Installation");
+            else typeOfCall.remove("Pre-Installation");
+        });
+        chkService.setOnCheckedChangeListener((compoundButton, b) -> {
+            tilService.setVisibility(b ? View.VISIBLE : View.GONE);
+            if (b) typeOfCall.add("Service");
+            else typeOfCall.remove("Service");
+        });
 
         rdgWorkStatus.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -586,14 +640,14 @@ public class VisitOthersFragment extends BaseFragment {
         params.put("description_work", edtDescriptionOfWorkDone.getText().toString());
         params.put("observation", edtObservation.getText().toString());
         params.put("nature_problem", edtNatureOfProblem.getText().toString());
-        params.put("courtesy_visit", chkCourtesyVisit.getText().toString());
-        params.put("warranty", chkWarranty.getText().toString());
-        params.put("chargeable", chkChargeable.getText().toString());
-        params.put("commissioning", chkCommissioning.getText().toString());
-        params.put("installation", chkInstallation.getText().toString());
-        params.put("pre_installation", chkPreInstallation.getText().toString());
-        params.put("services", chkService.getText().toString());
-        params.put("type_of_call", edtRemark.getText().toString());
+        params.put("courtesy_visit", chkCourtesyVisit.isChecked() ? edtCourtesyVisit.getText().toString() : "");
+        params.put("warranty", chkWarranty.isChecked() ? edtWarranty.getText().toString() : "");
+        params.put("chargeable", chkChargeable.isChecked() ? edtChargeable.getText().toString() : "");
+        params.put("commissioning", chkCommissioning.isChecked() ? edtCommissioning.getText().toString() : "");
+        params.put("installation", chkInstallation.isChecked() ? edtInstallation.getText().toString() : "");
+        params.put("pre_installation", chkPreInstallation.isChecked() ? edtPreInstallation.getText().toString() : "");
+        params.put("services", chkService.isChecked() ? edtService.getText().toString() : "");
+        params.put("type_of_call", typeOfCall.toString());
         params.put("complain_no_date", edtComplaintNoDate.getText().toString());
         params.put("po_no_date", edtPONoDate.getText().toString());
         params.put("equipment", edtEquipment.getText().toString());

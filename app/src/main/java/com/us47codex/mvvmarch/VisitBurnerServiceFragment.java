@@ -86,7 +86,7 @@ public class VisitBurnerServiceFragment extends BaseFragment {
             edtProductJobKnowledge, edtCooperationWithYou, edtTimelyCompletion, edtSiteBehaviour, edtPresenceOfMind, edtEffectiveCommunication,
             edtCustomerRemarks, edtName, edtServiceCharge, edtTransport, edtConveyance, edtFoods, edtHotelBill,
             edtActionTakenWork, edtRootOfCause, edtNatureOfProblem, edtObservation, edtFlameSafeguard, edtControlType, edtSpareReplace,
-            edtGasPrSw, edtAirPrSw, edtGasPressure, edtFGTemp, edtAirTemp, edtApplicationTempPres;
+            edtGasPrSw, edtAirPrSw, edtGasPressure, edtFGTemp, edtAirTemp, edtApplicationTempPres, edtApplication;
 
     private TextInputLayout tilAttnBy, tilClient,
             tilAddress, tilQuantity, tilCustomerAddress, tilModel, tilContactPerson, tilCustomerName, tilDate, tilReportNo, tilEngineerRemark,
@@ -258,6 +258,7 @@ public class VisitBurnerServiceFragment extends BaseFragment {
         edtAirTemp = view.findViewById(R.id.edtAirTemp);
         edtApplicationTempPres = view.findViewById(R.id.edtApplicationTempPres);
         edtQuantity = view.findViewById(R.id.edtQuantity);
+        edtApplication = view.findViewById(R.id.edtApplication);
 
         imgSignatureAndStamp = view.findViewById(R.id.imgSignatureAndStamp);
         imgCustomerSign = view.findViewById(R.id.imgCustomerSign);
@@ -698,7 +699,7 @@ public class VisitBurnerServiceFragment extends BaseFragment {
         params.put("bcode", edtCode.getText().toString());
         params.put("bquantity", edtQuantity.getText().toString());
         params.put("bmodel", edtModel.getText().toString());
-        params.put("bapplication", "");
+        params.put("bapplication", edtApplication.getText().toString());
         params.put("contact_person", edtContactPerson.getText().toString());
 
         return params;
