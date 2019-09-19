@@ -246,6 +246,7 @@ public class VisitBurnerInstallationFragment extends BaseFragment {
         edtClient = view.findViewById(R.id.edtClient);
         edtAddress = view.findViewById(R.id.edtAddress);
         edtModel = view.findViewById(R.id.edtModel);
+        edtQuantity = view.findViewById(R.id.edtQuantity);
         edtCustomerAddress = view.findViewById(R.id.edtCustomerAddress);
         edtContactPerson = view.findViewById(R.id.edtContactPerson);
         edtCustomerName = view.findViewById(R.id.edtCustomerName);
