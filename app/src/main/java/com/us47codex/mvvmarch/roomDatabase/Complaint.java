@@ -103,6 +103,7 @@ public class Complaint {
     @ColumnInfo(name = "resolve_date")
     private String resolveDate;
 
+    // customer last name :: Ashok
     @ColumnInfo(name = "customer_full_name")
     private String customerFullName;
 
@@ -220,9 +221,11 @@ public class Complaint {
     @ColumnInfo(name = "reason_incomplete")
     private String reasonIncomplete;
 
+    // Client/Company name :: Ashok
     @ColumnInfo(name = "customer_first_name")
     private String customerFirstName;
 
+    // Customer full name :: Ashok
     @ColumnInfo(name = "customer_last_name")
     private String customerLastName;
 

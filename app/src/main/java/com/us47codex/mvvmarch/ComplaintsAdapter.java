@@ -44,7 +44,7 @@ public class ComplaintsAdapter extends RecyclerView.Adapter<ComplaintsAdapter.Co
     public void onBindViewHolder(@NonNull ComplainsViewHolder holder, int position) {
         Complaint complaint = complaintList.get(position);
         holder.txvComplaintNo.setText(String.valueOf(complaint.getId()));
-        holder.txvCustomerName.setText(complaint.getCustomerFullName());
+        holder.txvCustomerName.setText(complaint.getCustomerLastName());
         holder.txvMachineType.setText(String.format("%s %s", complaint.getMcType(), AppUtils.isEmpty(complaint.getVisitType()) ? "" : ": " + complaint.getVisitType()));
         holder.txvStatus.setText(complaint.getStatus());
         holder.txvDate.setText(complaint.getUpdatedAt());

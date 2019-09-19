@@ -290,11 +290,11 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
         navItemComplaints.setImgId(R.drawable.ic_change_password);
         navDrawerModelList.add(navItemComplaints);
 
-        NavDrawerModel navItemAboutUs = new NavDrawerModel();
-        navItemAboutUs.setId(Constants.ABOUT_US_ID);
-        navItemAboutUs.setTitle(getResources().getString(R.string.about_us));
-        navItemAboutUs.setImgId(R.drawable.ic_aboutus);
-        navDrawerModelList.add(navItemAboutUs);
+//        NavDrawerModel navItemAboutUs = new NavDrawerModel();
+//        navItemAboutUs.setId(Constants.ABOUT_US_ID);
+//        navItemAboutUs.setTitle(getResources().getString(R.string.about_us));
+//        navItemAboutUs.setImgId(R.drawable.ic_aboutus);
+//        navDrawerModelList.add(navItemAboutUs);
 
         NavDrawerModel navItemLogout = new NavDrawerModel();
         navItemLogout.setId(Constants.LOGOUT_ID);

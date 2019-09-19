@@ -86,9 +86,9 @@ public class VisitOthersFragment extends BaseFragment {
             edtHeatPumpModelSerialNo, edtContactPerson, edtCustomerName, edtReportNo, edtPartsReplaced,
             edtCustomerRemark, edtSuggestionToCustomer, edtDescriptionOfWorkDone, edtObservation, edtNatureOfProblem,
             edtComplaintNoDate, edtPONoDate, edtEquipment, edtDealerPhoneNo, edtDealerAddress, edtNoOfHeatPumps,
-            edtDealerContactPerson, edtTax, edtConvayance, edtOthers, edtServiceCharge, edtToFrom, edtRemark,
-            edtService, edtPreInstallation, edtInstallation, edtCommissioning, edtChargeable, edtWarranty, edtCourtesyVisit;
-    private TextInputLayout tilService, tilPreInstallation, tilInstallation, tilCommissioning, tilChargeable, tilWarranty, tilCourtesyVisit;
+            edtDealerContactPerson, edtTax, edtConvayance, edtOthers, edtServiceCharge, edtToFrom, edtRemark, edtReasonIncomplete,
+            edtService, edtPreInstallation, edtInstallation, edtCommissioning, edtChargeable, edtWarranty, edtCourtesyVisit, edtCustomerAddress;
+    private TextInputLayout tilService, tilPreInstallation, tilInstallation, tilCommissioning, tilChargeable, tilWarranty, tilCourtesyVisit, tilReasonIncomplete;
     private AppCompatButton btnSubmitReport;
     private AppCompatImageView imgMarketingProjectHead, imgSunteRepresentative, imgCustomerSign;
     private AppCompatTextView txvMachineType, txvDate, txvCheckoutDateTime, txvWorkDateTime;
@@ -245,6 +245,8 @@ public class VisitOthersFragment extends BaseFragment {
         edtChargeable = view.findViewById(R.id.edtChargeable);
         edtWarranty = view.findViewById(R.id.edtWarranty);
         edtCourtesyVisit = view.findViewById(R.id.edtCourtesyVisit);
+        edtReasonIncomplete = view.findViewById(R.id.edtReasonIncomplete);
+        edtCustomerAddress = view.findViewById(R.id.edtCustomerAddress);
 
         tilService = view.findViewById(R.id.tilService);
         tilPreInstallation = view.findViewById(R.id.tilPreInstallation);
@@ -253,6 +255,7 @@ public class VisitOthersFragment extends BaseFragment {
         tilChargeable = view.findViewById(R.id.tilChargeable);
         tilWarranty = view.findViewById(R.id.tilWarranty);
         tilCourtesyVisit = view.findViewById(R.id.tilCourtesyVisit);
+        tilReasonIncomplete = view.findViewById(R.id.tilReasonIncomplete);
 
         chkCourtesyVisit = view.findViewById(R.id.chkCourtesyVisit);
         chkWarranty = view.findViewById(R.id.chkWarranty);
@@ -313,9 +316,11 @@ public class VisitOthersFragment extends BaseFragment {
                 switch (checkedId) {
                     case R.id.rdbComplete:
                         workStatus = "Complete";
+                        tilReasonIncomplete.setVisibility(View.GONE);
                         break;
                     case R.id.rdbIncomplete:
                         workStatus = "Incompelete";
+                        tilReasonIncomplete.setVisibility(View.VISIBLE);
                         break;
                 }
             }
@@ -388,9 +393,19 @@ public class VisitOthersFragment extends BaseFragment {
     private void setData(Complaint complaint) {
         this.complaint = complaint;
         txvMachineType.setText(String.format("%s %s", complaint.getMcType(), AppUtils.isEmpty(complaint.getVisitType()) ? "" : ": " + complaint.getVisitType()));
-        edtCustomerName.setText(complaint.getCustomerFullName());
-        edtComplaintNoDate.setText(complaint.getComplainNoDate());
+        edtCustomerName.setText(complaint.getCustomerFirstName());
+        edtContactPerson.setText(complaint.getCustomerLastName());
+        edtCustomerAddress.setText(complaint.getAddress());
+//        edtComplaintNoDate.setText(complaint.getComplainNoDate());
         edtOEMDealerName.setText(complaint.getDealerName());
+        txvDate.setText(AppUtils.getCurrentDate());
+        txvWorkDateTime.setText(AppUtils.getCurrentDateTime());
+        txvCheckoutDateTime.setText(AppUtils.getCurrentDateTime());
+        getReportNo();
+    }
+
+    private void setReportNo(String reportNo) {
+        edtReportNo.setText(reportNo);
     }
 
     private void getComplainFromDB() {
@@ -453,6 +468,13 @@ public class VisitOthersFragment extends BaseFragment {
                                                 "Report submitted successfully", Objects.requireNonNull(getActivity()).getString(R.string.ok), (dialog, which) -> {
                                                     backToPreviousFragment(R.id.complaintsFragment, frameMain, false);
                                                 }, false);
+                                    }
+                                } else if (pair.first.equals(ComplaintViewModel.GET_REPORT_NO_API_TAG)) {
+                                    enableDisableView(frameMain, true);
+                                    hideProgressLoader();
+                                    JSONObject jsonObject = (JSONObject) pair.second;
+                                    if (jsonObject != null && jsonObject.getInt(Constants.KEY_SUCCESS) == 1) {
+                                        setReportNo(jsonObject.optString("data"));
                                     }
                                 }
                             }
@@ -612,7 +634,19 @@ public class VisitOthersFragment extends BaseFragment {
     }
 
     private void submitReport() {
+        showProgressLoader();
         complaintViewModel.callToApi(prepareParam(), ComplaintViewModel.HEAT_PUMP_COMPLAIN_VISIT_API_TAG, true);
+    }
+
+    private void getReportNo() {
+        if (complaint != null) {
+            showProgressLoader();
+            HashMap<String, String> params = new HashMap<>();
+            params.put("mc_type", complaint.getMcType());
+            complaintViewModel.callToApi(params, ComplaintViewModel.GET_REPORT_NO_API_TAG, true);
+        } else {
+            Toast.makeText(getContext(), "Complain is null", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private HashMap<String, String> prepareParam() {
@@ -662,6 +696,7 @@ public class VisitOthersFragment extends BaseFragment {
         params.put("heat_p_sr_no", edtHeatPumpModelSerialNo.getText().toString());
         params.put("contact_person", edtContactPerson.getText().toString());
         params.put("report_no", edtReportNo.getText().toString());
+        params.put("reason_incomplte", edtReasonIncomplete.getText().toString());
 
         return params;
     }

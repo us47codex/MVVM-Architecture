@@ -20,6 +20,7 @@ public class EndPoints {
     public static final String CHANGE_PASSWORD = BASE_URL_API_API + "/change-password";
     public static final String SCHEDULE_DATE = BASE_URL_API_API + "/schedule-date";
     public static final String COMPLAIN_SCHEDULE = BASE_URL_API_API + "/complain-schedule";
+    public static final String GET_REPORT_NO = BASE_URL_API_API + "/get_repoprt_no";
     //    Complain Visit Heat Pump, HOT Water Generator, Dyare
     public static final String HEAT_PUMP_COMPLAIN_VISIT = BASE_URL_API_API + "/complain-visit";
     //    Complain Visit Burner installation & commissionin AND Pre-installed

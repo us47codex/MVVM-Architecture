@@ -38,6 +38,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.net.HttpURLConnection;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Random;
@@ -374,8 +375,21 @@ public class AppUtils {
         }
     }
 
+    public static String getCurrentDate() {
+        Date c = Calendar.getInstance().getTime();
+        System.out.println("Current time => " + c);
 
+        SimpleDateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+        return df.format(c);
+    }
 
+    public static String getCurrentDateTime() {
+        Date c = Calendar.getInstance().getTime();
+        System.out.println("Current time => " + c);
+
+        SimpleDateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:MM");
+        return df.format(c);
+    }
 
 
 }

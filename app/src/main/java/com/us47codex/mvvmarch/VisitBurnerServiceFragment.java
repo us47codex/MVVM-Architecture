@@ -86,7 +86,10 @@ public class VisitBurnerServiceFragment extends BaseFragment {
             edtProductJobKnowledge, edtCooperationWithYou, edtTimelyCompletion, edtSiteBehaviour, edtPresenceOfMind, edtEffectiveCommunication,
             edtCustomerRemarks, edtName, edtServiceCharge, edtTransport, edtConveyance, edtFoods, edtHotelBill,
             edtActionTakenWork, edtRootOfCause, edtNatureOfProblem, edtObservation, edtFlameSafeguard, edtControlType, edtSpareReplace,
-            edtGasPrSw, edtAirPrSw, edtGasPressure, edtFGTemp, edtAirTemp, edtApplicationTempPres, edtApplication;
+            edtGasPrSw, edtAirPrSw, edtGasPressure, edtFGTemp, edtAirTemp, edtApplicationTempPres, edtApplication,
+            edtFlueGasLossLow, edtExcessAirLow, edtCo2PpmLow, edtCo2Low,
+            edtO2Low, edtServoMotorLow, edtDammperPositionLow, edtFlueGasLossHigh, edtExcessAirHigh, edtCo2PpmHigh, edtCo2High,
+            edtO2High, edtServoMotorHigh, edtDammperPositionHigh;
 
     private TextInputLayout tilAttnBy, tilClient,
             tilAddress, tilQuantity, tilCustomerAddress, tilModel, tilContactPerson, tilCustomerName, tilDate, tilReportNo, tilEngineerRemark,
@@ -95,9 +98,8 @@ public class VisitBurnerServiceFragment extends BaseFragment {
             tilTransport, tilServiceCharge, tilName, tilCheckoutDateTime, tilCustomerRemarks, tilEffectiveCommunication, tilPresenceOfMind,
             tilSiteBehaviour, tilTimelyCompletion, tilCooperationWithYou, tilProductJobKnowledge, tilFoods;
 
-    private AppCompatTextView txvMachineType, txvCheckoutDateTime, txvDate;
-    private RadioGroup rdgCustomerFeedback, rdgTraining, rdgFlueGasLoss, rdgExcessAir, rdgCo2Ppm, rdgCo2,
-            rdgO2, rdgServoMotor, rdgDammperPosition;
+    private AppCompatTextView txvMachineType, txvCheckoutDateTime, txvDate, txvFinishDate;
+    private RadioGroup rdgTraining;
 
     private AppCompatButton btnSubmitReport;
     private AppCompatImageView imgSignatureAndStamp, imgCustomerSign;
@@ -110,7 +112,7 @@ public class VisitBurnerServiceFragment extends BaseFragment {
     ArrayList<String> customerimageSignatureList = new ArrayList<>();
     ArrayList<String> signatureAndStampList = new ArrayList<>();
 
-    private String customerFeedback, training, dammperPosition, servoMotor, o2, co2, co2ppm, excessAir, flueGasloss;
+    private String customerFeedback, training;
     private Dialog dialogWakeUpCall;
 
 
@@ -215,6 +217,7 @@ public class VisitBurnerServiceFragment extends BaseFragment {
         txvMachineType = view.findViewById(R.id.txvMachineType);
         txvCheckoutDateTime = view.findViewById(R.id.txvCheckoutDateTime);
         txvDate = view.findViewById(R.id.txvDate);
+        txvFinishDate = view.findViewById(R.id.txvFinishDate);
 
         edtAttnBy = view.findViewById(R.id.edtAttnBy);
         edtClient = view.findViewById(R.id.edtClient);
@@ -263,15 +266,21 @@ public class VisitBurnerServiceFragment extends BaseFragment {
         imgSignatureAndStamp = view.findViewById(R.id.imgSignatureAndStamp);
         imgCustomerSign = view.findViewById(R.id.imgCustomerSign);
 
-        rdgCustomerFeedback = view.findViewById(R.id.rdgCustomerFeedback);
         rdgTraining = view.findViewById(R.id.rdgTraining);
-        rdgFlueGasLoss = view.findViewById(R.id.rdgFlueGasLoss);
-        rdgExcessAir = view.findViewById(R.id.rdgExcessAir);
-        rdgCo2Ppm = view.findViewById(R.id.rdgCo2Ppm);
-        rdgCo2 = view.findViewById(R.id.rdgCo2);
-        rdgO2 = view.findViewById(R.id.rdgO2);
-        rdgServoMotor = view.findViewById(R.id.rdgServoMotor);
-        rdgDammperPosition = view.findViewById(R.id.rdgDammperPosition);
+        edtFlueGasLossHigh = view.findViewById(R.id.edtFlueGasLossHigh);
+        edtExcessAirHigh = view.findViewById(R.id.edtExcessAirHigh);
+        edtCo2PpmHigh = view.findViewById(R.id.edtCo2PpmHigh);
+        edtCo2High = view.findViewById(R.id.edtCo2High);
+        edtO2High = view.findViewById(R.id.edtO2High);
+        edtServoMotorHigh = view.findViewById(R.id.edtServoMotorHigh);
+        edtDammperPositionHigh = view.findViewById(R.id.edtDammperPositionHigh);
+        edtFlueGasLossLow = view.findViewById(R.id.edtFlueGasLossLow);
+        edtExcessAirLow = view.findViewById(R.id.edtExcessAirLow);
+        edtCo2PpmLow = view.findViewById(R.id.edtCo2PpmLow);
+        edtCo2Low = view.findViewById(R.id.edtCo2Low);
+        edtO2Low = view.findViewById(R.id.edtO2Low);
+        edtServoMotorLow = view.findViewById(R.id.edtServoMotorLow);
+        edtDammperPositionLow = view.findViewById(R.id.edtDammperPositionLow);
 
         btnSubmitReport = view.findViewById(R.id.btnSubmitReport);
 
@@ -307,27 +316,6 @@ public class VisitBurnerServiceFragment extends BaseFragment {
                 })
         );
 
-        rdgCustomerFeedback.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                switch (checkedId) {
-                    case R.id.rdbOne:
-                        customerFeedback = "1";
-                        break;
-                    case R.id.rdbTwo:
-                        customerFeedback = "2";
-                        break;
-                    case R.id.rdbThree:
-                        customerFeedback = "3";
-                        break;
-                    case R.id.rdbFour:
-                        customerFeedback = "4";
-                        break;
-                    case R.id.rdbFive:
-                        customerFeedback = "5";
-                        break;
-                }
-            }
-        });
         rdgTraining.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 switch (checkedId) {
@@ -340,90 +328,6 @@ public class VisitBurnerServiceFragment extends BaseFragment {
                 }
             }
         });
-        rdgFlueGasLoss.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                switch (checkedId) {
-                    case R.id.rdbFlueGasLossTrue:
-                        flueGasloss = "True";
-                        break;
-                    case R.id.rdbFlueGasLossFalse:
-                        flueGasloss = "False";
-                        break;
-                }
-            }
-        });
-        rdgExcessAir.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                switch (checkedId) {
-                    case R.id.rdbExcessAirTrue:
-                        excessAir = "True";
-                        break;
-                    case R.id.rdbExcessAirFalse:
-                        excessAir = "False";
-                        break;
-                }
-            }
-        });
-        rdgCo2Ppm.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                switch (checkedId) {
-                    case R.id.rdbCo2PpmTrue:
-                        co2ppm = "True";
-                        break;
-                    case R.id.rdbCo2PpmFalse:
-                        co2ppm = "False";
-                        break;
-                }
-            }
-        });
-        rdgCo2.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                switch (checkedId) {
-                    case R.id.rdbCo2True:
-                        co2 = "True";
-                        break;
-                    case R.id.rdbCo2False:
-                        co2 = "False";
-                        break;
-                }
-            }
-        });
-        rdgO2.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                switch (checkedId) {
-                    case R.id.rdbO2True:
-                        o2 = "True";
-                        break;
-                    case R.id.rdbO2False:
-                        o2 = "False";
-                        break;
-                }
-            }
-        });
-        rdgServoMotor.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                switch (checkedId) {
-                    case R.id.rdbServoMotorTrue:
-                        servoMotor = "True";
-                        break;
-                    case R.id.rdbServoMotorFalse:
-                        servoMotor = "False";
-                        break;
-                }
-            }
-        });
-        rdgDammperPosition.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                switch (checkedId) {
-                    case R.id.rdbDammperPositionTrue:
-                        dammperPosition = "True";
-                        break;
-                    case R.id.rdbDammperPositionFalse:
-                        dammperPosition = "False";
-                        break;
-                }
-            }
-        });
     }
 
     @Override
@@ -432,15 +336,37 @@ public class VisitBurnerServiceFragment extends BaseFragment {
     }
 
     private void submitReport() {
+        showProgressLoader();
         complaintViewModel.callToApi(prepareBurnerServiceParams(), ComplaintViewModel.BURNER_SERVICE_COMPLAINT_VISIT_API_TAG, true);
+    }
+
+    private void getReportNo() {
+        if (complaint != null) {
+            showProgressLoader();
+            HashMap<String, String> params = new HashMap<>();
+            params.put("mc_type", complaint.getMcType());
+            complaintViewModel.callToApi(params, ComplaintViewModel.GET_REPORT_NO_API_TAG, true);
+        } else {
+            Toast.makeText(getContext(), "Complain is null", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void setData(Complaint complaint) {
         this.complaint = complaint;
         txvMachineType.setText(String.format("%s %s", complaint.getMcType(), AppUtils.isEmpty(complaint.getVisitType()) ? "" : ": " + complaint.getVisitType()));
-        edtCustomerName.setText(complaint.getCustomerFullName());
+        edtContactPerson.setText(complaint.getCustomerLastName());
         edtCustomerAddress.setText(complaint.getAddress());
-        edtReportNo.setText(String.valueOf(complaint.getId()));
+        edtClient.setText(complaint.getCustomerFirstName());
+        txvDate.setText(AppUtils.getCurrentDate());
+        txvFinishDate.setText(AppUtils.getCurrentDate());
+
+        edtModel.setText(complaint.getMcModel());
+        edtSerialNo.setText(complaint.getSrNo());
+        getReportNo();
+    }
+
+    private void setReportNo(String reportNo) {
+        edtReportNo.setText(reportNo);
     }
 
     private void getComplainFromDB() {
@@ -503,6 +429,13 @@ public class VisitBurnerServiceFragment extends BaseFragment {
                                                 "Report submitted successfully", Objects.requireNonNull(getActivity()).getString(R.string.ok), (dialog, which) -> {
                                                     backToPreviousFragment(R.id.complaintsFragment, frameMain, false);
                                                 }, false);
+                                    }
+                                } else if (pair.first.equals(ComplaintViewModel.GET_REPORT_NO_API_TAG)) {
+                                    enableDisableView(frameMain, true);
+                                    hideProgressLoader();
+                                    JSONObject jsonObject = (JSONObject) pair.second;
+                                    if (jsonObject != null && jsonObject.getInt(Constants.KEY_SUCCESS) == 1) {
+                                        setReportNo(jsonObject.optString("data"));
                                     }
                                 }
                             }
@@ -659,13 +592,20 @@ public class VisitBurnerServiceFragment extends BaseFragment {
         params.put("observation", edtObservation.getText().toString());
         params.put("bflame_safe", edtFlameSafeguard.getText().toString());
         params.put("bcontrol_type", edtControlType.getText().toString());
-        params.put("bflue_loss", flueGasloss);
-        params.put("bexcess_air", excessAir);
-        params.put("bcoppm", co2ppm);
-        params.put("bco2", co2);
-        params.put("bo2", o2);
-        params.put("bservo_motor", servoMotor);
-        params.put("bdamper_pos", dammperPosition);
+        params.put("bflue_loss_low", edtFlueGasLossLow.getText().toString());
+        params.put("bexcess_air_low", edtExcessAirLow.getText().toString());
+        params.put("bcoppm_low", edtCo2PpmLow.getText().toString());
+        params.put("bco2_low", edtCo2Low.getText().toString());
+        params.put("bo2_low", edtO2Low.getText().toString());
+        params.put("bservo_motor_low", edtServoMotorLow.getText().toString());
+        params.put("bdamper_pos_low", edtDammperPositionLow.getText().toString());
+        params.put("bflue_loss_high", edtFlueGasLossHigh.getText().toString());
+        params.put("bexcess_air_high", edtExcessAirHigh.getText().toString());
+        params.put("bcoppm_high", edtCo2PpmHigh.getText().toString());
+        params.put("bco2_high", edtCo2High.getText().toString());
+        params.put("bo2_high", edtO2High.getText().toString());
+        params.put("bservo_motor_high", edtServoMotorHigh.getText().toString());
+        params.put("bdamper_pos_high", edtDammperPositionHigh.getText().toString());
         params.put("id", String.valueOf(complaint.getId()));
         params.put("resolve_image", "");
         params.put("sign_repre", AppUtils.covertBitmapToBase64(bitmapSignatureAndStamp));

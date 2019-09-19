@@ -10,6 +10,8 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -84,7 +86,7 @@ public class VisitBurnerInstallationFragment extends BaseFragment {
 
     private TextInputEditText edtAttnBy, edtClient, edtAddress, edtQuantity, edtModel, edtCustomerAddress, edtContactPerson, edtCustomerName,
             edtReportNo, edtFuel, edtType, edtSerialNo, edtCode, edtEngineerRemark, edtCommissioningWorkDoneDescription,
-            edtInstallationWorkDoneDescription,
+            edtInstallationWorkDoneDescription, edtTotalAmount,
             edtProductJobKnowledge, edtCooperationWithYou, edtTimelyCompletion, edtSiteBehaviour, edtPresenceOfMind, edtEffectiveCommunication,
             edtCustomerRemarks, edtName, edtServiceCharge, edtTransport, edtConveyance, edtFoods, edtHotelBill, edtApplication;
 
@@ -96,8 +98,8 @@ public class VisitBurnerInstallationFragment extends BaseFragment {
             tilSiteBehaviour, tilTimelyCompletion, tilCooperationWithYou, tilProductJobKnowledge, tilFoods;
 
     private AppCompatTextView txvMachineType, txvCommissioningDetail, txvBurnerDetail, txvCheckoutDateTime, txvInstallationDateEnd, txvCommissioningDateStart,
-            txvCommissioningDateEnd, txvInstallationDateStart, txvDate;
-    private RadioGroup rdgCustomerFeedback, rdgTraining;
+            txvCommissioningDateEnd, txvInstallationDateStart, txvDate, txvFinishDate;
+    private RadioGroup rdgTraining;
 
     private AppCompatButton btnSubmitReport;
     private AppCompatImageView imgSignatureAndStamp, imgCustomerSign;
@@ -117,6 +119,23 @@ public class VisitBurnerInstallationFragment extends BaseFragment {
     private int customerSignature = 0;
     private int imgSunteRepresentativeSignature = 1;
     private int imgMarketingProjectHeadsignature = 2;
+
+    private TextWatcher amountWatcher = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+        }
+
+        @Override
+        public void afterTextChanged(Editable editable) {
+            setTotalAmount();
+        }
+    };
 
     @Override
     protected int getLayoutId() {
@@ -221,6 +240,7 @@ public class VisitBurnerInstallationFragment extends BaseFragment {
         txvCommissioningDateStart = view.findViewById(R.id.txvCommissioningDateStart);
         txvInstallationDateEnd = view.findViewById(R.id.txvInstallationDateEnd);
         txvDate = view.findViewById(R.id.txvDate);
+        txvFinishDate = view.findViewById(R.id.txvFinishDate);
 
         edtAttnBy = view.findViewById(R.id.edtAttnBy);
         edtClient = view.findViewById(R.id.edtClient);
@@ -251,10 +271,10 @@ public class VisitBurnerInstallationFragment extends BaseFragment {
         edtFoods = view.findViewById(R.id.edtFoods);
         edtHotelBill = view.findViewById(R.id.edtHotelBill);
         edtApplication = view.findViewById(R.id.edtApplication);
+        edtTotalAmount = view.findViewById(R.id.edtTotalAmount);
 
         imgSignatureAndStamp = view.findViewById(R.id.imgSignatureAndStamp);
         imgCustomerSign = view.findViewById(R.id.imgCustomerSign);
-        rdgCustomerFeedback = view.findViewById(R.id.rdgCustomerFeedback);
         rdgTraining = view.findViewById(R.id.rdgTraining);
 
         btnSubmitReport = view.findViewById(R.id.btnSubmitReport);
@@ -314,27 +334,6 @@ public class VisitBurnerInstallationFragment extends BaseFragment {
                 })
         );
 
-        rdgCustomerFeedback.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                switch (checkedId) {
-                    case R.id.rdbOne:
-                        customerFeedback = "1";
-                        break;
-                    case R.id.rdbTwo:
-                        customerFeedback = "2";
-                        break;
-                    case R.id.rdbThree:
-                        customerFeedback = "3";
-                        break;
-                    case R.id.rdbFour:
-                        customerFeedback = "4";
-                        break;
-                    case R.id.rdbFive:
-                        customerFeedback = "5";
-                        break;
-                }
-            }
-        });
         rdgTraining.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 switch (checkedId) {
@@ -355,15 +354,61 @@ public class VisitBurnerInstallationFragment extends BaseFragment {
     }
 
     private void submitReport() {
+        showProgressLoader();
         complaintViewModel.callToApi(prepareBurnerInstallationParams(), ComplaintViewModel.BURNER_INSTALLATION_COMPLAINT_VISIT_API_TAG, true);
+    }
+
+    private void getReportNo() {
+        if (complaint != null) {
+            showProgressLoader();
+            HashMap<String, String> params = new HashMap<>();
+            params.put("mc_type", complaint.getMcType());
+            complaintViewModel.callToApi(params, ComplaintViewModel.GET_REPORT_NO_API_TAG, true);
+        } else {
+            Toast.makeText(getContext(), "Complain is null", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void setData(Complaint complaint) {
         this.complaint = complaint;
         txvMachineType.setText(String.format("%s %s", complaint.getMcType(), AppUtils.isEmpty(complaint.getVisitType()) ? "" : ": " + complaint.getVisitType()));
-        edtCustomerName.setText(complaint.getCustomerFullName());
-        edtCustomerAddress.setText(complaint.getAddress());
-        edtReportNo.setText(String.valueOf(complaint.getId()));
+//        edtCustomerName.setText(complaint.getCustomerLastName());
+        edtAddress.setText(complaint.getAddress());
+        edtClient.setText(complaint.getCustomerFirstName());
+        edtContactPerson.setText(complaint.getCustomerLastName());
+        edtAttnBy.setText(getPreference().getStringValue(SunTecPreferenceManager.PREF_USER_NAME, ""));
+        edtAttnBy.setClickable(false);
+        edtModel.setText(complaint.getMcModel());
+        edtModel.setClickable(false);
+        edtSerialNo.setText(complaint.getSrNo());
+        edtSerialNo.setClickable(false);
+        txvDate.setText(AppUtils.getCurrentDate());
+        txvFinishDate.setText(AppUtils.getCurrentDate());
+
+        txvInstallationDateEnd.setText(AppUtils.getCurrentDate());
+        txvCommissioningDateEnd.setText(AppUtils.getCurrentDate());
+
+//        edtTotalAmount
+        edtFoods.addTextChangedListener(amountWatcher);
+        edtHotelBill.addTextChangedListener(amountWatcher);
+        edtConveyance.addTextChangedListener(amountWatcher);
+        edtTransport.addTextChangedListener(amountWatcher);
+        edtServiceCharge.addTextChangedListener(amountWatcher);
+
+        getReportNo();
+    }
+
+    private void setTotalAmount() {
+        int totalAmount = Integer.parseInt(AppUtils.isEmpty(edtFoods.getText().toString()) ? "0" : edtFoods.getText().toString())
+                + Integer.parseInt(AppUtils.isEmpty(edtHotelBill.getText().toString()) ? "0" : edtHotelBill.getText().toString())
+                + Integer.parseInt(AppUtils.isEmpty(edtConveyance.getText().toString()) ? "0" : edtConveyance.getText().toString())
+                + Integer.parseInt(AppUtils.isEmpty(edtTransport.getText().toString()) ? "0" : edtTransport.getText().toString())
+                + Integer.parseInt(AppUtils.isEmpty(edtServiceCharge.getText().toString()) ? "0" : edtServiceCharge.getText().toString());
+        edtTotalAmount.setText(String.valueOf(totalAmount));
+    }
+
+    private void setReportNo(String reportNo) {
+        edtReportNo.setText(reportNo);
     }
 
     private void getComplainFromDB() {
@@ -426,6 +471,13 @@ public class VisitBurnerInstallationFragment extends BaseFragment {
                                                 "Report submitted successfully", Objects.requireNonNull(getActivity()).getString(R.string.ok), (dialog, which) -> {
                                                     backToPreviousFragment(R.id.complaintsFragment, frameMain, false);
                                                 }, false);
+                                    }
+                                } else if (pair.first.equals(ComplaintViewModel.GET_REPORT_NO_API_TAG)) {
+                                    enableDisableView(frameMain, true);
+                                    hideProgressLoader();
+                                    JSONObject jsonObject = (JSONObject) pair.second;
+                                    if (jsonObject != null && jsonObject.getInt(Constants.KEY_SUCCESS) == 1) {
+                                        setReportNo(jsonObject.optString("data"));
                                     }
                                 }
                             }

@@ -240,7 +240,7 @@ public class ComplaintDetailsFragment extends BaseFragment {
         this.complaint = complaint;
         txvComplaintNo.setText(String.valueOf(complaint.getId()));
         txvStatus.setText(complaint.getStatus());
-        txvCustomerName.setText(complaint.getCustomerFullName());
+        txvCustomerName.setText(complaint.getCustomerLastName());
         txvMobile.setText(complaint.getMno());
         txvEmail.setText(complaint.getEmail());
         txvDealerName.setText(complaint.getDealerName());
@@ -278,7 +278,7 @@ public class ComplaintDetailsFragment extends BaseFragment {
 
         txvComplaintNo.setText(complaint.getId() != 0 ? String.valueOf(complaint.getId()) : "0");
         txvStatus.setText(!AppUtils.isEmpty(complaint.getStatus()) ? complaint.getStatus() : "--");
-        txvCustomerName.setText(!AppUtils.isEmpty(complaint.getCustomerFullName()) ? complaint.getCustomerFullName() : "--");
+        txvCustomerName.setText(!AppUtils.isEmpty(complaint.getCustomerLastName()) ? complaint.getCustomerLastName() : "--");
         txvMobile.setText(!AppUtils.isEmpty(complaint.getMno()) ? complaint.getMno() : "--");
         txvEmail.setText(!AppUtils.isEmpty(complaint.getEmail()) ? complaint.getEmail() : "--");
         txvDealerName.setText(!AppUtils.isEmpty(complaint.getDealerName()) ? complaint.getDealerName() : "--");
@@ -331,7 +331,7 @@ public class ComplaintDetailsFragment extends BaseFragment {
             dialogWakeUpCall.dismiss();
             dialogWakeUpCall.cancel();
             try {
-//                showProgressLoader();
+                showProgressLoader();
                 HashMap<String, String> params = new HashMap<>();
                 params.put("schedule_date", AppUtils.convertDateToString(wakeupDateAndTimePicker.getDate(), "MM/dd/yyyy hh:mm a"));
                 params.put("schedule_id", String.valueOf(complainId));
@@ -408,6 +408,7 @@ public class ComplaintDetailsFragment extends BaseFragment {
                             Pair pair = (Pair) object;
                             if (pair.first != null) {
                                 if (pair.first.equals(ComplaintViewModel.COMPLAIN_SCHEDULE_API_TAG)) {
+                                    hideProgressLoader();
                                     enableDisableView(frameMain, true);
                                     JSONObject jsonObject = (JSONObject) pair.second;
                                     if (jsonObject != null && jsonObject.getInt(Constants.KEY_SUCCESS) == 1) {

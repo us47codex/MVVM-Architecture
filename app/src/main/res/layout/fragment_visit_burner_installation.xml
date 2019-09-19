@@ -10,6 +10,8 @@
 
     <include layout="@layout/action_bar_custom" />
 
+    <include layout="@layout/circular_progress_view" />
+
     <androidx.core.widget.NestedScrollView
         android:id="@+id/scrollview"
         android:layout_width="match_parent"
@@ -105,6 +107,79 @@
 
             </androidx.appcompat.widget.LinearLayoutCompat>
 
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/_5sdp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        style="@style/TextInputLayout.gray"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+                        android:paddingStart="@dimen/_5sdp"
+                        android:paddingEnd="@dimen/_5sdp"
+                        android:text="Finish Date"
+                        android:textColor="@color/text_color_gray"
+                        android:textSize="@dimen/_12ssp"
+                        tools:ignore="HardcodedText" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/txvFinishDate"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+                        android:hint="Select Date"
+                        android:padding="@dimen/_5sdp"
+                        android:textColor="@color/text_color"
+                        android:textSize="@dimen/_16ssp"
+                        tools:ignore="HardcodedText" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/text_divider_color" />
+
+                </androidx.appcompat.widget.LinearLayoutCompat>
+
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_5sdp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/tilTotalDays"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Total Days"
+                        app:hintTextAppearance="@style/TextInputLayout.gray">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/edtTotalDays"
+                            style="@style/editTextTheme"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:drawablePadding="@dimen/_10sdp"
+                            android:inputType="number"
+                            android:textColor="@color/text_color"
+                            android:textColorHint="@color/text_color_gray" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                </androidx.appcompat.widget.LinearLayoutCompat>
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/tilAttnBy"
                 android:layout_width="match_parent"
@@ -167,6 +242,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Customer Name"
+                android:visibility="gone"
                 app:hintTextAppearance="@style/TextInputLayout.gray">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -205,6 +281,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Customer Address"
+                android:visibility="gone"
                 app:hintTextAppearance="@style/TextInputLayout.gray">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -245,7 +322,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:padding="@dimen/_5sdp"
-                android:text="Burner Detail"
+                android:text="Burner's Details"
                 android:textColor="@color/text_color"
                 android:textSize="@dimen/_16ssp"
                 tools:ignore="HardcodedText" />
@@ -370,7 +447,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:padding="@dimen/_5sdp"
-                android:text="Installation Detail"
+                android:text="Installation Details"
                 android:textColor="@color/text_color"
                 android:textSize="@dimen/_16ssp"
                 tools:ignore="HardcodedText" />
@@ -470,7 +547,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:drawablePadding="@dimen/_10sdp"
-                    android:inputType="text"
+                    android:inputType="textMultiLine"
                     android:textColor="@color/text_color"
                     android:textColorHint="@color/text_color_gray" />
 
@@ -482,7 +559,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:padding="@dimen/_5sdp"
-                android:text="Commissioning Detail"
+                android:text="Commissioning Details"
                 android:textColor="@color/text_color"
                 android:textSize="@dimen/_16ssp"
                 tools:ignore="HardcodedText" />
@@ -582,272 +659,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:drawablePadding="@dimen/_10sdp"
-                    android:inputType="text"
+                    android:inputType="textMultiLine"
                     android:textColor="@color/text_color"
                     android:textColorHint="@color/text_color_gray" />
 
             </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/tilEngineerRemark"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Engineer Remark"
-                app:hintTextAppearance="@style/TextInputLayout.gray">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/edtEngineerRemark"
-                    style="@style/editTextTheme"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:drawablePadding="@dimen/_10sdp"
-                    android:inputType="text"
-                    android:textColor="@color/text_color"
-                    android:textColorHint="@color/text_color_gray" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-
-            <androidx.appcompat.widget.LinearLayoutCompat
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_5sdp"
-                    android:gravity="start"
-                    android:paddingStart="@dimen/_5sdp"
-                    android:paddingEnd="@dimen/_5sdp"
-                    android:text="Customer Feedback"
-                    android:textColor="@color/text_color_gray"
-                    android:textSize="@dimen/_12ssp"
-                    tools:ignore="HardcodedText" />
-
-                <RadioGroup
-                    android:id="@+id/rdgCustomerFeedback"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:weightSum="5">
-
-                    <RadioButton
-                        android:id="@+id/rdbOne"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="1" />
-
-                    <RadioButton
-                        android:id="@+id/rdbTwo"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="2" />
-
-                    <RadioButton
-                        android:id="@+id/rdbThree"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="3" />
-
-                    <RadioButton
-                        android:id="@+id/rdbFour"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="4" />
-
-                    <RadioButton
-                        android:id="@+id/rdbFive"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="5" />
-                </RadioGroup>
-
-            </androidx.appcompat.widget.LinearLayoutCompat>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/text_divider_color" />
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/tilProductJobKnowledge"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Product and Job Knowledge"
-                app:hintTextAppearance="@style/TextInputLayout.gray">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/edtProductJobKnowledge"
-                    style="@style/editTextTheme"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:drawablePadding="@dimen/_10sdp"
-                    android:inputType="text"
-                    android:textColor="@color/text_color"
-                    android:textColorHint="@color/text_color_gray" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/tilCooperationWithYou"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Cooperation with you and your team"
-                app:hintTextAppearance="@style/TextInputLayout.gray">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/edtCooperationWithYou"
-                    style="@style/editTextTheme"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:drawablePadding="@dimen/_10sdp"
-                    android:inputType="text"
-                    android:textColor="@color/text_color"
-                    android:textColorHint="@color/text_color_gray" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/tilTimelyCompletion"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Timely completion of work"
-                app:hintTextAppearance="@style/TextInputLayout.gray">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/edtTimelyCompletion"
-                    style="@style/editTextTheme"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:drawablePadding="@dimen/_10sdp"
-                    android:inputType="text"
-                    android:minLines="2"
-                    android:textColor="@color/text_color"
-                    android:textColorHint="@color/text_color_gray" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/tilSiteBehaviour"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Site Behaviour"
-                app:hintTextAppearance="@style/TextInputLayout.gray">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/edtSiteBehaviour"
-                    style="@style/editTextTheme"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:drawablePadding="@dimen/_10sdp"
-                    android:inputType="text"
-                    android:minLines="2"
-                    android:textColor="@color/text_color"
-                    android:textColorHint="@color/text_color_gray" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/tilPresenceOfMind"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Presence of Mind in Problem solving"
-                app:hintTextAppearance="@style/TextInputLayout.gray">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/edtPresenceOfMind"
-                    style="@style/editTextTheme"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:drawablePadding="@dimen/_10sdp"
-                    android:inputType="text"
-                    android:minLines="2"
-                    android:textColor="@color/text_color"
-                    android:textColorHint="@color/text_color_gray" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/tilEffectiveCommunication"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Effective Communication"
-                app:hintTextAppearance="@style/TextInputLayout.gray">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/edtEffectiveCommunication"
-                    style="@style/editTextTheme"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:drawablePadding="@dimen/_10sdp"
-                    android:inputType="text"
-                    android:minLines="2"
-                    android:textColor="@color/text_color"
-                    android:textColorHint="@color/text_color_gray" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/tilCustomerRemarks"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Customer's Remarks / Suggestion"
-                app:hintTextAppearance="@style/TextInputLayout.gray">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/edtCustomerRemarks"
-                    style="@style/editTextTheme"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:drawablePadding="@dimen/_10sdp"
-                    android:inputType="text"
-                    android:minLines="2"
-                    android:textColor="@color/text_color"
-                    android:textColorHint="@color/text_color_gray" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <androidx.appcompat.widget.LinearLayoutCompat
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical">
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    style="@style/TextInputLayout.gray"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="start"
-                    android:paddingStart="@dimen/_5sdp"
-                    android:paddingEnd="@dimen/_5sdp"
-                    android:text="Checkout Date Time"
-                    android:textColor="@color/text_color_gray"
-                    android:textSize="@dimen/_12ssp"
-                    tools:ignore="HardcodedText" />
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/txvCheckoutDateTime"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="start"
-                    android:hint="Select Date"
-                    android:padding="@dimen/_5sdp"
-                    android:textColor="@color/text_color"
-                    android:textSize="@dimen/_16ssp"
-                    tools:ignore="HardcodedText" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/text_divider_color" />
-
-            </androidx.appcompat.widget.LinearLayoutCompat>
 
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:layout_width="match_parent"
@@ -898,6 +714,213 @@
                 android:background="@color/text_divider_color" />
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilEngineerRemark"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Engineer Remark"
+                app:hintTextAppearance="@style/TextInputLayout.gray">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edtEngineerRemark"
+                    style="@style/editTextTheme"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="@dimen/_10sdp"
+                    android:inputType="textMultiLine"
+                    android:textColor="@color/text_color"
+                    android:textColorHint="@color/text_color_gray" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/txvCustomerFeedback"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="@dimen/_5sdp"
+                android:text="Customer Feedback"
+                android:textColor="@color/text_color"
+                android:textSize="@dimen/_16ssp"
+                tools:ignore="HardcodedText" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilProductJobKnowledge"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Product and Job Knowledge"
+                app:hintTextAppearance="@style/TextInputLayout.gray">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edtProductJobKnowledge"
+                    style="@style/editTextTheme"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="@dimen/_10sdp"
+                    android:inputType="number"
+                    android:digits="12345"
+                    android:textColor="@color/text_color"
+                    android:textColorHint="@color/text_color_gray" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilCooperationWithYou"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Cooperation with you and your team"
+                app:hintTextAppearance="@style/TextInputLayout.gray">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edtCooperationWithYou"
+                    style="@style/editTextTheme"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="@dimen/_10sdp"
+                    android:inputType="number"
+                    android:digits="12345"
+                    android:textColor="@color/text_color"
+                    android:textColorHint="@color/text_color_gray" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilTimelyCompletion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Timely completion of work"
+                app:hintTextAppearance="@style/TextInputLayout.gray">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edtTimelyCompletion"
+                    style="@style/editTextTheme"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="@dimen/_10sdp"
+                    android:inputType="number"
+                    android:digits="12345"
+                    android:textColor="@color/text_color"
+                    android:textColorHint="@color/text_color_gray" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilSiteBehaviour"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Site Behaviour"
+                app:hintTextAppearance="@style/TextInputLayout.gray">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edtSiteBehaviour"
+                    style="@style/editTextTheme"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="@dimen/_10sdp"
+                    android:inputType="number"
+                    android:digits="12345"
+                    android:textColor="@color/text_color"
+                    android:textColorHint="@color/text_color_gray" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilPresenceOfMind"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Presence of Mind in Problem solving"
+                app:hintTextAppearance="@style/TextInputLayout.gray">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edtPresenceOfMind"
+                    style="@style/editTextTheme"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="@dimen/_10sdp"
+                    android:inputType="number"
+                    android:digits="12345"
+                    android:textColor="@color/text_color"
+                    android:textColorHint="@color/text_color_gray" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilEffectiveCommunication"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Effective Communication"
+                app:hintTextAppearance="@style/TextInputLayout.gray">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edtEffectiveCommunication"
+                    style="@style/editTextTheme"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="@dimen/_10sdp"
+                    android:inputType="number"
+                    android:digits="12345"
+                    android:textColor="@color/text_color"
+                    android:textColorHint="@color/text_color_gray" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilCustomerRemarks"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Customer's Remarks / Suggestion"
+                app:hintTextAppearance="@style/TextInputLayout.gray">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edtCustomerRemarks"
+                    style="@style/editTextTheme"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="@dimen/_10sdp"
+                    android:inputType="text"
+                    android:minLines="2"
+                    android:textColor="@color/text_color"
+                    android:textColorHint="@color/text_color_gray" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:visibility="gone"
+                android:orientation="vertical">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    style="@style/TextInputLayout.gray"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:paddingStart="@dimen/_5sdp"
+                    android:paddingEnd="@dimen/_5sdp"
+                    android:text="Checkout Date Time"
+                    android:textColor="@color/text_color_gray"
+                    android:textSize="@dimen/_12ssp"
+                    tools:ignore="HardcodedText" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/txvCheckoutDateTime"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:hint="Select Date"
+                    android:padding="@dimen/_5sdp"
+                    android:textColor="@color/text_color"
+                    android:textSize="@dimen/_16ssp"
+                    tools:ignore="HardcodedText" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/text_divider_color" />
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/tilName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -922,7 +945,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:padding="@dimen/_5sdp"
-                android:text="Charges to be recovered"
+                android:text="Charges to be covered"
                 android:textColor="@color/text_color"
                 android:textSize="@dimen/_16ssp"
                 tools:ignore="HardcodedText" />
@@ -939,7 +962,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="@dimen/_10sdp"
                     android:layout_weight="1"
-                    android:hint="Service Charge"
+                    android:hint="Commi. Charge"
                     app:hintTextAppearance="@style/TextInputLayout.gray">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -1016,7 +1039,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:drawablePadding="@dimen/_10sdp"
-                        android:inputType="text"
+                        android:inputType="numberDecimal"
                         android:textColor="@color/text_color"
                         android:textColorHint="@color/text_color_gray" />
 
@@ -1024,25 +1047,54 @@
 
             </androidx.appcompat.widget.LinearLayoutCompat>
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/tilFoods"
+            <androidx.appcompat.widget.LinearLayoutCompat
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:hint="Foods"
-                app:hintTextAppearance="@style/TextInputLayout.gray">
+                android:orientation="horizontal"
+                android:weightSum="2">
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/edtFoods"
-                    style="@style/editTextTheme"
-                    android:layout_width="match_parent"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tilFoods"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:drawablePadding="@dimen/_10sdp"
-                    android:inputType="numberDecimal"
-                    android:textColor="@color/text_color"
-                    android:textColorHint="@color/text_color_gray" />
+                    android:layout_weight="1"
+                    android:hint="Foods"
+                    app:hintTextAppearance="@style/TextInputLayout.gray">
 
-            </com.google.android.material.textfield.TextInputLayout>
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edtFoods"
+                        style="@style/editTextTheme"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawablePadding="@dimen/_10sdp"
+                        android:inputType="numberDecimal"
+                        android:textColor="@color/text_color"
+                        android:textColorHint="@color/text_color_gray" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tilTotalAmount"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="Total Amount"
+                    app:hintTextAppearance="@style/TextInputLayout.gray">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edtTotalAmount"
+                        style="@style/editTextTheme"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawablePadding="@dimen/_10sdp"
+                        android:inputType="numberDecimal"
+                        android:enabled="false"
+                        android:textColor="@color/text_color"
+                        android:textColorHint="@color/text_color_gray" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
 
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:layout_width="match_parent"
@@ -1065,7 +1117,7 @@
                 <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/imgCustomerSign"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/_50sdp"
+                    android:layout_height="@dimen/_70sdp"
                     android:gravity="center"
                     android:padding="@dimen/_5sdp"
                     android:textColor="@color/text_color"
@@ -1100,7 +1152,7 @@
                 <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/imgSignatureAndStamp"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/_50sdp"
+                    android:layout_height="@dimen/_70sdp"
                     android:gravity="center"
                     android:padding="@dimen/_5sdp"
                     android:textColor="@color/text_color"
