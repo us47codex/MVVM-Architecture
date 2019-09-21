@@ -2,14 +2,14 @@ package com.us47codex.mvvmarch;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -54,7 +54,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
@@ -67,6 +66,9 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.observers.DisposableMaybeObserver;
 import io.reactivex.schedulers.Schedulers;
+import okhttp3.RequestBody;
+
+import static com.us47codex.mvvmarch.helper.AppUtils.toRequestBody;
 
 /**
  * Created by Upendra Shah on 07 September, 2019 for
@@ -82,7 +84,7 @@ public class VisitBurnerServiceFragment extends BaseFragment {
 
     private TextInputEditText edtAttnBy, edtClient, edtAddress, edtQuantity, edtModel, edtCustomerAddress, edtContactPerson, edtCustomerName,
             edtReportNo, edtFuel, edtType, edtSerialNo, edtCode, edtEngineerRemark, edtCommissioningWorkDoneDescription,
-            edtInstallationWorkDoneDescription,
+            edtInstallationWorkDoneDescription, edtTotalAmount,
             edtProductJobKnowledge, edtCooperationWithYou, edtTimelyCompletion, edtSiteBehaviour, edtPresenceOfMind, edtEffectiveCommunication,
             edtCustomerRemarks, edtName, edtServiceCharge, edtTransport, edtConveyance, edtFoods, edtHotelBill,
             edtActionTakenWork, edtRootOfCause, edtNatureOfProblem, edtObservation, edtFlameSafeguard, edtControlType, edtSpareReplace,
@@ -109,16 +111,32 @@ public class VisitBurnerServiceFragment extends BaseFragment {
     private boolean isSignatureCreate;
     private String SignatureFilePath = "";
     private AppCompatImageView signatureImage;
-    ArrayList<String> customerimageSignatureList = new ArrayList<>();
-    ArrayList<String> signatureAndStampList = new ArrayList<>();
 
-    private String customerFeedback, training;
+    private String training = "no";
     private Dialog dialogWakeUpCall;
 
+    private File customerSign;
+    private File signAndStamp;
 
-    private int customerSignature = 0;
-    private int imgSunteRepresentativeSignature = 1;
-    private int imgMarketingProjectHeadsignature = 2;
+    private int CUSTOMER_SIGN_CODE = 0;
+    private int SIGN_AND_STAMP_CODE = 1;
+
+    private TextWatcher amountWatcher = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+        }
+
+        @Override
+        public void afterTextChanged(Editable editable) {
+            setTotalAmount();
+        }
+    };
 
     @Override
     protected int getLayoutId() {
@@ -262,6 +280,7 @@ public class VisitBurnerServiceFragment extends BaseFragment {
         edtApplicationTempPres = view.findViewById(R.id.edtApplicationTempPres);
         edtQuantity = view.findViewById(R.id.edtQuantity);
         edtApplication = view.findViewById(R.id.edtApplication);
+        edtTotalAmount = view.findViewById(R.id.edtTotalAmount);
 
         imgSignatureAndStamp = view.findViewById(R.id.imgSignatureAndStamp);
         imgCustomerSign = view.findViewById(R.id.imgCustomerSign);
@@ -287,13 +306,13 @@ public class VisitBurnerServiceFragment extends BaseFragment {
         getCompositeDisposable().add(
                 RxView.clicks(imgCustomerSign).throttleFirst(500,
                         TimeUnit.MILLISECONDS).subscribe(o -> {
-                    openSignatureDialog(customerSignature);
+                    openSignatureDialog(CUSTOMER_SIGN_CODE);
                 })
         );
         getCompositeDisposable().add(
                 RxView.clicks(imgSignatureAndStamp).throttleFirst(500,
                         TimeUnit.MILLISECONDS).subscribe(o -> {
-                    openSignatureDialog(imgSunteRepresentativeSignature);
+                    openSignatureDialog(SIGN_AND_STAMP_CODE);
                 })
         );
         getCompositeDisposable().add(
@@ -353,17 +372,39 @@ public class VisitBurnerServiceFragment extends BaseFragment {
 
     private void setData(Complaint complaint) {
         this.complaint = complaint;
+        edtAttnBy.setText(getPreference().getStringValue(SunTecPreferenceManager.PREF_USER_NAME, ""));
+        edtAttnBy.setClickable(false);
         txvMachineType.setText(String.format("%s %s", complaint.getMcType(), AppUtils.isEmpty(complaint.getVisitType()) ? "" : ": " + complaint.getVisitType()));
         edtContactPerson.setText(complaint.getCustomerLastName());
-        edtCustomerAddress.setText(complaint.getAddress());
+        edtAddress.setText(complaint.getAddress());
         edtClient.setText(complaint.getCustomerFirstName());
         txvDate.setText(AppUtils.getCurrentDate());
+        txvDate.setClickable(false);
         txvFinishDate.setText(AppUtils.getCurrentDate());
-
+        txvFinishDate.setEnabled(false);
         edtModel.setText(complaint.getMcModel());
         edtSerialNo.setText(complaint.getSrNo());
+
+        edtFoods.addTextChangedListener(amountWatcher);
+        edtHotelBill.addTextChangedListener(amountWatcher);
+        edtConveyance.addTextChangedListener(amountWatcher);
+        edtTransport.addTextChangedListener(amountWatcher);
+        edtServiceCharge.addTextChangedListener(amountWatcher);
+
+        edtTotalAmount.setClickable(false);
+
         getReportNo();
     }
+
+    private void setTotalAmount() {
+        int totalAmount = Integer.parseInt(AppUtils.isEmpty(edtFoods.getText().toString()) ? "0" : edtFoods.getText().toString())
+                + Integer.parseInt(AppUtils.isEmpty(edtHotelBill.getText().toString()) ? "0" : edtHotelBill.getText().toString())
+                + Integer.parseInt(AppUtils.isEmpty(edtConveyance.getText().toString()) ? "0" : edtConveyance.getText().toString())
+                + Integer.parseInt(AppUtils.isEmpty(edtTransport.getText().toString()) ? "0" : edtTransport.getText().toString())
+                + Integer.parseInt(AppUtils.isEmpty(edtServiceCharge.getText().toString()) ? "0" : edtServiceCharge.getText().toString());
+        edtTotalAmount.setText(String.valueOf(totalAmount));
+    }
+
 
     private void setReportNo(String reportNo) {
         edtReportNo.setText(reportNo);
@@ -492,31 +533,28 @@ public class VisitBurnerServiceFragment extends BaseFragment {
 
         btnSubmit.setOnClickListener(v -> {
             if (mSignaturePad.getSignatureBitmap() != null) {
-                if (type == 0) {
-                    if (customerimageSignatureList == null) {
-                        Toast.makeText(getContext(), "Please Signature here...", Toast.LENGTH_LONG).show();
-                        return;
-                    }
-                } else if (type == 1) {
-                    if (signatureAndStampList == null) {
-                        Toast.makeText(getContext(), "Please Signature here...", Toast.LENGTH_LONG).show();
-                        return;
-                    }
-                }
+//                if (type == 0) {
+//                    if (customerimageSignatureList == null) {
+//                        Toast.makeText(getContext(), "Please Signature here...", Toast.LENGTH_LONG).show();
+//                        return;
+//                    }
+//                } else if (type == 1) {
+//                    if (signatureAndStampList == null) {
+//                        Toast.makeText(getContext(), "Please Signature here...", Toast.LENGTH_LONG).show();
+//                        return;
+//                    }
+//                }
                 Bitmap signatureBitmap = mSignaturePad.getSignatureBitmap();
                 addJpgSignatureToGallery(signatureBitmap, type);
 
-
                 RequestOptions requestOptions = new RequestOptions();
 
-                if (type == 0) {
-                    bitmapCustomerSign = signatureBitmap;
+                if (type == CUSTOMER_SIGN_CODE) {
                     Glide.with(this)
                             .setDefaultRequestOptions(requestOptions)
                             .load(signatureBitmap)
                             .into(imgCustomerSign);
-                } else if (type == 1) {
-                    bitmapSignatureAndStamp = signatureBitmap;
+                } else if (type == SIGN_AND_STAMP_CODE) {
                     Glide.with(this)
                             .setDefaultRequestOptions(requestOptions)
                             .load(signatureBitmap)
@@ -533,9 +571,14 @@ public class VisitBurnerServiceFragment extends BaseFragment {
     private boolean addJpgSignatureToGallery(Bitmap signature, int type) {
         boolean result = false;
         try {
-            File photo = new File(getAlbumStorageDir(), String.format("Signature_%d.jpg", System.currentTimeMillis()));
-            saveBitmapToJPG(signature, photo);
-            scanMediaFile(photo, type);
+            File photo = new File(getContext().getCacheDir(), String.format("Signature_%d.jpg", System.currentTimeMillis()));
+//            saveBitmapToJPG(signature, photo);
+//            scanMediaFile(photo, type);
+            if (type == CUSTOMER_SIGN_CODE) {
+                customerSign = saveBitmapToJPG(signature, photo);
+            } else if (type == SIGN_AND_STAMP_CODE) {
+                signAndStamp = saveBitmapToJPG(signature, photo);
+            }
             result = true;
         } catch (IOException e) {
             e.printStackTrace();
@@ -553,7 +596,7 @@ public class VisitBurnerServiceFragment extends BaseFragment {
         return file;
     }
 
-    private void saveBitmapToJPG(Bitmap bitmap, File photo) throws IOException {
+    private File saveBitmapToJPG(Bitmap bitmap, File photo) throws IOException {
         Bitmap newBitmap = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(newBitmap);
         canvas.drawColor(Color.WHITE);
@@ -561,25 +604,26 @@ public class VisitBurnerServiceFragment extends BaseFragment {
         OutputStream stream = new FileOutputStream(photo);
         newBitmap.compress(Bitmap.CompressFormat.JPEG, 80, stream);
         stream.close();
+        return photo;
     }
 
     private void scanMediaFile(File photo, int type) {
-        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-        Uri contentUri = Uri.fromFile(photo);
-        mediaScanIntent.setData(contentUri);
-
-        Uri imgUri = Uri.parse(String.valueOf(contentUri));
-        String path = AppUtils.getRealPathFromURI(Objects.requireNonNull(getContext()), imgUri);
-        SignatureFilePath = path;
-        String str_image1 = AppUtils.convertImageBase64(path);
-        if (type == 0) {
-            customerimageSignatureList.add(str_image1);
-        } else if (type == 1) {
-            signatureAndStampList.add(str_image1);
-        }
+//        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+//        Uri contentUri = Uri.fromFile(photo);
+//        mediaScanIntent.setData(contentUri);
+//
+//        Uri imgUri = Uri.parse(String.valueOf(contentUri));
+//        String path = AppUtils.getRealPathFromURI(Objects.requireNonNull(getContext()), imgUri);
+//        SignatureFilePath = path;
+//        String str_image1 = AppUtils.convertImageBase64(path);
+//        if (type == 0) {
+//            customerimageSignatureList.add(str_image1);
+//        } else if (type == 1) {
+//            signatureAndStampList.add(str_image1);
+//        }
     }
 
-    private HashMap<String, String> prepareBurnerServiceParams() {
+    private HashMap<String, String> prepareBurnerServiceParamsOld() {
         //        Complain Visit Burner
 //        Service/Breakdown
 //        AND AMC
@@ -625,7 +669,7 @@ public class VisitBurnerServiceFragment extends BaseFragment {
         params.put("rate_work", edtTimelyCompletion.getText().toString());
         params.put("rate_cooperation", edtCooperationWithYou.getText().toString());
         params.put("rate_knowladge", edtProductJobKnowledge.getText().toString());
-        params.put("crate", customerFeedback);
+        params.put("crate", "");
         params.put("engineer_remark", edtEngineerRemark.getText().toString());
         params.put("bgas_pr_sw", edtGasPrSw.getText().toString());
         params.put("bair_pr_sw", edtAirPrSw.getText().toString());
@@ -641,6 +685,73 @@ public class VisitBurnerServiceFragment extends BaseFragment {
         params.put("bmodel", edtModel.getText().toString());
         params.put("bapplication", edtApplication.getText().toString());
         params.put("contact_person", edtContactPerson.getText().toString());
+
+        return params;
+
+    }
+
+    private HashMap<String, RequestBody> prepareBurnerServiceParams() {
+        //        Complain Visit Burner
+//        Service/Breakdown
+//        AND AMC
+
+        HashMap<String, RequestBody> params = new HashMap<>();
+        params.put("spare_replace", toRequestBody(edtSpareReplace.getText().toString()));
+        params.put("action_taken", toRequestBody(edtActionTakenWork.getText().toString()));
+        params.put("root_of_cause", toRequestBody(edtRootOfCause.getText().toString()));
+        params.put("nature_problem", toRequestBody(edtNatureOfProblem.getText().toString()));
+        params.put("observation", toRequestBody(edtObservation.getText().toString()));
+        params.put("bflame_safe", toRequestBody(edtFlameSafeguard.getText().toString()));
+        params.put("bcontrol_type", toRequestBody(edtControlType.getText().toString()));
+        params.put("bflue_loss_low", toRequestBody(edtFlueGasLossLow.getText().toString()));
+        params.put("bexcess_air_low", toRequestBody(edtExcessAirLow.getText().toString()));
+        params.put("bcoppm_low", toRequestBody(edtCo2PpmLow.getText().toString()));
+        params.put("bco2_low", toRequestBody(edtCo2Low.getText().toString()));
+        params.put("bo2_low", toRequestBody(edtO2Low.getText().toString()));
+        params.put("bservo_motor_low", toRequestBody(edtServoMotorLow.getText().toString()));
+        params.put("bdamper_pos_low", toRequestBody(edtDammperPositionLow.getText().toString()));
+        params.put("bflue_loss_high", toRequestBody(edtFlueGasLossHigh.getText().toString()));
+        params.put("bexcess_air_high", toRequestBody(edtExcessAirHigh.getText().toString()));
+        params.put("bcoppm_high", toRequestBody(edtCo2PpmHigh.getText().toString()));
+        params.put("bco2_high", toRequestBody(edtCo2High.getText().toString()));
+        params.put("bo2_high", toRequestBody(edtO2High.getText().toString()));
+        params.put("bservo_motor_high", toRequestBody(edtServoMotorHigh.getText().toString()));
+        params.put("bdamper_pos_high", toRequestBody(edtDammperPositionHigh.getText().toString()));
+        params.put("id", toRequestBody(String.valueOf(complaint.getId())));
+        params.put("resolve_image", toRequestBody(""));
+        params.put("sign_repre", toRequestBody(signAndStamp));
+        params.put("sign_customer", toRequestBody(customerSign));
+        params.put("tax", toRequestBody(edtFoods.getText().toString()));
+        params.put("others", toRequestBody(edtHotelBill.getText().toString()));
+        params.put("to_form", toRequestBody(edtTransport.getText().toString()));
+        params.put("conveyance", toRequestBody(edtContactPerson.getText().toString()));
+        params.put("services_charges", toRequestBody(edtServiceCharge.getText().toString()));
+        params.put("training_given_by", toRequestBody(edtName.getText().toString()));
+        params.put("training_given", toRequestBody(training));
+        params.put("checkout_date", toRequestBody(txvCheckoutDateTime.getText().toString()));
+        params.put("customer_remark", toRequestBody(edtCustomerRemarks.getText().toString()));
+        params.put("rate_communication", toRequestBody(edtEffectiveCommunication.getText().toString()));
+        params.put("rate_problem", toRequestBody(edtPresenceOfMind.getText().toString()));
+        params.put("rate_behaviour", toRequestBody(edtSiteBehaviour.getText().toString()));
+        params.put("rate_work", toRequestBody(edtTimelyCompletion.getText().toString()));
+        params.put("rate_cooperation", toRequestBody(edtCooperationWithYou.getText().toString()));
+        params.put("rate_knowladge", toRequestBody(edtProductJobKnowledge.getText().toString()));
+        params.put("crate", toRequestBody(""));
+        params.put("engineer_remark", toRequestBody(edtEngineerRemark.getText().toString()));
+        params.put("bgas_pr_sw", toRequestBody(edtGasPrSw.getText().toString()));
+        params.put("bair_pr_sw", toRequestBody(edtAirPrSw.getText().toString()));
+        params.put("bgas_pre", toRequestBody(edtGasPressure.getText().toString()));
+        params.put("bfg_temp", toRequestBody(edtFGTemp.getText().toString()));
+        params.put("bair_temp", toRequestBody(edtAirTemp.getText().toString()));
+        params.put("btemp_press", toRequestBody(edtApplicationTempPres.getText().toString()));
+        params.put("bfuel", toRequestBody(edtFuel.getText().toString()));
+        params.put("btype", toRequestBody(edtType.getText().toString()));
+        params.put("bsrno", toRequestBody(edtSerialNo.getText().toString()));
+        params.put("bcode", toRequestBody(edtCode.getText().toString()));
+        params.put("bquantity", toRequestBody(edtQuantity.getText().toString()));
+        params.put("bmodel", toRequestBody(edtModel.getText().toString()));
+        params.put("bapplication", toRequestBody(edtApplication.getText().toString()));
+        params.put("contact_person", toRequestBody(edtContactPerson.getText().toString()));
 
         return params;
 

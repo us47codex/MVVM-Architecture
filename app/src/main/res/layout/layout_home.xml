@@ -104,7 +104,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="@dimen/_7sdp"
                             android:gravity="center|start"
-                            android:text="Today Scheduled Complaints"
+                            android:text="Scheduled Complaints"
                             android:textAllCaps="true"
                             android:textColor="@color/text_color"
                             android:textSize="@dimen/_18ssp" />

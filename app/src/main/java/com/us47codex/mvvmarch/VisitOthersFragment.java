@@ -2,11 +2,9 @@ package com.us47codex.mvvmarch;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -68,8 +66,9 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.observers.DisposableMaybeObserver;
 import io.reactivex.schedulers.Schedulers;
+import okhttp3.RequestBody;
 
-import static com.us47codex.mvvmarch.helper.AppUtils.covertBitmapToBase64;
+import static com.us47codex.mvvmarch.helper.AppUtils.toRequestBody;
 
 /**
  * Created by Upendra Shah on 07 September, 2019 for
@@ -99,17 +98,16 @@ public class VisitOthersFragment extends BaseFragment {
     private boolean isSignatureCreate;
     private String SignatureFilePath = "";
     private AppCompatImageView signatureImage;
-    ArrayList<String> imgMarketingProjectHeadsignatureList = new ArrayList<>();
-    ArrayList<String> customerimageSignatureList = new ArrayList<>();
-    ArrayList<String> imgSunteRepresentativeSignatureList = new ArrayList<>();
 
-    private Bitmap bitmapMarketingProjectHead, bitmapSunteRepresentative, bitmapCustomerSign;
     private Dialog dialogWakeUpCall;
 
-    private int customerSignature = 0;
-    private int imgSunteRepresentativeSignature = 1;
-    private int imgMarketingProjectHeadsignature = 2;
-    private String workStatus, qualityOfService;
+    private File customerSign;
+    private File suntecRepreSign;
+    private File marketingProjectHeadSign;
+    private int CUSTOMER_SIGN_CODE = 0;
+    private int SUNTEC_REPRE_SIGN_CODE = 1;
+    private int MARKETING_PROJECT_HEAD_SIGN_CODE = 2;
+    private String workStatus = "Complete", qualityOfService = "Excellent";
     private ArrayList<String> typeOfCall = new ArrayList<>();
 
     @Override
@@ -344,19 +342,19 @@ public class VisitOthersFragment extends BaseFragment {
         getCompositeDisposable().add(
                 RxView.clicks(imgCustomerSign).throttleFirst(500,
                         TimeUnit.MILLISECONDS).subscribe(o -> {
-                    openSignatureDialog(customerSignature);
+                    openSignatureDialog(CUSTOMER_SIGN_CODE);
                 })
         );
         getCompositeDisposable().add(
                 RxView.clicks(imgSunteRepresentative).throttleFirst(500,
                         TimeUnit.MILLISECONDS).subscribe(o -> {
-                    openSignatureDialog(imgSunteRepresentativeSignature);
+                    openSignatureDialog(SUNTEC_REPRE_SIGN_CODE);
                 })
         );
         getCompositeDisposable().add(
                 RxView.clicks(imgMarketingProjectHead).throttleFirst(500,
                         TimeUnit.MILLISECONDS).subscribe(o -> {
-                    openSignatureDialog(imgMarketingProjectHeadsignature);
+                    openSignatureDialog(MARKETING_PROJECT_HEAD_SIGN_CODE);
                 })
         );
         getCompositeDisposable().add(
@@ -531,42 +529,22 @@ public class VisitOthersFragment extends BaseFragment {
 
         btnSubmit.setOnClickListener(v -> {
             if (mSignaturePad.getSignatureBitmap() != null) {
-                if (type == 0) {
-                    if (customerimageSignatureList == null) {
-                        Toast.makeText(getContext(), "Please Signature here...", Toast.LENGTH_LONG).show();
-                        return;
-                    }
-                } else if (type == 1) {
-                    if (imgSunteRepresentativeSignatureList == null) {
-                        Toast.makeText(getContext(), "Please Signature here...", Toast.LENGTH_LONG).show();
-                        return;
-                    }
-                } else if (type == 3) {
-                    if (imgMarketingProjectHeadsignatureList == null) {
-                        Toast.makeText(getContext(), "Please Signature here...", Toast.LENGTH_LONG).show();
-                        return;
-                    }
-                }
                 Bitmap signatureBitmap = mSignaturePad.getSignatureBitmap();
                 addJpgSignatureToGallery(signatureBitmap, type);
-
 
                 RequestOptions requestOptions = new RequestOptions();
 
                 if (type == 0) {
-                    bitmapCustomerSign = signatureBitmap;
                     Glide.with(this)
                             .setDefaultRequestOptions(requestOptions)
                             .load(signatureBitmap)
                             .into(imgCustomerSign);
                 } else if (type == 1) {
-                    bitmapSunteRepresentative = signatureBitmap;
                     Glide.with(this)
                             .setDefaultRequestOptions(requestOptions)
                             .load(signatureBitmap)
                             .into(imgSunteRepresentative);
                 } else if (type == 2) {
-                    bitmapMarketingProjectHead = signatureBitmap;
                     Glide.with(this)
                             .setDefaultRequestOptions(requestOptions)
                             .load(signatureBitmap)
@@ -585,9 +563,16 @@ public class VisitOthersFragment extends BaseFragment {
     private boolean addJpgSignatureToGallery(Bitmap signature, int type) {
         boolean result = false;
         try {
-            File photo = new File(getAlbumStorageDir(), String.format("Signature_%d.jpg", System.currentTimeMillis()));
-            saveBitmapToJPG(signature, photo);
-            scanMediaFile(photo, type);
+            File photo = new File(getContext().getCacheDir(), String.format("Signature_%d.jpg", System.currentTimeMillis()));
+//            saveBitmapToJPG(signature, photo);
+//            scanMediaFile(photo, type);
+            if (type == CUSTOMER_SIGN_CODE) {
+                customerSign = saveBitmapToJPG(signature, photo);
+            } else if (type == SUNTEC_REPRE_SIGN_CODE) {
+                suntecRepreSign = saveBitmapToJPG(signature, photo);
+            } else if (type == MARKETING_PROJECT_HEAD_SIGN_CODE) {
+                marketingProjectHeadSign = saveBitmapToJPG(signature, photo);
+            }
             result = true;
         } catch (IOException e) {
             e.printStackTrace();
@@ -605,7 +590,7 @@ public class VisitOthersFragment extends BaseFragment {
         return file;
     }
 
-    private void saveBitmapToJPG(Bitmap bitmap, File photo) throws IOException {
+    private File saveBitmapToJPG(Bitmap bitmap, File photo) throws IOException {
         Bitmap newBitmap = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(newBitmap);
         canvas.drawColor(Color.WHITE);
@@ -613,24 +598,25 @@ public class VisitOthersFragment extends BaseFragment {
         OutputStream stream = new FileOutputStream(photo);
         newBitmap.compress(Bitmap.CompressFormat.JPEG, 80, stream);
         stream.close();
+        return photo;
     }
 
     private void scanMediaFile(File photo, int type) {
-        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-        Uri contentUri = Uri.fromFile(photo);
-        mediaScanIntent.setData(contentUri);
-
-        Uri imgUri = Uri.parse(String.valueOf(contentUri));
-        String path = AppUtils.getRealPathFromURI(Objects.requireNonNull(getContext()), imgUri);
-        SignatureFilePath = path;
-        String str_image1 = AppUtils.convertImageBase64(path);
-        if (type == 0) {
-            customerimageSignatureList.add(str_image1);
-        } else if (type == 1) {
-            imgSunteRepresentativeSignatureList.add(str_image1);
-        } else if (type == 2) {
-            imgMarketingProjectHeadsignatureList.add(str_image1);
-        }
+//        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+//        Uri contentUri = Uri.fromFile(photo);
+//        mediaScanIntent.setData(contentUri);
+//
+//        Uri imgUri = Uri.parse(String.valueOf(contentUri));
+//        String path = AppUtils.getRealPathFromURI(Objects.requireNonNull(getContext()), imgUri);
+//        SignatureFilePath = path;
+//        String str_image1 = AppUtils.convertImageBase64(path);
+//        if (type == 0) {
+//            customerimageSignatureList.add(str_image1);
+//        } else if (type == 1) {
+//            imgSunteRepresentativeSignatureList.add(str_image1);
+//        } else if (type == 2) {
+//            imgMarketingProjectHeadsignatureList.add(str_image1);
+//        }
     }
 
     private void submitReport() {
@@ -649,16 +635,16 @@ public class VisitOthersFragment extends BaseFragment {
         }
     }
 
-    private HashMap<String, String> prepareParam() {
+    private HashMap<String, String> prepareParamOld() {
         //Complain Visit Heat Pump, HOT Water Generator, Dyare
 
 
         HashMap<String, String> params = new HashMap<>();
         params.put("id", String.valueOf(complaint.getId()));
         params.put("resolve_image", "");
-        params.put("sign_customer", covertBitmapToBase64(bitmapCustomerSign));
-        params.put("sign_marketing", covertBitmapToBase64(bitmapMarketingProjectHead));
-        params.put("sign_repre", covertBitmapToBase64(bitmapSunteRepresentative));
+//        params.put("sign_customer", covertBitmapToBase64(bitmapCustomerSign));
+//        params.put("sign_marketing", covertBitmapToBase64(bitmapMarketingProjectHead));
+//        params.put("sign_repre", covertBitmapToBase64(bitmapSunteRepresentative));
         params.put("checkout_date", txvCheckoutDateTime.getText().toString());
         params.put("spare_replace", edtPartsReplaced.getText().toString());
         params.put("work_date", txvWorkDateTime.getText().toString());
@@ -697,6 +683,58 @@ public class VisitOthersFragment extends BaseFragment {
         params.put("contact_person", edtContactPerson.getText().toString());
         params.put("report_no", edtReportNo.getText().toString());
         params.put("reason_incomplte", edtReasonIncomplete.getText().toString());
+
+        return params;
+    }
+
+    private HashMap<String, RequestBody> prepareParam() {
+        //Complain Visit Heat Pump, HOT Water Generator, Dyare
+
+
+        HashMap<String, RequestBody> params = new HashMap<>();
+        params.put("id", toRequestBody(String.valueOf(complaint.getId())));
+        params.put("resolve_image", toRequestBody(""));
+        params.put("sign_customer", toRequestBody(customerSign));
+        params.put("sign_marketing", toRequestBody(marketingProjectHeadSign));
+        params.put("sign_repre", toRequestBody(suntecRepreSign));
+        params.put("checkout_date", toRequestBody(txvCheckoutDateTime.getText().toString()));
+        params.put("spare_replace", toRequestBody(edtPartsReplaced.getText().toString()));
+        params.put("work_date", toRequestBody(txvWorkDateTime.getText().toString()));
+        params.put("tax", toRequestBody(edtTax.getText().toString()));
+        params.put("others", toRequestBody(edtOthers.getText().toString()));
+        params.put("to_form", toRequestBody(edtToFrom.getText().toString()));
+        params.put("conveyance", toRequestBody(edtConvayance.getText().toString()));
+        params.put("services_charges", toRequestBody(edtServiceCharge.getText().toString()));
+        params.put("quality_service", toRequestBody(qualityOfService));
+        params.put("work_status", toRequestBody(workStatus));
+        params.put("customer_remark", toRequestBody(edtCustomerRemark.getText().toString()));
+        params.put("suggetion_customer", toRequestBody(edtSuggestionToCustomer.getText().toString()));
+        params.put("description_work", toRequestBody(edtDescriptionOfWorkDone.getText().toString()));
+        params.put("observation", toRequestBody(edtObservation.getText().toString()));
+        params.put("nature_problem", toRequestBody(edtNatureOfProblem.getText().toString()));
+        params.put("courtesy_visit", toRequestBody(chkCourtesyVisit.isChecked() ? edtCourtesyVisit.getText().toString() : ""));
+        params.put("warranty", toRequestBody(chkWarranty.isChecked() ? edtWarranty.getText().toString() : ""));
+        params.put("chargeable", toRequestBody(chkChargeable.isChecked() ? edtChargeable.getText().toString() : ""));
+        params.put("commissioning", toRequestBody(chkCommissioning.isChecked() ? edtCommissioning.getText().toString() : ""));
+        params.put("installation", toRequestBody(chkInstallation.isChecked() ? edtInstallation.getText().toString() : ""));
+        params.put("pre_installation", toRequestBody(chkPreInstallation.isChecked() ? edtPreInstallation.getText().toString() : ""));
+        params.put("services", toRequestBody(chkService.isChecked() ? edtService.getText().toString() : ""));
+        params.put("type_of_call", toRequestBody(typeOfCall.toString()));
+        params.put("complain_no_date", toRequestBody(edtComplaintNoDate.getText().toString()));
+        params.put("po_no_date", toRequestBody(edtPONoDate.getText().toString()));
+        params.put("equipment", toRequestBody(edtEquipment.getText().toString()));
+        params.put("d_mno", toRequestBody(edtDealerPhoneNo.getText().toString()));
+        params.put("d_address", toRequestBody(edtDealerAddress.getText().toString()));
+        params.put("d_contact_person", toRequestBody(edtDealerContactPerson.getText().toString()));
+        params.put("oem_dealer_name", toRequestBody(edtOEMDealerName.getText().toString()));
+        params.put("month_year_insta", toRequestBody(edtMonthYearOfInstallation.getText().toString()));
+        params.put("no_of_hwg", toRequestBody(edtNoOfHWG.getText().toString()));
+        params.put("hwg_sr_no", toRequestBody(edtHWGModelSerialNo.getText().toString()));
+        params.put("no_of_heat", toRequestBody(edtNoOfHeatPumps.getText().toString()));
+        params.put("heat_p_sr_no", toRequestBody(edtHeatPumpModelSerialNo.getText().toString()));
+        params.put("contact_person", toRequestBody(edtContactPerson.getText().toString()));
+        params.put("report_no", toRequestBody(edtReportNo.getText().toString()));
+        params.put("reason_incomplte", toRequestBody(edtReasonIncomplete.getText().toString()));
 
         return params;
     }

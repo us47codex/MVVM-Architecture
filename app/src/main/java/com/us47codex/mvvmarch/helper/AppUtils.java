@@ -36,6 +36,7 @@ import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.net.HttpURLConnection;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -49,6 +50,8 @@ import java.util.regex.Pattern;
 import io.reactivex.Completable;
 import io.reactivex.Single;
 import io.reactivex.schedulers.Schedulers;
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
 
 public class AppUtils {
 
@@ -375,11 +378,33 @@ public class AppUtils {
         }
     }
 
+    public static File bitmapToJPEGFile(Context context, Bitmap bitmap) {
+        File f = new File(context.getCacheDir(), getCurrentDateTime("MMddyyyyHHMMss"));
+        try {
+            //create a file to write bitmap data
+            f.createNewFile();
+
+//Convert bitmap to byte array
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100 /*ignored for PNG*/, bos);
+            byte[] bitmapdata = bos.toByteArray();
+//write the bytes in file
+            FileOutputStream fos = new FileOutputStream(f);
+            fos.write(bitmapdata);
+            fos.flush();
+            fos.close();
+        } catch (Exception e) {
+            AppLog.error(TAG, e);
+            e.printStackTrace();
+        }
+        return f;
+    }
+
     public static String getCurrentDate() {
         Date c = Calendar.getInstance().getTime();
         System.out.println("Current time => " + c);
 
-        SimpleDateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+        SimpleDateFormat df = new SimpleDateFormat("MM/dd/yyyy", Locale.ENGLISH);
         return df.format(c);
     }
 
@@ -387,9 +412,26 @@ public class AppUtils {
         Date c = Calendar.getInstance().getTime();
         System.out.println("Current time => " + c);
 
-        SimpleDateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:MM");
+        SimpleDateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:MM", Locale.ENGLISH);
         return df.format(c);
     }
 
+    public static String getCurrentDateTime(String format) {
+        Date c = Calendar.getInstance().getTime();
+        System.out.println("Current time => " + c);
+
+        SimpleDateFormat df = new SimpleDateFormat(format, Locale.ENGLISH);
+        return df.format(c);
+    }
+
+    // This method  converts String to RequestBody
+    public static RequestBody toRequestBody(String value) {
+        return RequestBody.create(MediaType.parse("text/plain"), value);
+    }  // This method  converts String to RequestBody
+
+    public static RequestBody toRequestBody(File file) {
+//        File file = new File("file_name");
+        return RequestBody.create(MediaType.parse("image/png"), file);
+    }
 
 }

@@ -2,11 +2,9 @@ package com.us47codex.mvvmarch;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -56,7 +54,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
@@ -69,8 +66,9 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.observers.DisposableMaybeObserver;
 import io.reactivex.schedulers.Schedulers;
+import okhttp3.RequestBody;
 
-import static com.us47codex.mvvmarch.helper.AppUtils.covertBitmapToBase64;
+import static com.us47codex.mvvmarch.helper.AppUtils.toRequestBody;
 
 /**
  * Created by Upendra Shah on 07 September, 2019 for
@@ -103,22 +101,20 @@ public class VisitBurnerInstallationFragment extends BaseFragment {
 
     private AppCompatButton btnSubmitReport;
     private AppCompatImageView imgSignatureAndStamp, imgCustomerSign;
-    private Bitmap bitmapSignatureAndStamp, bitmapCustomerSign;
     private long complainId;
     private Complaint complaint;
     private boolean isSignatureCreate;
     private String SignatureFilePath = "";
     private AppCompatImageView signatureImage;
-    ArrayList<String> customerimageSignatureList = new ArrayList<>();
-    ArrayList<String> signatureAndStampList = new ArrayList<>();
 
-    private String customerFeedback, training;
+    private String customerFeedback, training = "no";
     private Dialog dialogWakeUpCall;
 
+    private int CUSTOMER_SIGN_CODE = 0;
+    private int SUNTEC_REPRE_SIGN_CODE = 1;
 
-    private int customerSignature = 0;
-    private int imgSunteRepresentativeSignature = 1;
-    private int imgMarketingProjectHeadsignature = 2;
+    private File customerSign;
+    private File suntecRepreSign;
 
     private TextWatcher amountWatcher = new TextWatcher() {
         @Override
@@ -283,13 +279,13 @@ public class VisitBurnerInstallationFragment extends BaseFragment {
         getCompositeDisposable().add(
                 RxView.clicks(imgCustomerSign).throttleFirst(500,
                         TimeUnit.MILLISECONDS).subscribe(o -> {
-                    openSignatureDialog(customerSignature);
+                    openSignatureDialog(CUSTOMER_SIGN_CODE);
                 })
         );
         getCompositeDisposable().add(
                 RxView.clicks(imgSignatureAndStamp).throttleFirst(500,
                         TimeUnit.MILLISECONDS).subscribe(o -> {
-                    openSignatureDialog(imgSunteRepresentativeSignature);
+                    openSignatureDialog(SUNTEC_REPRE_SIGN_CODE);
                 })
         );
         getCompositeDisposable().add(
@@ -384,8 +380,9 @@ public class VisitBurnerInstallationFragment extends BaseFragment {
         edtSerialNo.setText(complaint.getSrNo());
         edtSerialNo.setClickable(false);
         txvDate.setText(AppUtils.getCurrentDate());
+        txvDate.setClickable(false);
         txvFinishDate.setText(AppUtils.getCurrentDate());
-
+        txvFinishDate.setClickable(false);
         txvInstallationDateEnd.setText(AppUtils.getCurrentDate());
         txvCommissioningDateEnd.setText(AppUtils.getCurrentDate());
 
@@ -396,6 +393,7 @@ public class VisitBurnerInstallationFragment extends BaseFragment {
         edtTransport.addTextChangedListener(amountWatcher);
         edtServiceCharge.addTextChangedListener(amountWatcher);
 
+        edtTotalAmount.setClickable(false);
         getReportNo();
     }
 
@@ -535,31 +533,28 @@ public class VisitBurnerInstallationFragment extends BaseFragment {
 
         btnSubmit.setOnClickListener(v -> {
             if (mSignaturePad.getSignatureBitmap() != null) {
-                if (type == 0) {
-                    if (customerimageSignatureList == null) {
-                        Toast.makeText(getContext(), "Please Signature here...", Toast.LENGTH_LONG).show();
-                        return;
-                    }
-                } else if (type == 1) {
-                    if (signatureAndStampList == null) {
-                        Toast.makeText(getContext(), "Please Signature here...", Toast.LENGTH_LONG).show();
-                        return;
-                    }
-                }
+//                if (type == CUSTOMER_SIGN_CODE) {
+//                    if (customerSign == null) {
+//                        Toast.makeText(getContext(), "Please Signature here...", Toast.LENGTH_LONG).show();
+//                        return;
+//                    }
+//                } else if (type == SUNTEC_REPRE_SIGN_CODE) {
+//                    if (suntecRepreSign == null) {
+//                        Toast.makeText(getContext(), "Please Signature here...", Toast.LENGTH_LONG).show();
+//                        return;
+//                    }
+//                }
                 Bitmap signatureBitmap = mSignaturePad.getSignatureBitmap();
                 addJpgSignatureToGallery(signatureBitmap, type);
 
-
                 RequestOptions requestOptions = new RequestOptions();
 
-                if (type == 0) {
-                    bitmapCustomerSign = signatureBitmap;
+                if (type == CUSTOMER_SIGN_CODE) {
                     Glide.with(this)
                             .setDefaultRequestOptions(requestOptions)
                             .load(signatureBitmap)
                             .into(imgCustomerSign);
-                } else if (type == 1) {
-                    bitmapSignatureAndStamp = signatureBitmap;
+                } else if (type == SUNTEC_REPRE_SIGN_CODE) {
                     Glide.with(this)
                             .setDefaultRequestOptions(requestOptions)
                             .load(signatureBitmap)
@@ -576,9 +571,15 @@ public class VisitBurnerInstallationFragment extends BaseFragment {
     private boolean addJpgSignatureToGallery(Bitmap signature, int type) {
         boolean result = false;
         try {
-            File photo = new File(getAlbumStorageDir(), String.format("Signature_%d.jpg", System.currentTimeMillis()));
-            saveBitmapToJPG(signature, photo);
-            scanMediaFile(photo, type);
+            File photo = new File(getContext().getCacheDir(), String.format("Signature_%d.jpg", System.currentTimeMillis()));
+//            saveBitmapToJPG(signature, photo);
+//            scanMediaFile(photo, type);
+            if (type == CUSTOMER_SIGN_CODE) {
+                customerSign = saveBitmapToJPG(signature, photo);
+
+            } else if (type == SUNTEC_REPRE_SIGN_CODE) {
+                suntecRepreSign = saveBitmapToJPG(signature, photo);
+            }
             result = true;
         } catch (IOException e) {
             e.printStackTrace();
@@ -596,7 +597,7 @@ public class VisitBurnerInstallationFragment extends BaseFragment {
         return file;
     }
 
-    private void saveBitmapToJPG(Bitmap bitmap, File photo) throws IOException {
+    private File saveBitmapToJPG(Bitmap bitmap, File photo) throws IOException {
         Bitmap newBitmap = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(newBitmap);
         canvas.drawColor(Color.WHITE);
@@ -604,25 +605,26 @@ public class VisitBurnerInstallationFragment extends BaseFragment {
         OutputStream stream = new FileOutputStream(photo);
         newBitmap.compress(Bitmap.CompressFormat.JPEG, 80, stream);
         stream.close();
+        return photo;
     }
 
     private void scanMediaFile(File photo, int type) {
-        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-        Uri contentUri = Uri.fromFile(photo);
-        mediaScanIntent.setData(contentUri);
-
-        Uri imgUri = Uri.parse(String.valueOf(contentUri));
-        String path = AppUtils.getRealPathFromURI(Objects.requireNonNull(getContext()), imgUri);
-        SignatureFilePath = path;
-        String str_image1 = AppUtils.convertImageBase64(path);
-        if (type == 0) {
-            customerimageSignatureList.add(str_image1);
-        } else if (type == 1) {
-            signatureAndStampList.add(str_image1);
-        }
+//        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+//        Uri contentUri = Uri.fromFile(photo);
+//        mediaScanIntent.setData(contentUri);
+//
+//        Uri imgUri = Uri.parse(String.valueOf(contentUri));
+//        String path = AppUtils.getRealPathFromURI(Objects.requireNonNull(getContext()), imgUri);
+//        SignatureFilePath = path;
+//        String str_image1 = AppUtils.convertImageBase64(path);
+//        if (type == CUSTOMER_SIGN_CODE) {
+//            customerimageSignatureList.add(str_image1);
+//        } else if (type == SUNTEC_REPRE_SIGN_CODE) {
+//            signatureAndStampList.add(str_image1);
+//        }
     }
 
-    private HashMap<String, String> prepareBurnerInstallationParams() {
+    private HashMap<String, String> prepareBurnerInstallationParamsold() {
         // Complain Visit Burner
         //installation & commissionin
         //AND
@@ -632,8 +634,8 @@ public class VisitBurnerInstallationFragment extends BaseFragment {
         HashMap<String, String> params = new HashMap<>();
         params.put("id", String.valueOf(complaint.getId()));
         params.put("resolve_image", "");
-        params.put("sign_repre", covertBitmapToBase64(bitmapSignatureAndStamp));
-        params.put("sign_customer", covertBitmapToBase64(bitmapCustomerSign));
+//        params.put("sign_repre", covertBitmapToBase64(bitmapSignatureAndStamp));
+//        params.put("sign_customer", covertBitmapToBase64(bitmapCustomerSign));
         params.put("battn_by", edtAttnBy.getText().toString());
         params.put("bclient", edtClient.getText().toString());
         params.put("badress", edtAddress.getText().toString());
@@ -668,6 +670,57 @@ public class VisitBurnerInstallationFragment extends BaseFragment {
         params.put("bmodel", edtModel.getText().toString());
         params.put("bapplication", edtApplication.getText().toString());
         params.put("contact_person", edtContactPerson.getText().toString());
+
+        return params;
+
+    }
+
+    private HashMap<String, RequestBody> prepareBurnerInstallationParams() {
+        // Complain Visit Burner
+        //installation & commissionin
+        //AND
+        //Pre-installed
+
+
+        HashMap<String, RequestBody> params = new HashMap<>();
+        params.put("id", toRequestBody(String.valueOf(complaint.getId())));
+        params.put("resolve_image", toRequestBody(""));
+        params.put("sign_repre", toRequestBody(suntecRepreSign));
+        params.put("sign_customer", toRequestBody(customerSign));
+        params.put("battn_by", toRequestBody(edtAttnBy.getText().toString()));
+        params.put("bclient", toRequestBody(edtClient.getText().toString()));
+        params.put("badress", toRequestBody(edtAddress.getText().toString()));
+        params.put("tax", toRequestBody(edtFoods.getText().toString()));
+        params.put("others", toRequestBody(edtHotelBill.getText().toString()));
+        params.put(",to_form", toRequestBody(edtTransport.getText().toString()));
+        params.put("conveyance", toRequestBody(edtConveyance.getText().toString()));
+        params.put("services_charges", toRequestBody(edtServiceCharge.getText().toString()));
+        params.put("training_given_by", toRequestBody(edtName.getText().toString()));
+        params.put("training_given", toRequestBody(training));
+        params.put("checkout_date", toRequestBody(txvCheckoutDateTime.getText().toString()));
+        params.put("customer_remark", toRequestBody(edtCustomerRemarks.getText().toString()));
+        params.put("rate_communication", toRequestBody(edtEffectiveCommunication.getText().toString()));
+        params.put("rate_problem", toRequestBody(edtPresenceOfMind.getText().toString()));
+        params.put("rate_behaviour", toRequestBody(edtSiteBehaviour.getText().toString()));
+        params.put("rate_work", toRequestBody(edtTimelyCompletion.getText().toString()));
+        params.put("rate_cooperation", toRequestBody(edtCooperationWithYou.getText().toString()));
+        params.put("rate_knowladge", toRequestBody(edtProductJobKnowledge.getText().toString()));
+        params.put("crate", toRequestBody(""));
+        params.put("engineer_remark", toRequestBody(edtEngineerRemark.getText().toString()));
+        params.put("bcom_work_done", toRequestBody(edtCommissioningWorkDoneDescription.getText().toString()));
+        params.put("com_end_date", toRequestBody(txvCommissioningDateEnd.getText().toString()));
+        params.put("com_start_date", toRequestBody(txvCommissioningDateStart.getText().toString()));
+        params.put("bin_work_des", toRequestBody(edtInstallationWorkDoneDescription.getText().toString()));
+        params.put("in_end_date", toRequestBody(txvInstallationDateEnd.getText().toString()));
+        params.put("in_start_date", toRequestBody(txvInstallationDateStart.getText().toString()));
+        params.put("bfuel", toRequestBody(edtFuel.getText().toString()));
+        params.put("btype", toRequestBody(edtType.getText().toString()));
+        params.put("bsrno", toRequestBody(edtSerialNo.getText().toString()));
+        params.put("bcode", toRequestBody(edtCode.getText().toString()));
+        params.put("bquantity", toRequestBody(edtQuantity.getText().toString()));
+        params.put("bmodel", toRequestBody(edtModel.getText().toString()));
+        params.put("bapplication", toRequestBody(edtApplication.getText().toString()));
+        params.put("contact_person", toRequestBody(edtContactPerson.getText().toString()));
 
         return params;
 

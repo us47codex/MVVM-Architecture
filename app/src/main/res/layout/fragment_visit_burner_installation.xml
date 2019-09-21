@@ -688,6 +688,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:checkedButton="@id/rdbTrainingNo"
                     android:orientation="horizontal"
                     android:weightSum="2">
 
@@ -703,6 +704,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:enabled="true"
                         android:text="No" />
                 </RadioGroup>
 
@@ -755,9 +757,9 @@
                     style="@style/editTextTheme"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:digits="12345"
                     android:drawablePadding="@dimen/_10sdp"
                     android:inputType="number"
-                    android:digits="12345"
                     android:textColor="@color/text_color"
                     android:textColorHint="@color/text_color_gray" />
 
@@ -775,9 +777,9 @@
                     style="@style/editTextTheme"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:digits="12345"
                     android:drawablePadding="@dimen/_10sdp"
                     android:inputType="number"
-                    android:digits="12345"
                     android:textColor="@color/text_color"
                     android:textColorHint="@color/text_color_gray" />
 
@@ -795,9 +797,9 @@
                     style="@style/editTextTheme"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:digits="12345"
                     android:drawablePadding="@dimen/_10sdp"
                     android:inputType="number"
-                    android:digits="12345"
                     android:textColor="@color/text_color"
                     android:textColorHint="@color/text_color_gray" />
 
@@ -815,9 +817,9 @@
                     style="@style/editTextTheme"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:digits="12345"
                     android:drawablePadding="@dimen/_10sdp"
                     android:inputType="number"
-                    android:digits="12345"
                     android:textColor="@color/text_color"
                     android:textColorHint="@color/text_color_gray" />
 
@@ -835,9 +837,9 @@
                     style="@style/editTextTheme"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:digits="12345"
                     android:drawablePadding="@dimen/_10sdp"
                     android:inputType="number"
-                    android:digits="12345"
                     android:textColor="@color/text_color"
                     android:textColorHint="@color/text_color_gray" />
 
@@ -855,9 +857,9 @@
                     style="@style/editTextTheme"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:digits="12345"
                     android:drawablePadding="@dimen/_10sdp"
                     android:inputType="number"
-                    android:digits="12345"
                     android:textColor="@color/text_color"
                     android:textColorHint="@color/text_color_gray" />
 
@@ -887,8 +889,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:visibility="gone"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:visibility="gone">
 
                 <androidx.appcompat.widget.AppCompatTextView
                     style="@style/TextInputLayout.gray"
@@ -1087,8 +1089,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:drawablePadding="@dimen/_10sdp"
-                        android:inputType="numberDecimal"
                         android:enabled="false"
+                        android:inputType="numberDecimal"
                         android:textColor="@color/text_color"
                         android:textColorHint="@color/text_color_gray" />
 
