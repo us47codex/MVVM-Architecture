@@ -399,6 +399,10 @@ public class VisitOthersFragment extends BaseFragment {
         txvDate.setText(AppUtils.getCurrentDate());
         txvWorkDateTime.setText(AppUtils.getCurrentDateTime());
         txvCheckoutDateTime.setText(AppUtils.getCurrentDateTime());
+
+        txvDate.setClickable(false);
+        txvWorkDateTime.setClickable(false);
+        txvCheckoutDateTime.setClickable(false);
         getReportNo();
     }
 

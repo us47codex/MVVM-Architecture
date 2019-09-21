@@ -374,17 +374,18 @@ public class VisitBurnerInstallationFragment extends BaseFragment {
         edtClient.setText(complaint.getCustomerFirstName());
         edtContactPerson.setText(complaint.getCustomerLastName());
         edtAttnBy.setText(getPreference().getStringValue(SunTecPreferenceManager.PREF_USER_NAME, ""));
-        edtAttnBy.setClickable(false);
         edtModel.setText(complaint.getMcModel());
-        edtModel.setClickable(false);
         edtSerialNo.setText(complaint.getSrNo());
-        edtSerialNo.setClickable(false);
         txvDate.setText(AppUtils.getCurrentDate());
-        txvDate.setClickable(false);
         txvFinishDate.setText(AppUtils.getCurrentDate());
-        txvFinishDate.setClickable(false);
         txvInstallationDateEnd.setText(AppUtils.getCurrentDate());
         txvCommissioningDateEnd.setText(AppUtils.getCurrentDate());
+
+        edtModel.setClickable(false);
+        edtSerialNo.setClickable(false);
+        edtAttnBy.setClickable(false);
+        txvDate.setClickable(false);
+        txvFinishDate.setClickable(false);
 
 //        edtTotalAmount
         edtFoods.addTextChangedListener(amountWatcher);

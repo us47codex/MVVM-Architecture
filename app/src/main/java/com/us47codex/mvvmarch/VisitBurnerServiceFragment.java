@@ -373,18 +373,18 @@ public class VisitBurnerServiceFragment extends BaseFragment {
     private void setData(Complaint complaint) {
         this.complaint = complaint;
         edtAttnBy.setText(getPreference().getStringValue(SunTecPreferenceManager.PREF_USER_NAME, ""));
-        edtAttnBy.setClickable(false);
         txvMachineType.setText(String.format("%s %s", complaint.getMcType(), AppUtils.isEmpty(complaint.getVisitType()) ? "" : ": " + complaint.getVisitType()));
         edtContactPerson.setText(complaint.getCustomerLastName());
         edtAddress.setText(complaint.getAddress());
         edtClient.setText(complaint.getCustomerFirstName());
-        txvDate.setText(AppUtils.getCurrentDate());
-        txvDate.setClickable(false);
-        txvFinishDate.setText(AppUtils.getCurrentDate());
-        txvFinishDate.setEnabled(false);
         edtModel.setText(complaint.getMcModel());
         edtSerialNo.setText(complaint.getSrNo());
+        txvDate.setText(AppUtils.getCurrentDate());
+        txvFinishDate.setText(AppUtils.getCurrentDate());
 
+        edtAttnBy.setClickable(false);
+        txvDate.setClickable(false);
+        txvFinishDate.setEnabled(false);
         edtFoods.addTextChangedListener(amountWatcher);
         edtHotelBill.addTextChangedListener(amountWatcher);
         edtConveyance.addTextChangedListener(amountWatcher);
