@@ -1,4 +1,4 @@
-package com.us47codex.mvvmarch;
+package com.us47codex.mvvmarch.complaint;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -10,6 +10,7 @@ import androidx.appcompat.widget.AppCompatTextView;
 import androidx.appcompat.widget.LinearLayoutCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.us47codex.mvvmarch.R;
 import com.us47codex.mvvmarch.helper.AppUtils;
 import com.us47codex.mvvmarch.interfaces.OnItemClickListener;
 import com.us47codex.mvvmarch.roomDatabase.Complaint;

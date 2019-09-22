@@ -1,4 +1,4 @@
-package com.us47codex.mvvmarch;
+package com.us47codex.mvvmarch.home;
 
 import android.os.Build;
 import android.os.Bundle;
@@ -19,11 +19,11 @@ import androidx.lifecycle.ViewModelProviders;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.jakewharton.rxbinding2.view.RxView;
+import com.us47codex.mvvmarch.R;
 import com.us47codex.mvvmarch.base.BaseFragment;
 import com.us47codex.mvvmarch.constant.Constants;
 import com.us47codex.mvvmarch.enums.ApiCallStatus;
 import com.us47codex.mvvmarch.helper.AppUtils;
-import com.us47codex.mvvmarch.login.LoginViewModel;
 
 import org.json.JSONObject;
 
@@ -42,17 +42,17 @@ import io.reactivex.schedulers.Schedulers;
  * Company : US47Codex
  * Email : us47codex@gmail.com
  **/
-public class ResetPasswordFragment extends BaseFragment {
+public class ChangePasswordFragment extends BaseFragment {
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
     private FrameLayout frameMain;
-    private TextInputLayout inputMobileLayout, inputOTPLayout, inputPasswordLayout, inputConfirmPasswordLayout;
-    private AppCompatButton btnUpdatePassword, btnSendOtp;
-    private TextInputEditText edtPassword, edtOTP, edtMobileNo, edtConfirmPassword;
-    private LoginViewModel loginViewModel;
+    private AppCompatButton btnChangePassword;
+    private TextInputEditText edtConfirmPassword, edtNewPassword, edtOldPassword;
+    private TextInputLayout tilConfirmPassword, tilNewPassword, tilOldPassword;
+    private HomeViewModel homeViewModel;
 
     @Override
     protected int getLayoutId() {
-        return R.layout.fragment_reset_password;
+        return R.layout.fragment_change_password;
     }
 
     @Override
@@ -62,7 +62,7 @@ public class ResetPasswordFragment extends BaseFragment {
 
     @Override
     protected String getToolbarTitle() {
-        return getString(R.string.resetPassword);
+        return getString(R.string.change_password);
     }
 
     @Override
@@ -97,7 +97,7 @@ public class ResetPasswordFragment extends BaseFragment {
 
     @Override
     protected int getCurrentFragmentId() {
-        return R.id.resetPasswordFragment;
+        return R.id.changePasswordFragment;
     }
 
     @Override
@@ -108,66 +108,72 @@ public class ResetPasswordFragment extends BaseFragment {
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             window.setStatusBarColor(getResources().getColor(R.color.white));
         }
-        loginViewModel = ViewModelProviders.of(this).get(LoginViewModel.class);
+        homeViewModel = ViewModelProviders.of(this).get(HomeViewModel.class);
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_reset_password, container, false);
+        return inflater.inflate(R.layout.fragment_change_password, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        initActionBar(view);
         initView(view);
         subscribeApiCallStatusObservable();
     }
 
-    private void initView(View view) {
-        frameMain = view.findViewById(R.id.frameMain);
-        inputMobileLayout = view.findViewById(R.id.inputMobileLayout);
-        inputOTPLayout = view.findViewById(R.id.inputOTPLayout);
-        inputPasswordLayout = view.findViewById(R.id.inputPasswordLayout);
-        inputConfirmPasswordLayout = view.findViewById(R.id.inputConfirmPasswordLayout);
-        btnUpdatePassword = view.findViewById(R.id.btnUpdatePassword);
-        btnSendOtp = view.findViewById(R.id.btnSendOtp);
-        edtPassword = view.findViewById(R.id.edtPassword);
-        edtConfirmPassword = view.findViewById(R.id.edtConfirmPassword);
-        edtOTP = view.findViewById(R.id.edtOTP);
-        edtMobileNo = view.findViewById(R.id.edtMobileNo);
-
-        handleView(false);
-
+    private void initActionBar(View view) {
         ImageView imgBackButton = view.findViewById(R.id.imageBack);
-        getCompositeDisposable().add(
+        compositeDisposable.add(
                 RxView.clicks(imgBackButton).throttleFirst(500,
-                        TimeUnit.MILLISECONDS).subscribe(o -> backToPreviousFragment(R.id.loginFragment,
+                        TimeUnit.MILLISECONDS).subscribe(o -> backToPreviousFragment(R.id.homeFragment,
                         imgBackButton, false))
         );
+    }
+
+    private void initView(View view) {
+        frameMain = view.findViewById(R.id.frameMain);
+        edtOldPassword = view.findViewById(R.id.edtOldPassword);
+        edtNewPassword = view.findViewById(R.id.edtNewPassword);
+        edtConfirmPassword = view.findViewById(R.id.edtConfirmPassword);
+        tilOldPassword = view.findViewById(R.id.tilOldPassword);
+        tilNewPassword = view.findViewById(R.id.tilNewPassword);
+        tilConfirmPassword = view.findViewById(R.id.tilConfirmPassword);
+        btnChangePassword = view.findViewById(R.id.btnChangePassword);
+
         compositeDisposable.add(
-                RxView.clicks(btnSendOtp).throttleFirst(500, TimeUnit.MILLISECONDS).subscribe(o -> {
-                    if (!AppUtils.isEmpty(edtMobileNo.getText().toString())) {
+                RxView.clicks(btnChangePassword).throttleFirst(500, TimeUnit.MILLISECONDS).subscribe(o -> {
+                    if (checkValidations()) {
                         showProgressLoader();
                         HashMap<String, String> params = new HashMap<>();
-                        params.put("mobile", edtMobileNo.getText().toString());
-                        loginViewModel.callToApi(params, LoginViewModel.OTP_SEND_API_TAG, true);
+                        params.put("old_password", edtOldPassword.getText().toString());
+                        params.put("password", edtNewPassword.getText().toString());
+                        params.put("coform_password", edtConfirmPassword.getText().toString());
+                        homeViewModel.callToApi(params, HomeViewModel.CHANGE_PASSWORD_API_TAG, true);
                     }
                 })
         );
-        compositeDisposable.add(
-                RxView.clicks(btnUpdatePassword).throttleFirst(500, TimeUnit.MILLISECONDS).subscribe(o -> {
-                    if (!AppUtils.isEmpty(edtOTP.getText().toString())
-                            && !AppUtils.isEmpty(edtPassword.getText().toString())) {
-                        showProgressLoader();
-                        HashMap<String, String> params = new HashMap<>();
-                        params.put("otp", edtOTP.getText().toString());
-                        params.put("password", edtPassword.getText().toString());
-                        params.put("conform_password", edtConfirmPassword.getText().toString());
-                        loginViewModel.callToApi(params, LoginViewModel.OTP_PASSWORD_UPDATE_API_TAG, true);
-                    }
-                })
-        );
+    }
+
+    private boolean checkValidations() {
+        String newPassword = Objects.requireNonNull(edtNewPassword.getText()).toString().trim();
+        String confirmPassword = Objects.requireNonNull(edtConfirmPassword.getText()).toString().trim();
+        if (AppUtils.isEmpty(newPassword)) {
+            tilNewPassword.setError(getString(R.string.password_length_must_be));
+            return false;
+        }
+        if (AppUtils.isEmpty(confirmPassword)) {
+            tilConfirmPassword.setError(getString(R.string.password_length_must_be));
+            return false;
+        }
+        if (!newPassword.equals(confirmPassword)) {
+            tilConfirmPassword.setError(getString(R.string.password_must_be_same));
+            return false;
+        }
+        return true;
     }
 
     @Override
@@ -176,9 +182,9 @@ public class ResetPasswordFragment extends BaseFragment {
     }
 
     private void subscribeApiCallStatusObservable() {
-        getCompositeDisposable().add(Observable.merge(loginViewModel.getStatusBehaviorRelay(),
-                loginViewModel.getErrorRelay(),
-                loginViewModel.getResponseRelay())
+        getCompositeDisposable().add(Observable.merge(homeViewModel.getStatusBehaviorRelay(),
+                homeViewModel.getErrorRelay(),
+                homeViewModel.getResponseRelay())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .onErrorReturn(throwable -> {
@@ -203,21 +209,14 @@ public class ResetPasswordFragment extends BaseFragment {
                         } else if (object instanceof Pair) {
                             Pair pair = (Pair) object;
                             if (pair.first != null) {
-                                enableDisableView(frameMain, true);
-                                hideProgressLoader();
-                                if (pair.first.equals(LoginViewModel.OTP_SEND_API_TAG)) {
-                                    handleView(true);
+                                if (pair.first.equals(HomeViewModel.CHANGE_PASSWORD_API_TAG)) {
+                                    enableDisableView(frameMain, true);
+                                    hideProgressLoader();
                                     JSONObject jsonObject = (JSONObject) pair.second;
                                     if (jsonObject != null && jsonObject.getInt(Constants.KEY_SUCCESS) == 1) {
-                                        String data = jsonObject.getString("data");
                                         showDialogWithSingleButtons(getContext(), getString(R.string.app_name),
-                                                data, Objects.requireNonNull(getActivity()).getString(R.string.ok), (dialog, which) -> {
-                                                    enableDisableView(frameMain, true);
-                                                }, false);
+                                                Objects.requireNonNull(getActivity()).getString(R.string.password_updated_successfully), Objects.requireNonNull(getActivity()).getString(R.string.ok), (dialog, which) -> backToPreviousFragment(R.id.homeFragment, frameMain, false), false);
                                     }
-
-                                } else if (pair.first.equals(LoginViewModel.OTP_PASSWORD_UPDATE_API_TAG)) {
-                                    backToPreviousFragment(R.id.loginFragment, frameMain, false);
                                 }
                             }
                         }
@@ -230,12 +229,4 @@ public class ResetPasswordFragment extends BaseFragment {
         );
     }
 
-    private void handleView(boolean isReceiveOTP) {
-        inputMobileLayout.setVisibility(isReceiveOTP ? View.GONE : View.VISIBLE);
-        inputOTPLayout.setVisibility(isReceiveOTP ? View.VISIBLE : View.GONE);
-        inputPasswordLayout.setVisibility(isReceiveOTP ? View.VISIBLE : View.GONE);
-        inputConfirmPasswordLayout.setVisibility(isReceiveOTP ? View.VISIBLE : View.GONE);
-        btnSendOtp.setVisibility(isReceiveOTP ? View.GONE : View.VISIBLE);
-        btnUpdatePassword.setVisibility(isReceiveOTP ? View.VISIBLE : View.GONE);
-    }
 }

@@ -1,4 +1,4 @@
-package com.us47codex.mvvmarch;
+package com.us47codex.mvvmarch.home;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -19,6 +19,7 @@ import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
 import com.jakewharton.rxbinding2.view.RxView;
+import com.us47codex.mvvmarch.R;
 import com.us47codex.mvvmarch.interfaces.OnItemClickListener;
 import com.us47codex.mvvmarch.models.NavDrawerModel;
 

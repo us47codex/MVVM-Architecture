@@ -1,4 +1,4 @@
-package com.us47codex.mvvmarch;
+package com.us47codex.mvvmarch.complaint;
 
 import android.os.Build;
 import android.os.Bundle;
@@ -21,8 +21,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.jakewharton.rxbinding2.view.RxView;
+import com.us47codex.mvvmarch.R;
 import com.us47codex.mvvmarch.base.BaseFragment;
-import com.us47codex.mvvmarch.complaint.ComplaintViewModel;
 import com.us47codex.mvvmarch.constant.Constants;
 import com.us47codex.mvvmarch.enums.ApiCallStatus;
 import com.us47codex.mvvmarch.roomDatabase.Complaint;

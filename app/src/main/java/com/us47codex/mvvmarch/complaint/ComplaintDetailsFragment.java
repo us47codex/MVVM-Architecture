@@ -1,4 +1,4 @@
-package com.us47codex.mvvmarch;
+package com.us47codex.mvvmarch.complaint;
 
 import android.app.Dialog;
 import android.os.Build;
@@ -22,8 +22,8 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.github.florent37.singledateandtimepicker.SingleDateAndTimePicker;
 import com.jakewharton.rxbinding2.view.RxView;
+import com.us47codex.mvvmarch.R;
 import com.us47codex.mvvmarch.base.BaseFragment;
-import com.us47codex.mvvmarch.complaint.ComplaintViewModel;
 import com.us47codex.mvvmarch.constant.Constants;
 import com.us47codex.mvvmarch.enums.ApiCallStatus;
 import com.us47codex.mvvmarch.helper.AppLog;

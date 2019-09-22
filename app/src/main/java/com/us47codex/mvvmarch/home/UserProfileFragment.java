@@ -1,4 +1,4 @@
-package com.us47codex.mvvmarch;
+package com.us47codex.mvvmarch.home;
 
 import android.Manifest;
 import android.app.Activity;
@@ -39,12 +39,13 @@ import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.jakewharton.rxbinding2.view.RxView;
+import com.us47codex.mvvmarch.R;
+import com.us47codex.mvvmarch.SunTecPreferenceManager;
 import com.us47codex.mvvmarch.base.BaseFragment;
 import com.us47codex.mvvmarch.constant.Constants;
 import com.us47codex.mvvmarch.enums.ApiCallStatus;
 import com.us47codex.mvvmarch.helper.AppLog;
 import com.us47codex.mvvmarch.helper.AppUtils;
-import com.us47codex.mvvmarch.home.HomeViewModel;
 import com.us47codex.mvvmarch.roomDatabase.User;
 
 import org.json.JSONObject;
@@ -236,7 +237,7 @@ public class UserProfileFragment extends BaseFragment {
                         params.put("department", toRequestBody(edtDepartment.getEditableText().toString()));
                         params.put("email", toRequestBody(edtMailId.getEditableText().toString()));
                         if (pictureFile != null)
-                            params.put("profile", toRequestBody(pictureFile));
+                            params.put("profile\"; filename=\"profile.jpg\"", toRequestBody(pictureFile));
                         homeViewModel.callToApi(params, HomeViewModel.POST_PROFILE_API_TAG, true);
                     }
                 })
@@ -270,6 +271,24 @@ public class UserProfileFragment extends BaseFragment {
         edtPhoneNumber.setText(getPreference().getStringValue(SunTecPreferenceManager.PREF_USER_MNO, ""));
         edtUsername.setText(getPreference().getStringValue(SunTecPreferenceManager.PREF_USER_NAME, ""));
         edtDepartment.setText(getPreference().getStringValue(SunTecPreferenceManager.PREF_USER_DEPARTMENT, ""));
+
+        Glide.with(this)
+                .setDefaultRequestOptions(new RequestOptions().error(R.drawable.ic_place_holder).placeholder(R.drawable.ic_place_holder))
+                .load(getPreference().getStringValue(SunTecPreferenceManager.PREF_USER_PROFILE, ""))
+                .listener(new RequestListener<Drawable>() {
+                    @Override
+                    public boolean onLoadFailed(@io.reactivex.annotations.Nullable GlideException e, Object model, com.bumptech.glide.request.target.Target<Drawable> target, boolean isFirstResource) {
+                        e.printStackTrace();
+                        loadingSpinner.setVisibility(View.GONE);
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onResourceReady(Drawable resource, Object model, com.bumptech.glide.request.target.Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                        loadingSpinner.setVisibility(View.GONE);
+                        return false;
+                    }
+                }).into(imgUserPic);
     }
 
     @Override

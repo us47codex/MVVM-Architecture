@@ -1,4 +1,4 @@
-package com.us47codex.mvvmarch;
+package com.us47codex.mvvmarch.base;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -20,6 +20,7 @@ import com.transitionseverywhere.Fade;
 import com.transitionseverywhere.TransitionManager;
 import com.transitionseverywhere.TransitionSet;
 import com.transitionseverywhere.extra.Scale;
+import com.us47codex.mvvmarch.R;
 import com.us47codex.mvvmarch.helper.AppLog;
 import com.us47codex.mvvmarch.helper.PublishSubjectEvent;
 
