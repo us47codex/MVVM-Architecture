@@ -242,6 +242,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Customer Name"
+                android:visibility="gone"
                 app:hintTextAppearance="@style/TextInputLayout.gray">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -357,7 +358,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:drawablePadding="@dimen/_10sdp"
-                    android:inputType="text"
+                    android:inputType="number"
                     android:textColor="@color/text_color"
                     android:textColorHint="@color/text_color_gray" />
 
@@ -472,7 +473,6 @@
                     android:layout_height="wrap_content"
                     android:drawablePadding="@dimen/_10sdp"
                     android:inputType="textMultiLine"
-                    android:minLines="2"
                     android:textColor="@color/text_color"
                     android:textColorHint="@color/text_color_gray" />
 
@@ -492,7 +492,6 @@
                     android:layout_height="wrap_content"
                     android:drawablePadding="@dimen/_10sdp"
                     android:inputType="textMultiLine"
-                    android:minLines="2"
                     android:textColor="@color/text_color"
                     android:textColorHint="@color/text_color_gray" />
 
@@ -512,7 +511,6 @@
                     android:layout_height="wrap_content"
                     android:drawablePadding="@dimen/_10sdp"
                     android:inputType="textMultiLine"
-                    android:minLines="2"
                     android:textColor="@color/text_color"
                     android:textColorHint="@color/text_color_gray" />
 
@@ -1390,7 +1388,6 @@
                     android:layout_height="wrap_content"
                     android:drawablePadding="@dimen/_10sdp"
                     android:inputType="textMultiLine"
-                    android:minLines="2"
                     android:textColor="@color/text_color"
                     android:textColorHint="@color/text_color_gray" />
 
@@ -1410,7 +1407,6 @@
                     android:layout_height="wrap_content"
                     android:drawablePadding="@dimen/_10sdp"
                     android:inputType="textMultiLine"
-                    android:minLines="2"
                     android:textColor="@color/text_color"
                     android:textColorHint="@color/text_color_gray" />
 
@@ -1506,6 +1502,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Name"
+                android:visibility="gone"
                 app:hintTextAppearance="@style/TextInputLayout.gray">
 
                 <com.google.android.material.textfield.TextInputEditText

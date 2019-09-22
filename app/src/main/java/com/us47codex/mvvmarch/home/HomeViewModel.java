@@ -25,6 +25,7 @@ import io.reactivex.SingleSource;
 import io.reactivex.functions.Function;
 import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
+import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Response;
 
@@ -69,7 +70,7 @@ public class HomeViewModel extends BaseViewModel {
                     callToDashboard((HashMap<String, String>) params, apiTag, shouldShowLoader);
                     break;
                 case POST_PROFILE_API_TAG:
-                    callToUpdateProfile((HashMap<String, String>) params, apiTag, shouldShowLoader);
+                    callToUpdateProfile((HashMap<String, RequestBody>) params, apiTag, shouldShowLoader);
                     break;
                 case CHANGE_PASSWORD_API_TAG:
                     callToChangePassword((HashMap<String, String>) params, apiTag, shouldShowLoader);
@@ -87,9 +88,9 @@ public class HomeViewModel extends BaseViewModel {
 //                        .subscribe());
     }
 
-    private void callToUpdateProfile(HashMap<String, String> params, String apiTag, boolean shouldShowLoader) {
+    private void callToUpdateProfile(HashMap<String, RequestBody> params, String apiTag, boolean shouldShowLoader) {
         getCompositeDisposable().add(
-                RestCallAPI.restCallAPI(
+                RestCallAPI.restMultipartCallAPI(
                         EndPoints.UPDATE_PROFILE,
                         getHeaders(),
                         params,

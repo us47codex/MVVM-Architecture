@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -399,7 +400,9 @@ public class VisitOthersFragment extends BaseFragment {
         txvDate.setText(AppUtils.getCurrentDate());
         txvWorkDateTime.setText(AppUtils.getCurrentDateTime());
         txvCheckoutDateTime.setText(AppUtils.getCurrentDateTime());
+        edtHeatPumpModelSerialNo.setText(String.format("%s %s", complaint.getMcModel(), complaint.getHeatPSrNo()));
 
+        edtHeatPumpModelSerialNo.setClickable(false);
         txvDate.setClickable(false);
         txvWorkDateTime.setClickable(false);
         txvCheckoutDateTime.setClickable(false);
@@ -494,13 +497,14 @@ public class VisitOthersFragment extends BaseFragment {
 
         final Dialog dialog = new Dialog(Objects.requireNonNull(getActivity()));
         dialog.setContentView(R.layout.layout_signature_view);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.setTitle(getString(R.string.signature));
         AppCompatImageView imgCancel = dialog.findViewById(R.id.imgCancel);
         AppCompatButton btnSubmit = dialog.findViewById(R.id.btnSubmit);
         AppCompatButton btnClear = dialog.findViewById(R.id.btnClear);
         SignaturePad mSignaturePad = dialog.findViewById(R.id.signature_pad);
-        btnSubmit.setVisibility(View.GONE);
-        btnClear.setVisibility(View.GONE);
+        btnSubmit.setVisibility(View.INVISIBLE);
+        btnClear.setVisibility(View.INVISIBLE);
         mSignaturePad.setBackgroundColor(Color.WHITE);
 
         mSignaturePad.setOnSignedListener(new SignaturePad.OnSignedListener() {
@@ -518,8 +522,8 @@ public class VisitOthersFragment extends BaseFragment {
 
             @Override
             public void onClear() {
-                btnSubmit.setVisibility(View.GONE);
-                btnClear.setVisibility(View.GONE);
+                btnSubmit.setVisibility(View.INVISIBLE);
+                btnClear.setVisibility(View.INVISIBLE);
                 //btnClear.setEnabled(false);
                 isSignatureCreate = false;
             }
@@ -698,9 +702,10 @@ public class VisitOthersFragment extends BaseFragment {
         HashMap<String, RequestBody> params = new HashMap<>();
         params.put("id", toRequestBody(String.valueOf(complaint.getId())));
         params.put("resolve_image", toRequestBody(""));
-        params.put("sign_customer", toRequestBody(customerSign));
-        params.put("sign_marketing", toRequestBody(marketingProjectHeadSign));
-        params.put("sign_repre", toRequestBody(suntecRepreSign));
+        params.put("sign_customer\"; filename=\"sign_customer.jpg\"", toRequestBody(customerSign));
+//        params.put("sign_customer", toRequestBody(customerSign));
+        params.put("sign_marketing\"; filename=\"sign_marketing.jpg\"", toRequestBody(marketingProjectHeadSign));
+        params.put("sign_repre\"; filename=\"sign_repre.jpg\"", toRequestBody(suntecRepreSign));
         params.put("checkout_date", toRequestBody(txvCheckoutDateTime.getText().toString()));
         params.put("spare_replace", toRequestBody(edtPartsReplaced.getText().toString()));
         params.put("work_date", toRequestBody(txvWorkDateTime.getText().toString()));
@@ -723,7 +728,7 @@ public class VisitOthersFragment extends BaseFragment {
         params.put("installation", toRequestBody(chkInstallation.isChecked() ? edtInstallation.getText().toString() : ""));
         params.put("pre_installation", toRequestBody(chkPreInstallation.isChecked() ? edtPreInstallation.getText().toString() : ""));
         params.put("services", toRequestBody(chkService.isChecked() ? edtService.getText().toString() : ""));
-        params.put("type_of_call", toRequestBody(typeOfCall.toString()));
+        params.put("type_of_call", toRequestBody(typeOfCall.toString().replace("[", "").replace("]", "")));
         params.put("complain_no_date", toRequestBody(edtComplaintNoDate.getText().toString()));
         params.put("po_no_date", toRequestBody(edtPONoDate.getText().toString()));
         params.put("equipment", toRequestBody(edtEquipment.getText().toString()));

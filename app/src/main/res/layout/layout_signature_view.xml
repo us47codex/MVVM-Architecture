@@ -2,12 +2,16 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
+    android:layout_marginStart="@dimen/_10sdp"
+    android:layout_marginTop="@dimen/_20sdp"
+    android:layout_marginEnd="@dimen/_10sdp"
+    android:layout_marginBottom="@dimen/_20sdp"
     android:background="@color/white"
+    android:orientation="vertical"
     android:weightSum="1">
 
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorPrimary"
@@ -15,61 +19,72 @@
         android:weightSum="1">
 
         <TextView
-            android:layout_width="0dp"
-            android:layout_height="40dp"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_centerInParent="true"
             android:layout_weight="1"
             android:background="@color/colorPrimary"
             android:gravity="center"
             android:padding="5dp"
-            android:textSize="14sp"
             android:text="@string/dialog_title"
-            android:textColor="@android:color/white" />
+            android:textAllCaps="true"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/_16ssp" />
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/imgCancel"
             android:layout_width="@dimen/_30sdp"
             android:layout_height="@dimen/_20sdp"
-            android:src="@drawable/ic_cancel"
-            android:tint="@color/white"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center"
             android:padding="@dimen/_2sdp"
-            android:layout_gravity="center" />
-    </LinearLayout>
+            android:src="@drawable/ic_cancel"
+            android:tint="@color/white" />
+    </RelativeLayout>
 
     <com.github.gcacace.signaturepad.views.SignaturePad
+        android:id="@+id/signature_pad"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:background="@color/white"
-        android:id="@+id/signature_pad" />
+        android:background="@color/white" />
 
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:background="#A1FFFFFF"
         android:weightSum="2">
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnClear"
+            style="?android:attr/borderlessButtonStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/_5sdp"
             android:layout_weight="1"
-            android:layout_marginEnd="@dimen/_5sdp"
-            android:background="@color/colorPrimary"
+            android:background="@drawable/round_square_button_drawable"
+            android:minWidth="@dimen/space_two_hundred"
+            android:text="@string/clear_pad"
             android:textColor="@color/white"
-            android:textSize="@dimen/_14sdp"
-            android:text="@string/clear_pad" />
+            android:textSize="@dimen/text_size_eighteen" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnSubmit"
+            style="?android:attr/borderlessButtonStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/_5sdp"
             android:layout_weight="1"
-            android:layout_marginStart="@dimen/_5sdp"
-            android:background="@color/colorPrimary"
+            android:background="@drawable/round_square_button_drawable"
+            android:minWidth="@dimen/space_two_hundred"
+            android:text="Submit"
             android:textColor="@color/white"
-            android:textSize="@dimen/_14sdp"
-            android:text="@string/submit" />
+            android:textSize="@dimen/text_size_eighteen" />
     </LinearLayout>
 
     <ImageView
@@ -77,6 +92,6 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:visibility="gone"
-        android:contentDescription="@string/app_name" />
+        android:contentDescription="@string/app_name"
+        android:visibility="gone" />
 </LinearLayout>

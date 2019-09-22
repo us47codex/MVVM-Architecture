@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import io.reactivex.Single;
+import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Response;
@@ -35,6 +36,13 @@ public interface RestApiInterface {
             @Url String url,
             @HeaderMap Map<String, String> headers,
             @PartMap HashMap<String, RequestBody> params);
+
+    @Multipart
+    @POST()
+    Single<Response<ResponseBody>> callMultipartApi1(
+            @Url String url,
+            @HeaderMap Map<String, String> headers,
+            @PartMap HashMap<String, RequestBody> params, @PartMap HashMap<String, MultipartBody.Part> params1);
 
     @Multipart
     @POST()

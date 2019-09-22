@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -301,6 +302,8 @@ public class VisitBurnerServiceFragment extends BaseFragment {
         edtServoMotorLow = view.findViewById(R.id.edtServoMotorLow);
         edtDammperPositionLow = view.findViewById(R.id.edtDammperPositionLow);
 
+        tilName = view.findViewById(R.id.tilName);
+
         btnSubmitReport = view.findViewById(R.id.btnSubmitReport);
 
         getCompositeDisposable().add(
@@ -340,9 +343,12 @@ public class VisitBurnerServiceFragment extends BaseFragment {
                 switch (checkedId) {
                     case R.id.rdbTrainingYes:
                         training = "Yes";
+                        tilName.setVisibility(View.VISIBLE);
                         break;
                     case R.id.rdbTrainingNo:
                         training = "No";
+                        edtName.setText("");
+                        tilName.setVisibility(View.GONE);
                         break;
                 }
             }
@@ -494,13 +500,14 @@ public class VisitBurnerServiceFragment extends BaseFragment {
 
         final Dialog dialog = new Dialog(Objects.requireNonNull(getActivity()));
         dialog.setContentView(R.layout.layout_signature_view);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.setTitle(getString(R.string.signature));
         AppCompatImageView imgCancel = dialog.findViewById(R.id.imgCancel);
         AppCompatButton btnSubmit = dialog.findViewById(R.id.btnSubmit);
         AppCompatButton btnClear = dialog.findViewById(R.id.btnClear);
         SignaturePad mSignaturePad = dialog.findViewById(R.id.signature_pad);
-        btnSubmit.setVisibility(View.GONE);
-        btnClear.setVisibility(View.GONE);
+        btnSubmit.setVisibility(View.INVISIBLE);
+        btnClear.setVisibility(View.INVISIBLE);
         mSignaturePad.setBackgroundColor(Color.WHITE);
 
         mSignaturePad.setOnSignedListener(new SignaturePad.OnSignedListener() {
@@ -518,8 +525,8 @@ public class VisitBurnerServiceFragment extends BaseFragment {
 
             @Override
             public void onClear() {
-                btnSubmit.setVisibility(View.GONE);
-                btnClear.setVisibility(View.GONE);
+                btnSubmit.setVisibility(View.INVISIBLE);
+                btnClear.setVisibility(View.INVISIBLE);
                 //btnClear.setEnabled(false);
                 isSignatureCreate = false;
             }
@@ -691,7 +698,7 @@ public class VisitBurnerServiceFragment extends BaseFragment {
     }
 
     private HashMap<String, RequestBody> prepareBurnerServiceParams() {
-        //        Complain Visit Burner
+//        Complain Visit Burner
 //        Service/Breakdown
 //        AND AMC
 
@@ -719,8 +726,8 @@ public class VisitBurnerServiceFragment extends BaseFragment {
         params.put("bdamper_pos_high", toRequestBody(edtDammperPositionHigh.getText().toString()));
         params.put("id", toRequestBody(String.valueOf(complaint.getId())));
         params.put("resolve_image", toRequestBody(""));
-        params.put("sign_repre", toRequestBody(signAndStamp));
-        params.put("sign_customer", toRequestBody(customerSign));
+        params.put("sign_repre\"; filename=\"sign_repre.jpg\"", toRequestBody(signAndStamp));
+        params.put("sign_customer\"; filename=\"sign_customer.jpg\"", toRequestBody(customerSign));
         params.put("tax", toRequestBody(edtFoods.getText().toString()));
         params.put("others", toRequestBody(edtHotelBill.getText().toString()));
         params.put("to_form", toRequestBody(edtTransport.getText().toString()));

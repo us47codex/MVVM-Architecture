@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -270,6 +271,8 @@ public class VisitBurnerInstallationFragment extends BaseFragment {
         edtApplication = view.findViewById(R.id.edtApplication);
         edtTotalAmount = view.findViewById(R.id.edtTotalAmount);
 
+        tilName = view.findViewById(R.id.tilName);
+
         imgSignatureAndStamp = view.findViewById(R.id.imgSignatureAndStamp);
         imgCustomerSign = view.findViewById(R.id.imgCustomerSign);
         rdgTraining = view.findViewById(R.id.rdgTraining);
@@ -336,9 +339,12 @@ public class VisitBurnerInstallationFragment extends BaseFragment {
                 switch (checkedId) {
                     case R.id.rdbTrainingYes:
                         training = "Yes";
+                        tilName.setVisibility(View.VISIBLE);
                         break;
                     case R.id.rdbTrainingNo:
                         training = "No";
+                        edtName.setText("");
+                        tilName.setVisibility(View.GONE);
                         break;
                 }
             }
@@ -380,21 +386,25 @@ public class VisitBurnerInstallationFragment extends BaseFragment {
         txvFinishDate.setText(AppUtils.getCurrentDate());
         txvInstallationDateEnd.setText(AppUtils.getCurrentDate());
         txvCommissioningDateEnd.setText(AppUtils.getCurrentDate());
+        txvCheckoutDateTime.setText(AppUtils.getCurrentDateTime());
 
         edtModel.setClickable(false);
         edtSerialNo.setClickable(false);
         edtAttnBy.setClickable(false);
         txvDate.setClickable(false);
         txvFinishDate.setClickable(false);
+        edtTotalAmount.setClickable(false);
+        txvInstallationDateEnd.setClickable(false);
+        txvCommissioningDateEnd.setClickable(false);
+        txvCheckoutDateTime.setClickable(false);
+        txvCheckoutDateTime.setClickable(false);
 
-//        edtTotalAmount
         edtFoods.addTextChangedListener(amountWatcher);
         edtHotelBill.addTextChangedListener(amountWatcher);
         edtConveyance.addTextChangedListener(amountWatcher);
         edtTransport.addTextChangedListener(amountWatcher);
         edtServiceCharge.addTextChangedListener(amountWatcher);
 
-        edtTotalAmount.setClickable(false);
         getReportNo();
     }
 
@@ -495,13 +505,14 @@ public class VisitBurnerInstallationFragment extends BaseFragment {
 
         final Dialog dialog = new Dialog(Objects.requireNonNull(getActivity()));
         dialog.setContentView(R.layout.layout_signature_view);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.setTitle(getString(R.string.signature));
         AppCompatImageView imgCancel = dialog.findViewById(R.id.imgCancel);
         AppCompatButton btnSubmit = dialog.findViewById(R.id.btnSubmit);
         AppCompatButton btnClear = dialog.findViewById(R.id.btnClear);
         SignaturePad mSignaturePad = dialog.findViewById(R.id.signature_pad);
-        btnSubmit.setVisibility(View.GONE);
-        btnClear.setVisibility(View.GONE);
+        btnSubmit.setVisibility(View.INVISIBLE);
+        btnClear.setVisibility(View.INVISIBLE);
         mSignaturePad.setBackgroundColor(Color.WHITE);
 
         mSignaturePad.setOnSignedListener(new SignaturePad.OnSignedListener() {
@@ -519,8 +530,8 @@ public class VisitBurnerInstallationFragment extends BaseFragment {
 
             @Override
             public void onClear() {
-                btnSubmit.setVisibility(View.GONE);
-                btnClear.setVisibility(View.GONE);
+                btnSubmit.setVisibility(View.INVISIBLE);
+                btnClear.setVisibility(View.INVISIBLE);
                 //btnClear.setEnabled(false);
                 isSignatureCreate = false;
             }
@@ -686,8 +697,8 @@ public class VisitBurnerInstallationFragment extends BaseFragment {
         HashMap<String, RequestBody> params = new HashMap<>();
         params.put("id", toRequestBody(String.valueOf(complaint.getId())));
         params.put("resolve_image", toRequestBody(""));
-        params.put("sign_repre", toRequestBody(suntecRepreSign));
-        params.put("sign_customer", toRequestBody(customerSign));
+        params.put("sign_repre\"; filename=\"sign_repre.jpg\"", toRequestBody(suntecRepreSign));
+        params.put("sign_customer\"; filename=\"sign_customer.jpg\"", toRequestBody(customerSign));
         params.put("battn_by", toRequestBody(edtAttnBy.getText().toString()));
         params.put("bclient", toRequestBody(edtClient.getText().toString()));
         params.put("badress", toRequestBody(edtAddress.getText().toString()));

@@ -612,7 +612,7 @@
                     android:layout_height="wrap_content"
                     android:drawablePadding="@dimen/_10sdp"
                     android:inputType="textMultiLine"
-                    android:minLines="2"
+
                     android:textColor="@color/text_color"
                     android:textColorHint="@color/text_color_gray" />
 
@@ -632,7 +632,6 @@
                     android:layout_height="wrap_content"
                     android:drawablePadding="@dimen/_10sdp"
                     android:inputType="textMultiLine"
-                    android:minLines="2"
                     android:textColor="@color/text_color"
                     android:textColorHint="@color/text_color_gray" />
 
@@ -652,7 +651,6 @@
                     android:layout_height="wrap_content"
                     android:drawablePadding="@dimen/_10sdp"
                     android:inputType="textMultiLine"
-                    android:minLines="2"
                     android:textColor="@color/text_color"
                     android:textColorHint="@color/text_color_gray" />
 
@@ -672,7 +670,6 @@
                     android:layout_height="wrap_content"
                     android:drawablePadding="@dimen/_10sdp"
                     android:inputType="textMultiLine"
-                    android:minLines="2"
                     android:textColor="@color/text_color"
                     android:textColorHint="@color/text_color_gray" />
 
@@ -692,7 +689,6 @@
                     android:layout_height="wrap_content"
                     android:drawablePadding="@dimen/_10sdp"
                     android:inputType="textMultiLine"
-                    android:minLines="2"
                     android:textColor="@color/text_color"
                     android:textColorHint="@color/text_color_gray" />
 
@@ -712,7 +708,6 @@
                     android:layout_height="wrap_content"
                     android:drawablePadding="@dimen/_10sdp"
                     android:inputType="textMultiLine"
-                    android:minLines="2"
                     android:textColor="@color/text_color"
                     android:textColorHint="@color/text_color_gray" />
 
@@ -775,7 +770,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:drawablePadding="@dimen/_10sdp"
-                    android:inputType="numberDecimal"
+                    android:inputType="textMultiLine"
                     android:textColor="@color/text_color"
                     android:textColorHint="@color/text_color_gray" />
             </com.google.android.material.textfield.TextInputLayout>

@@ -64,6 +64,9 @@ import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
+import okhttp3.RequestBody;
+
+import static com.us47codex.mvvmarch.helper.AppUtils.toRequestBody;
 
 /**
  * Created by Upendra Shah on 30 August, 2019 for
@@ -94,6 +97,7 @@ public class UserProfileFragment extends BaseFragment {
     private String realPath = "";
     private Bitmap mBitmap;
     private String imageUrl = "";
+    private File pictureFile;
 
     @Override
     protected int getLayoutId() {
@@ -222,15 +226,17 @@ public class UserProfileFragment extends BaseFragment {
                         TimeUnit.MILLISECONDS).subscribe(o -> {
                     if (checkValidations()) {
                         showProgressLoader();
-                        HashMap<String, String> params = new HashMap<>();
-                        params.put("id", getPreference().getStringValue(SunTecPreferenceManager.PREF_USER_ID, ""));
-                        params.put("first_name", edtFirstName.getEditableText().toString());
-                        params.put("middle_name", edtMiddleName.getEditableText().toString());
-                        params.put("last_name", edtLastName.getEditableText().toString());
-                        params.put("mno", edtPhoneNumber.getEditableText().toString());
-                        params.put("username", edtUsername.getEditableText().toString());
-                        params.put("department", edtDepartment.getEditableText().toString());
-                        params.put("email", edtMailId.getEditableText().toString());
+                        HashMap<String, RequestBody> params = new HashMap<>();
+                        params.put("id", toRequestBody(getPreference().getStringValue(SunTecPreferenceManager.PREF_USER_ID, "")));
+                        params.put("first_name", toRequestBody(edtFirstName.getEditableText().toString()));
+                        params.put("middle_name", toRequestBody(edtMiddleName.getEditableText().toString()));
+                        params.put("last_name", toRequestBody(edtLastName.getEditableText().toString()));
+                        params.put("mno", toRequestBody(edtPhoneNumber.getEditableText().toString()));
+                        params.put("username", toRequestBody(edtUsername.getEditableText().toString()));
+                        params.put("department", toRequestBody(edtDepartment.getEditableText().toString()));
+                        params.put("email", toRequestBody(edtMailId.getEditableText().toString()));
+                        if (pictureFile != null)
+                            params.put("profile", toRequestBody(pictureFile));
                         homeViewModel.callToApi(params, HomeViewModel.POST_PROFILE_API_TAG, true);
                     }
                 })
@@ -396,7 +402,6 @@ public class UserProfileFragment extends BaseFragment {
         Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         cameraIntent.putExtra(MediaStore.EXTRA_FINISH_ON_COMPLETION, true);
         if (cameraIntent.resolveActivity(Objects.requireNonNull(getActivity()).getPackageManager()) != null) {
-            File pictureFile;
             try {
                 pictureFile = getPictureFile();
             } catch (IOException ex) {

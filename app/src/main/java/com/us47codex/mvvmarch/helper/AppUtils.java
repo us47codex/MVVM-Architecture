@@ -51,6 +51,7 @@ import io.reactivex.Completable;
 import io.reactivex.Single;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.MediaType;
+import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 
 public class AppUtils {
@@ -431,7 +432,13 @@ public class AppUtils {
 
     public static RequestBody toRequestBody(File file) {
 //        File file = new File("file_name");
-        return RequestBody.create(MediaType.parse("image/png"), file);
+        return RequestBody.create(MediaType.parse("image/jpg"), file);
+    }
+
+    public static MultipartBody.Part toRequestBody1(File file) {
+//        File file = new File("file_name");
+        RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+        return MultipartBody.Part.createFormData("image", file.getName(), requestFile);
     }
 
 }
