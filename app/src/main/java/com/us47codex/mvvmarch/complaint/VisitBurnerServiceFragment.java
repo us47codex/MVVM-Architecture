@@ -664,7 +664,7 @@ public class VisitBurnerServiceFragment extends BaseFragment {
         params.put("sign_customer", AppUtils.covertBitmapToBase64(bitmapCustomerSign));
         params.put("tax", edtFoods.getText().toString());
         params.put("others", edtHotelBill.getText().toString());
-        params.put("to_form", edtTransport.getText().toString());
+        params.put("to_from", edtTransport.getText().toString());
         params.put("conveyance", edtContactPerson.getText().toString());
         params.put("services_charges", edtServiceCharge.getText().toString());
         params.put("training_given_by", edtName.getText().toString());
@@ -760,6 +760,9 @@ public class VisitBurnerServiceFragment extends BaseFragment {
         params.put("bmodel", toRequestBody(edtModel.getText().toString()));
         params.put("bapplication", toRequestBody(edtApplication.getText().toString()));
         params.put("contact_person", toRequestBody(edtContactPerson.getText().toString()));
+        params.put("battn_by", toRequestBody(edtAttnBy.getText().toString()));
+        params.put("bclient", toRequestBody(edtClient.getText().toString()));
+        params.put("badress", toRequestBody(edtAddress.getText().toString()));
 
         return params;
 
