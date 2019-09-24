@@ -20,6 +20,9 @@ import android.util.Log;
 import android.view.Display;
 import android.view.WindowManager;
 
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkManager;
+
 import com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork;
 import com.github.pwittchen.reactivenetwork.library.rx2.internet.observing.InternetObservingSettings;
 import com.github.pwittchen.reactivenetwork.library.rx2.internet.observing.InternetObservingStrategy;
@@ -29,8 +32,10 @@ import com.github.pwittchen.reactivenetwork.library.rx2.internet.observing.strat
 import com.us47codex.mvvmarch.BuildConfig;
 import com.us47codex.mvvmarch.R;
 import com.us47codex.mvvmarch.SunTecApplication;
+import com.us47codex.mvvmarch.SunTecPreferenceManager;
 import com.us47codex.mvvmarch.constant.Constants;
 import com.us47codex.mvvmarch.constant.EndPoints;
+import com.us47codex.mvvmarch.location.LocationWorkManager;
 
 import org.json.JSONObject;
 
@@ -44,6 +49,7 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.Random;
 import java.util.TimeZone;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -57,6 +63,7 @@ import okhttp3.RequestBody;
 public class AppUtils {
 
     private static final String TAG = AppUtils.class.getSimpleName();
+    public static final String TAG_MY_WORK = "SUNTEC";
 
     public static boolean isEmpty(String strValue) {
         return TextUtils.isEmpty(strValue) || strValue.equals("null") ||
@@ -440,5 +447,19 @@ public class AppUtils {
         RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
         return MultipartBody.Part.createFormData("image", file.getName(), requestFile);
     }
+
+    public static void callWorkManager() {
+        try {
+            PeriodicWorkRequest.Builder dataCheckBuilder = new PeriodicWorkRequest.Builder(LocationWorkManager.class,
+                    1, TimeUnit.HOURS);
+            dataCheckBuilder.addTag(TAG_MY_WORK);
+            PeriodicWorkRequest dataCheckWork = dataCheckBuilder.build();
+            WorkManager.getInstance().enqueue(dataCheckWork);
+            SunTecApplication.getInstance().getPreferenceManager().putStringValue(SunTecPreferenceManager.PREF_LOCATION_ID,String.valueOf(dataCheckWork.getId()));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 
 }
