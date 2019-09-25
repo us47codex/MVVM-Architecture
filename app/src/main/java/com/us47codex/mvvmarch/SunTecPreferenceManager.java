@@ -25,6 +25,7 @@ public class SunTecPreferenceManager {
     public static final String PREF_USER_MNO = "user_mno";
     public static final String PREF_USER_DEPARTMENT = "user_department";
     public static final String PREF_USER_PROFILE = "user_profile";
+    public static final String PREF_LOCATION_ID = "add_location_id";
 
 
     // Constructor
