@@ -48,7 +48,7 @@ public interface UserDao {
     Single<List<User>> getAllUsers();
 
     @Query("DELETE FROM tbl_user")
-    void deleteAllUser();
+    Completable deleteAllUser();
 
 //    @Transaction
 //    public void updateUserByUserId(User user) {

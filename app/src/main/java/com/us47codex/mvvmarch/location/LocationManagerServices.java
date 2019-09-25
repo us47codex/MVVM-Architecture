@@ -61,9 +61,9 @@ public class LocationManagerServices extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        try{
+        try {
             init();
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -99,32 +99,18 @@ public class LocationManagerServices extends Service {
     }
 
 
-    private void makeUseOfNewLocation(Location location){
-            if(location != null){
-                if (location.getLatitude() != 0.0 && location.getLongitude() != 0.0) {
-                        if(!AppUtils.isEmpty(SunTecApplication.getInstance().getPreferenceManager().getStringValue(SunTecPreferenceManager.PREF_USER_ID,""))){
+    private void makeUseOfNewLocation(Location location) {
+        if (location != null) {
+            if (location.getLatitude() != 0.0 && location.getLongitude() != 0.0) {
+                if (!AppUtils.isEmpty(SunTecApplication.getInstance().getPreferenceManager().getStringValue(SunTecPreferenceManager.PREF_USER_ID, ""))) {
 
-                            Log.e(TAG, "latitude >>: " + location.getLatitude());
-                            Log.e(TAG, "longitude >>: " + location.getLongitude());
-                        }else{
-                            mFusedLocationClient.removeLocationUpdates(mLocationCallback);
-                        }
-
-                }else{
-                    if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                            && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                        // TODO: Consider calling
-                        //    ActivityCompat#requestPermissions
-                        // here to request the missing permissions, and then overriding
-                        //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                        //                                          int[] grantResults)
-                        // to handle the case where the user grants the permission. See the documentation
-                        // for ActivityCompat#requestPermissions for more details.
-                        stopSelf();
-                        return;
-                    }
+                    Log.e(TAG, "latitude >>: " + location.getLatitude());
+                    Log.e(TAG, "longitude >>: " + location.getLongitude());
+                } else {
+                    mFusedLocationClient.removeLocationUpdates(mLocationCallback);
                 }
-            }else{
+
+            } else {
                 if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                         && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                     // TODO: Consider calling
@@ -137,8 +123,22 @@ public class LocationManagerServices extends Service {
                     stopSelf();
                     return;
                 }
-
             }
+        } else {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                    && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                // TODO: Consider calling
+                //    ActivityCompat#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for ActivityCompat#requestPermissions for more details.
+                stopSelf();
+                return;
+            }
+
+        }
 
         stopSelf();
     }

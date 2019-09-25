@@ -1146,7 +1146,7 @@
                     android:gravity="center"
                     android:paddingStart="@dimen/_5sdp"
                     android:paddingEnd="@dimen/_5sdp"
-                    android:text="Signature and Stamp"
+                    android:text="Suntec Representative Signature"
                     android:textColor="@color/text_color_gray"
                     android:textSize="@dimen/_12ssp"
                     tools:ignore="HardcodedText" />

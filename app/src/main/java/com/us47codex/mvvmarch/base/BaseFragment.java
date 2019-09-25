@@ -244,8 +244,8 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
                             return new User();
                         })
                         .doOnSuccess(user -> {
-                            userName.setText(String.format("%s %s", user.getFirst_name(), user.getLast_name()));
-                            txtSortName.setText(String.format("%s%s", user.getFirst_name().substring(0, 1), user.getLast_name().substring(0, 1)));
+                            userName.setText(String.format("%s %s", getPreference().getStringValue(SunTecPreferenceManager.PREF_USER_FIRST_NAME, "Please"), getPreference().getStringValue(SunTecPreferenceManager.PREF_USER_LAST_NAME, "Login Again")));
+                            txtSortName.setText(String.format("%s%s", getPreference().getStringValue(SunTecPreferenceManager.PREF_USER_FIRST_NAME, "Please").substring(0, 1), getPreference().getStringValue(SunTecPreferenceManager.PREF_USER_LAST_NAME, "Login Again").substring(0, 1)));
                         })
                         .doOnError(Throwable::printStackTrace)
                         .subscribe()
@@ -460,6 +460,8 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
     private void clearAllDataFromApp() {
         compositeDisposable.add(
                 AppUtils.clearPreference()
+                        .andThen(getDatabase().userDao().deleteAllUser())
+                        .andThen(getDatabase().complaintDao().deleteAllComplaint())
                         .subscribeOn(Schedulers.computation())
                         .observeOn(AndroidSchedulers.mainThread())
                         .doOnComplete(() -> {

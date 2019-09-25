@@ -23,7 +23,6 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.work.WorkInfo;
 import androidx.work.WorkManager;
 
-import com.github.mikephil.charting.utils.Utils;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.us47codex.mvvmarch.R;
@@ -139,7 +138,7 @@ public class HomeFragment extends BaseFragment {
         checkLocation();
     }
 
-    private void checkLocation(){
+    private void checkLocation() {
         if (ActivityCompat.checkSelfPermission(Objects.requireNonNull(getActivity()), Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED &&
                 ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION)
@@ -279,14 +278,14 @@ public class HomeFragment extends BaseFragment {
     private boolean isWorkScheduled() {
         try {
             boolean running = false;
-            if (TextUtils.isEmpty(SunTecApplication.getInstance().getPreferenceManager().getStringValue(SunTecPreferenceManager.PREF_LOCATION_ID,""))) {
+            if (TextUtils.isEmpty(SunTecApplication.getInstance().getPreferenceManager().getStringValue(SunTecPreferenceManager.PREF_LOCATION_ID, ""))) {
                 return false;
             }
-            String strUUID =SunTecApplication.getInstance().getPreferenceManager().getStringValue(SunTecPreferenceManager.PREF_LOCATION_ID,"");
+            String strUUID = SunTecApplication.getInstance().getPreferenceManager().getStringValue(SunTecPreferenceManager.PREF_LOCATION_ID, "");
             //if(UUID.fromString(MyApplication.getInstance().getPrefManager().getLocationId().equals("null"))
             if (!TextUtils.isEmpty(strUUID) && !strUUID.equals("null")) {
                 strUUID = String.valueOf(UUID.fromString(strUUID));
-                ListenableFuture<WorkInfo> workStatus1 = WorkManager.getInstance().getWorkInfoById(UUID.fromString(SunTecApplication.getInstance().getPreferenceManager().getStringValue(SunTecPreferenceManager.PREF_LOCATION_ID,"")));
+                ListenableFuture<WorkInfo> workStatus1 = WorkManager.getInstance().getWorkInfoById(UUID.fromString(SunTecApplication.getInstance().getPreferenceManager().getStringValue(SunTecPreferenceManager.PREF_LOCATION_ID, "")));
                 // workStatus1.get().getState();
                 try {
                     if (workStatus1.get().getState() == WorkInfo.State.ENQUEUED) {

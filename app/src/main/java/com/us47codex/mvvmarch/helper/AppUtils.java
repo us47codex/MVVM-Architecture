@@ -439,6 +439,9 @@ public class AppUtils {
 
     public static RequestBody toRequestBody(File file) {
 //        File file = new File("file_name");
+        if (file == null) {
+            return RequestBody.create(MediaType.parse("image/jpg"), "");
+        }
         return RequestBody.create(MediaType.parse("image/jpg"), file);
     }
 
@@ -455,7 +458,7 @@ public class AppUtils {
             dataCheckBuilder.addTag(TAG_MY_WORK);
             PeriodicWorkRequest dataCheckWork = dataCheckBuilder.build();
             WorkManager.getInstance().enqueue(dataCheckWork);
-            SunTecApplication.getInstance().getPreferenceManager().putStringValue(SunTecPreferenceManager.PREF_LOCATION_ID,String.valueOf(dataCheckWork.getId()));
+            SunTecApplication.getInstance().getPreferenceManager().putStringValue(SunTecPreferenceManager.PREF_LOCATION_ID, String.valueOf(dataCheckWork.getId()));
         } catch (Exception e) {
             e.printStackTrace();
         }
