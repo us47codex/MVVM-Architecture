@@ -47,7 +47,7 @@ public interface ComplaintDao {
     Single<List<Complaint>> getAllComplaintsByStatus(String status);
 
     @Query("DELETE FROM tbl_complaints")
-    void deleteAllComplaint();
+    Completable deleteAllComplaint();
 
 //    @Transaction
 //    public void updateUserByUserId(User user) {

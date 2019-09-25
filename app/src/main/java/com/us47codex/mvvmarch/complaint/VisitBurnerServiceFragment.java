@@ -362,8 +362,10 @@ public class VisitBurnerServiceFragment extends BaseFragment {
     }
 
     private void submitReport() {
-        showProgressLoader();
-        complaintViewModel.callToApi(prepareBurnerServiceParams(), ComplaintViewModel.BURNER_SERVICE_COMPLAINT_VISIT_API_TAG, true);
+        if (isValidated()) {
+            showProgressLoader();
+            complaintViewModel.callToApi(prepareBurnerServiceParams(), ComplaintViewModel.BURNER_SERVICE_COMPLAINT_VISIT_API_TAG, true);
+        }
     }
 
     private void getReportNo() {
@@ -705,6 +707,7 @@ public class VisitBurnerServiceFragment extends BaseFragment {
 
         HashMap<String, RequestBody> params = new HashMap<>();
         params.put("spare_replace", toRequestBody(edtSpareReplace.getText().toString()));
+        params.put("report_no", toRequestBody(edtReportNo.getText().toString()));
         params.put("action_taken", toRequestBody(edtActionTakenWork.getText().toString()));
         params.put("root_of_cause", toRequestBody(edtRootOfCause.getText().toString()));
         params.put("nature_problem", toRequestBody(edtNatureOfProblem.getText().toString()));
@@ -816,6 +819,18 @@ public class VisitBurnerServiceFragment extends BaseFragment {
             dialogWakeUpCall.show();
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    private boolean isValidated() {
+        if (signAndStamp == null) {
+            Toast.makeText(getContext(), "Please add Signature And Stamp", Toast.LENGTH_SHORT).show();
+            return false;
+        } else if (customerSign == null) {
+            Toast.makeText(getContext(), "Please add Customer Signature", Toast.LENGTH_SHORT).show();
+            return false;
+        } else {
+            return true;
         }
     }
 }

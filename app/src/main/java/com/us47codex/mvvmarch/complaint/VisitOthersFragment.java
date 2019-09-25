@@ -628,8 +628,10 @@ public class VisitOthersFragment extends BaseFragment {
     }
 
     private void submitReport() {
-        showProgressLoader();
-        complaintViewModel.callToApi(prepareParam(), ComplaintViewModel.HEAT_PUMP_COMPLAIN_VISIT_API_TAG, true);
+        if (isValidated()) {
+            showProgressLoader();
+            complaintViewModel.callToApi(prepareParam(), ComplaintViewModel.HEAT_PUMP_COMPLAIN_VISIT_API_TAG, true);
+        }
     }
 
     private void getReportNo() {
@@ -799,6 +801,20 @@ public class VisitOthersFragment extends BaseFragment {
         }
     }
 
+    private boolean isValidated() {
+        if (suntecRepreSign == null) {
+            Toast.makeText(getContext(), "Please add Suntec Representative Signature", Toast.LENGTH_SHORT).show();
+            return false;
+        } else if (customerSign == null) {
+            Toast.makeText(getContext(), "Please add Customer Signature", Toast.LENGTH_SHORT).show();
+            return false;
+        } else if (marketingProjectHeadSign == null) {
+            Toast.makeText(getContext(), "Please add Marketing / Project Head Signature", Toast.LENGTH_SHORT).show();
+            return false;
+        } else {
+            return true;
+        }
+    }
 }
 
 

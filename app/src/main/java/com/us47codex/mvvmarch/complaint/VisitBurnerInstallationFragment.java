@@ -358,8 +358,10 @@ public class VisitBurnerInstallationFragment extends BaseFragment {
     }
 
     private void submitReport() {
-        showProgressLoader();
-        complaintViewModel.callToApi(prepareBurnerInstallationParams(), ComplaintViewModel.BURNER_INSTALLATION_COMPLAINT_VISIT_API_TAG, true);
+        if (isValidated()) {
+            showProgressLoader();
+            complaintViewModel.callToApi(prepareBurnerInstallationParams(), ComplaintViewModel.BURNER_INSTALLATION_COMPLAINT_VISIT_API_TAG, true);
+        }
     }
 
     private void getReportNo() {
@@ -697,6 +699,7 @@ public class VisitBurnerInstallationFragment extends BaseFragment {
 
         HashMap<String, RequestBody> params = new HashMap<>();
         params.put("id", toRequestBody(String.valueOf(complaint.getId())));
+        params.put("report_no", toRequestBody(edtReportNo.getText().toString()));
         params.put("resolve_image", toRequestBody(""));
         params.put("sign_repre\"; filename=\"sign_repre.jpg\"", toRequestBody(suntecRepreSign));
         params.put("sign_customer\"; filename=\"sign_customer.jpg\"", toRequestBody(customerSign));
@@ -787,6 +790,18 @@ public class VisitBurnerInstallationFragment extends BaseFragment {
             dialogWakeUpCall.show();
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    private boolean isValidated() {
+        if (suntecRepreSign == null) {
+            Toast.makeText(getContext(), "Please add Suntec Representative Signature", Toast.LENGTH_SHORT).show();
+            return false;
+        } else if (customerSign == null) {
+            Toast.makeText(getContext(), "Please add Customer Signature", Toast.LENGTH_SHORT).show();
+            return false;
+        } else {
+            return true;
         }
     }
 }

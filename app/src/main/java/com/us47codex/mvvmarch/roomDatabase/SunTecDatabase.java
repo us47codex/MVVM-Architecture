@@ -46,4 +46,8 @@ public abstract class SunTecDatabase extends RoomDatabase {
 // Since we didn't alter the table, there's nothing else to do here.
         }
     };
+
+//    public Completable clearAllTables1(){
+//        return Observable
+//    }
 }
