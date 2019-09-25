@@ -432,6 +432,9 @@ public class AppUtils {
 
     public static RequestBody toRequestBody(File file) {
 //        File file = new File("file_name");
+        if (file == null) {
+            return RequestBody.create(MediaType.parse("image/jpg"), "");
+        }
         return RequestBody.create(MediaType.parse("image/jpg"), file);
     }
 

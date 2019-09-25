@@ -794,10 +794,11 @@ public class VisitBurnerInstallationFragment extends BaseFragment {
     }
 
     private boolean isValidated() {
-        if (suntecRepreSign == null) {
+        /*if (suntecRepreSign == null) {
             Toast.makeText(getContext(), "Please add Suntec Representative Signature", Toast.LENGTH_SHORT).show();
             return false;
-        } else if (customerSign == null) {
+        } else */
+        if (customerSign == null) {
             Toast.makeText(getContext(), "Please add Customer Signature", Toast.LENGTH_SHORT).show();
             return false;
         } else {

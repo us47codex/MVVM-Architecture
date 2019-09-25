@@ -823,10 +823,11 @@ public class VisitBurnerServiceFragment extends BaseFragment {
     }
 
     private boolean isValidated() {
-        if (signAndStamp == null) {
+        /*if (signAndStamp == null) {
             Toast.makeText(getContext(), "Please add Signature And Stamp", Toast.LENGTH_SHORT).show();
             return false;
-        } else if (customerSign == null) {
+        } else */
+        if (customerSign == null) {
             Toast.makeText(getContext(), "Please add Customer Signature", Toast.LENGTH_SHORT).show();
             return false;
         } else {
