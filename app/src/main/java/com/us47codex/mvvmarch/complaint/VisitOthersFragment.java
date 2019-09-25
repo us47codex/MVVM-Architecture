@@ -281,8 +281,8 @@ public class VisitOthersFragment extends BaseFragment {
         });
         chkWarranty.setOnCheckedChangeListener((compoundButton, b) -> {
             tilWarranty.setVisibility(b ? View.VISIBLE : View.GONE);
-            if (b) typeOfCall.add("Warranty");
-            else typeOfCall.remove("Warranty");
+            if (b) typeOfCall.add("warranty");
+            else typeOfCall.remove("warranty");
         });
         chkChargeable.setOnCheckedChangeListener((compoundButton, b) -> {
             tilChargeable.setVisibility(b ? View.VISIBLE : View.GONE);

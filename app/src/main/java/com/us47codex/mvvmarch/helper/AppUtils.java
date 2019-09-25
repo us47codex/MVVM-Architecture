@@ -451,18 +451,16 @@ public class AppUtils {
         return MultipartBody.Part.createFormData("image", file.getName(), requestFile);
     }
 
-    public static void callWorkManager() {
+    public static void callWorkManager(Context context) {
         try {
             PeriodicWorkRequest.Builder dataCheckBuilder = new PeriodicWorkRequest.Builder(LocationWorkManager.class,
                     1, TimeUnit.HOURS);
             dataCheckBuilder.addTag(TAG_MY_WORK);
             PeriodicWorkRequest dataCheckWork = dataCheckBuilder.build();
-            WorkManager.getInstance().enqueue(dataCheckWork);
+            WorkManager.getInstance(context).enqueue(dataCheckWork);
             SunTecApplication.getInstance().getPreferenceManager().putStringValue(SunTecPreferenceManager.PREF_LOCATION_ID, String.valueOf(dataCheckWork.getId()));
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-
-
 }

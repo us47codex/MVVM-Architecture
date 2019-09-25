@@ -59,7 +59,7 @@ public class ComplaintDetailsFragment extends BaseFragment {
     private AppCompatTextView txvComplaintNo, txvStatus, txvCustomerName, txvMobile, txvEmail, txvDealerName, txvMachineType,
             txvMachineModel, txvSerialNo, txvReferenceAlternateNumber, txvAddress, txvProblemDescription, txvComplaintBy,
             txvAssignee, txvComplaintDate, txvScheduleDate, txvCloseDate;
-    private AppCompatButton btnVisit, btnSchedule, btnVisitReport;
+    private AppCompatButton btnStarWork, btnSchedule, btnVisitReport;
     private ComplaintViewModel complaintViewModel;
     private long complainId;
     private Dialog dialogWakeUpCall;
@@ -200,7 +200,7 @@ public class ComplaintDetailsFragment extends BaseFragment {
         txvCloseDate = view.findViewById(R.id.txvCloseDate);
 
         btnSchedule = view.findViewById(R.id.btnSchedule);
-        btnVisit = view.findViewById(R.id.btnVisit);
+        btnStarWork = view.findViewById(R.id.btnStarWork);
         btnVisitReport = view.findViewById(R.id.btnVisitReport);
 
         compositeDisposable.add(
@@ -210,9 +210,9 @@ public class ComplaintDetailsFragment extends BaseFragment {
                 })
         );
         compositeDisposable.add(
-                RxView.clicks(btnVisit).throttleFirst(500,
+                RxView.clicks(btnStarWork).throttleFirst(500,
                         TimeUnit.MILLISECONDS).subscribe(o -> {
-
+                    btnVisitReport.setVisibility(View.VISIBLE);
                 })
         );
         compositeDisposable.add(
@@ -259,20 +259,20 @@ public class ComplaintDetailsFragment extends BaseFragment {
         if (complaint.getStatus().equalsIgnoreCase(Constants.STATUS_OPEN)) {
             btnSchedule.setText("Schedule");
             btnSchedule.setVisibility(View.VISIBLE);
-            btnVisit.setVisibility(View.GONE);
+            btnStarWork.setVisibility(View.GONE);
             btnVisitReport.setVisibility(View.GONE);
         } else if (complaint.getStatus().equalsIgnoreCase(Constants.STATUS_SCHEDULE)) {
             btnSchedule.setText("Reschedule");
             btnSchedule.setVisibility(View.VISIBLE);
-            btnVisit.setVisibility(View.GONE);
-            btnVisitReport.setVisibility(View.VISIBLE);
+            btnStarWork.setVisibility(View.VISIBLE);
+            btnVisitReport.setVisibility(View.GONE);
 //        } else if (complaint.getStatus().equalsIgnoreCase(Constants.STATUS_CLOSED)) {
 //            btnSchedule.setVisibility(View.GONE);
 //            btnVisit.setVisibility(View.GONE);
 //            btnVisitReport.setVisibility(View.VISIBLE);
         } else {
             btnSchedule.setVisibility(View.GONE);
-            btnVisit.setVisibility(View.GONE);
+            btnStarWork.setVisibility(View.GONE);
             btnVisitReport.setVisibility(View.GONE);
         }
 

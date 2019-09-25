@@ -547,14 +547,14 @@
                     android:visibility="visible" />
 
                 <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/btnVisit"
+                    android:id="@+id/btnStarWork"
                     style="?android:attr/borderlessButtonStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:background="@drawable/round_square_button_drawable"
                     android:minWidth="@dimen/space_two_hundred"
-                    android:text="Visit"
+                    android:text="Start Work"
                     android:textColor="@color/white"
                     android:textSize="@dimen/text_size_eighteen"
                     android:visibility="gone" />
