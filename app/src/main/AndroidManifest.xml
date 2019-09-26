@@ -40,6 +40,9 @@
             </intent-filter>
         </activity>
 
+        <service android:name=".location.LocationManagerServices"
+            android:enabled="true"/>
+
         <!-- Android 8.0 camera Intent file provider -->
         <!--<provider
             android:name="com.us47codex.mvvmarch.helper.MyFileProvider"

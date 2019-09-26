@@ -454,7 +454,7 @@ public class AppUtils {
     public static void callWorkManager(Context context) {
         try {
             PeriodicWorkRequest.Builder dataCheckBuilder = new PeriodicWorkRequest.Builder(LocationWorkManager.class,
-                    1, TimeUnit.HOURS);
+                    15, TimeUnit.MINUTES);
             dataCheckBuilder.addTag(TAG_MY_WORK);
             PeriodicWorkRequest dataCheckWork = dataCheckBuilder.build();
             WorkManager.getInstance(context).enqueue(dataCheckWork);
