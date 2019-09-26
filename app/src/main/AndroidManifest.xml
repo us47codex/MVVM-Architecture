@@ -64,5 +64,6 @@
                 android:resource="@xml/file_path" />
         </provider>
 
+        <service android:name=".location.LocationManagerServices" />
     </application>
 </manifest>

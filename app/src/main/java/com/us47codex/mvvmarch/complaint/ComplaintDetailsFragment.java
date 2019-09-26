@@ -212,6 +212,7 @@ public class ComplaintDetailsFragment extends BaseFragment {
         compositeDisposable.add(
                 RxView.clicks(btnStarWork).throttleFirst(500,
                         TimeUnit.MILLISECONDS).subscribe(o -> {
+                    btnStarWork.setVisibility(View.GONE);
                     btnVisitReport.setVisibility(View.VISIBLE);
                 })
         );

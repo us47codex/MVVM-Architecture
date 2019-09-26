@@ -55,6 +55,7 @@ public class ComplaintViewModel extends BaseViewModel {
     public static final String BURNER_INSTALLATION_COMPLAINT_VISIT_API_TAG = "BURNER_INSTALLATION_COMPLAINT_VISIT_API_TAG";
     public static final String BURNER_SERVICE_COMPLAINT_VISIT_API_TAG = "BURNER_SERVICE_COMPLAINT_VISIT_API_TAG";
     public static final String GET_REPORT_NO_API_TAG = "GET_REPORT_NO_API_TAG";
+    public static final String WORK_START_API_TAG = "WORK_START_API_TAG";
 
     public ComplaintViewModel(@NonNull Application application) {
         super(application);
@@ -105,6 +106,9 @@ public class ComplaintViewModel extends BaseViewModel {
 
                 case GET_REPORT_NO_API_TAG:
                     callToGetReportNo((HashMap<String, String>) params, apiTag, shouldShowLoader);
+                    break;
+                case WORK_START_API_TAG:
+                    callToWorkStart((HashMap<String, String>) params, apiTag, shouldShowLoader);
                     break;
             }
         } catch (Exception e) {
@@ -333,6 +337,43 @@ public class ComplaintViewModel extends BaseViewModel {
         getCompositeDisposable().add(
                 RestCallAPI.restCallAPI(
                         EndPoints.GET_REPORT_NO,
+                        getHeaders(),
+                        params,
+                        new DisposableSingleObserver<Response<ResponseBody>>() {
+                            @Override
+                            public void onSuccess(Response<ResponseBody> response) {
+                                try {
+                                    JSONObject jsonObject = parseOnSuccess(response, apiTag, shouldShowLoader);
+                                    if (jsonObject != null) {
+                                        AppLog.error(TAG, "User Login :" + jsonObject.toString());
+                                        String data = jsonObject.getString("data");
+                                        if (shouldShowLoader) {
+                                            getStatusBehaviorRelay().accept(ApiCallStatus.SUCCESS);
+                                        }
+                                        getResponseRelay().accept(new Pair<>(apiTag, jsonObject));
+
+                                    }
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                    if (shouldShowLoader)
+                                        getStatusBehaviorRelay().accept(ApiCallStatus.ERROR);
+                                    getErrorRelay().accept(Objects.requireNonNull(e.getLocalizedMessage()));
+                                }
+                            }
+
+                            @Override
+                            public void onError(Throwable e) {
+                                e.printStackTrace();
+                                parseOnError(e, apiTag, shouldShowLoader);
+                            }
+                        }
+                ));
+    }
+
+    private void callToWorkStart(HashMap<String, String> params, String apiTag, boolean shouldShowLoader) {
+        getCompositeDisposable().add(
+                RestCallAPI.restCallAPI(
+                        EndPoints.WORK_START,
                         getHeaders(),
                         params,
                         new DisposableSingleObserver<Response<ResponseBody>>() {
