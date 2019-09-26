@@ -1,6 +1,8 @@
 package com.us47codex.mvvmarch.home;
 
 import android.Manifest;
+import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -31,7 +33,9 @@ import com.us47codex.mvvmarch.SunTecPreferenceManager;
 import com.us47codex.mvvmarch.base.BaseFragment;
 import com.us47codex.mvvmarch.constant.Constants;
 import com.us47codex.mvvmarch.enums.ApiCallStatus;
+import com.us47codex.mvvmarch.helper.AppLog;
 import com.us47codex.mvvmarch.helper.AppUtils;
+import com.us47codex.mvvmarch.location.LocationManagerServices;
 
 import org.json.JSONObject;
 
@@ -41,6 +45,7 @@ import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
+import io.reactivex.Completable;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
@@ -60,6 +65,12 @@ public class HomeFragment extends BaseFragment {
     private LinearLayout llTotalComplaints, llClosedComplaints, llScheduleComplaints, llOpenComplaints;
     private HomeViewModel homeViewModel;
     private String total_complain, open_complain, closed_complain, today_schedule_complain;
+    private static final int REQUEST_LOCATION = 1001;
+    private final int ALL_PERMISSIONS_REQUEST_CODE = 1111;
+    private final String[] ALL_PERMISSIONS = {
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION
+    };
 
 
     @Override
@@ -135,9 +146,31 @@ public class HomeFragment extends BaseFragment {
         initView(view);
         getDashboardDataFromServer();
         subscribeApiCallStatusObservable();
-        checkLocation();
+        requestLocationPermissions();
+
+        getContext().stopService(new Intent(getContext(), LocationManagerServices.class));
+        getContext().startService(new Intent(getContext(), LocationManagerServices.class));
     }
 
+    private void requestLocationPermissions() {
+        compositeDisposable.add(
+                Completable.timer(1, TimeUnit.SECONDS)
+                        .subscribeOn(Schedulers.newThread())
+                        .doOnError(Throwable::printStackTrace)
+                        .doOnComplete(() -> {
+                            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M)
+                                return;
+                            if (!hasPermissions(getActivity(), ALL_PERMISSIONS)) {
+                                ActivityCompat.requestPermissions(getActivity(), ALL_PERMISSIONS,
+                                        ALL_PERMISSIONS_REQUEST_CODE);
+                            } else {
+                                checkLocation();
+                            }
+                        })
+                        .subscribe()
+        );
+
+    }
     private void checkLocation() {
         if (ActivityCompat.checkSelfPermission(Objects.requireNonNull(getActivity()), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
@@ -152,6 +185,41 @@ public class HomeFragment extends BaseFragment {
                 AppUtils.callWorkManager(getContext());
             }
         }
+    }
+
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        if (requestCode == ALL_PERMISSIONS_REQUEST_CODE) {
+            for (int i = 0; i < grantResults.length; i++) {
+                if (grantResults[i] == PackageManager.PERMISSION_GRANTED) {
+                    AppLog.error("TAG", permissions[i] + " :: PERMISSION_GRANTED");
+                } else if (grantResults[i] == PackageManager.PERMISSION_DENIED) {
+                    if (!hasPermissions(getActivity(), ALL_PERMISSIONS)) {
+                        ActivityCompat.requestPermissions(getActivity(), new String[]{permissions[i]},
+                                ALL_PERMISSIONS_REQUEST_CODE);
+                    }
+                }
+
+            }
+
+            if (hasPermissions(getActivity(), ALL_PERMISSIONS)) {
+                checkLocation();
+            }
+        }
+    }
+
+    private static boolean hasPermissions(Context context, String... permissions) {
+        if (context != null && permissions != null) {
+            for (String permission : permissions) {
+                if (ActivityCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     private void initView(View view) {

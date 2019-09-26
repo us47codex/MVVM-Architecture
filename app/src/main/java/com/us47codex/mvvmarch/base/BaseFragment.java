@@ -30,6 +30,7 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.work.WorkManager;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -465,6 +466,7 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
                         .subscribeOn(Schedulers.computation())
                         .observeOn(AndroidSchedulers.mainThread())
                         .doOnComplete(() -> {
+                            WorkManager.getInstance(Objects.requireNonNull(getContext())).cancelAllWork();
                             jumpToDestinationFragment(getCurrentFragmentId(), R.id.toLoginFragment, frameMain, null, true);
                         })
                         .doOnError(Throwable::printStackTrace)
