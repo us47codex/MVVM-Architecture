@@ -41,6 +41,7 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.us47codex.mvvmarch.R;
+import com.us47codex.mvvmarch.SunTecApplication;
 import com.us47codex.mvvmarch.SunTecPreferenceManager;
 import com.us47codex.mvvmarch.base.BaseFragment;
 import com.us47codex.mvvmarch.constant.Constants;
@@ -213,11 +214,15 @@ public class VisitBurnerInstallationFragment extends BaseFragment {
         initView(view);
         getComplainFromDB();
         subscribeApiCallStatusObservable();
+        if(isPremissionGranted(getContext())){
+            getLocation(getContext());
+        }else{
+            requestLocationPermissions();
+        }
     }
 
     private void initActionBar(View view) {
         ImageView imgBackButton = view.findViewById(R.id.imageBack);
-
         compositeDisposable.add(
                 RxView.clicks(imgBackButton).throttleFirst(500,
                         TimeUnit.MILLISECONDS).subscribe(o -> backToPreviousFragment(R.id.complaintDetailsFragment,
@@ -737,11 +742,12 @@ public class VisitBurnerInstallationFragment extends BaseFragment {
         params.put("bmodel", toRequestBody(edtModel.getText().toString()));
         params.put("bapplication", toRequestBody(edtApplication.getText().toString()));
         params.put("contact_person", toRequestBody(edtContactPerson.getText().toString()));
-        params.put("out_long", toRequestBody(""));
-        params.put("out_lat", toRequestBody(""));
+        params.put("out_lat", toRequestBody(String.valueOf(SunTecApplication.getInstance().latitude)));
+        params.put("out_long", toRequestBody(String.valueOf(SunTecApplication.getInstance().longitude)));
         return params;
 
     }
+
 
     protected void showDialogSelectDate(AppCompatTextView appCompatTextView) {
         if (dialogWakeUpCall != null) {

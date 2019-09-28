@@ -40,6 +40,7 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.us47codex.mvvmarch.R;
+import com.us47codex.mvvmarch.SunTecApplication;
 import com.us47codex.mvvmarch.base.BaseFragment;
 import com.us47codex.mvvmarch.constant.Constants;
 import com.us47codex.mvvmarch.enums.ApiCallStatus;
@@ -189,6 +190,11 @@ public class VisitOthersFragment extends BaseFragment {
         initView(view);
         getComplainFromDB();
         subscribeApiCallStatusObservable();
+        if(isPremissionGranted(getContext())){
+            getLocation(getContext());
+        }else{
+            requestLocationPermissions();
+        }
     }
 
     private void initActionBar(View view) {
@@ -746,8 +752,9 @@ public class VisitOthersFragment extends BaseFragment {
         params.put("contact_person", toRequestBody(edtContactPerson.getText().toString()));
         params.put("report_no", toRequestBody(edtReportNo.getText().toString()));
         params.put("reason_incomplete", toRequestBody(edtReasonIncomplete.getText().toString()));
-        params.put("out_long", toRequestBody(""));
-        params.put("out_lat", toRequestBody(""));
+        params.put("out_lat", toRequestBody(String.valueOf(SunTecApplication.getInstance().latitude)));
+        params.put("out_long", toRequestBody(String.valueOf(SunTecApplication.getInstance().longitude)));
+
         return params;
     }
 

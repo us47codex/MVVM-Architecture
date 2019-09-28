@@ -16,6 +16,7 @@ public class SunTecApplication extends Application {
     private static SunTecApplication mInstance;
     private SunTecPreferenceManager pref;
     private SunTecDatabase sunTecDatabase;
+    public double latitude,longitude;
 
     @Override
     public void onCreate() {

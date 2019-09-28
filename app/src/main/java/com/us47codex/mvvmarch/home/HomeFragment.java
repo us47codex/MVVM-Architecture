@@ -146,13 +146,13 @@ public class HomeFragment extends BaseFragment {
         initView(view);
         getDashboardDataFromServer();
         subscribeApiCallStatusObservable();
-        requestLocationPermissions();
+        requestLocationPermissionsOne();
 
         getContext().stopService(new Intent(getContext(), LocationManagerServices.class));
         getContext().startService(new Intent(getContext(), LocationManagerServices.class));
     }
 
-    private void requestLocationPermissions() {
+    private void requestLocationPermissionsOne() {
         compositeDisposable.add(
                 Completable.timer(1, TimeUnit.SECONDS)
                         .subscribeOn(Schedulers.newThread())

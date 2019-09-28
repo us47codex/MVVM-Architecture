@@ -31,6 +31,7 @@ import androidx.lifecycle.ViewModelProviders;
 import com.github.florent37.singledateandtimepicker.SingleDateAndTimePicker;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.us47codex.mvvmarch.R;
+import com.us47codex.mvvmarch.SunTecApplication;
 import com.us47codex.mvvmarch.base.BaseFragment;
 import com.us47codex.mvvmarch.constant.Constants;
 import com.us47codex.mvvmarch.enums.ApiCallStatus;
@@ -151,7 +152,12 @@ public class ComplaintDetailsFragment extends BaseFragment {
         initView(view);
         getComplainFromDB();
         subscribeApiCallStatusObservable();
-        getLocation();
+        //getLocation();
+        if(isPremissionGranted(getContext())){
+            getLocation(getContext());
+        }else{
+            requestLocationPermissions();
+        }
     }
 
     private void initActionBar(View view) {
@@ -224,8 +230,8 @@ public class ComplaintDetailsFragment extends BaseFragment {
                     showProgressLoader();
                     HashMap<String, String> params = new HashMap<>();
                     params.put("complain_id", String.valueOf(complainId));
-                    params.put("in_lat", "");
-                    params.put("in_long", "");
+                    params.put("in_lat", String.valueOf(SunTecApplication.getInstance().latitude));
+                    params.put("in_long", String.valueOf(SunTecApplication.getInstance().longitude));
                     complaintViewModel.callToApi(params, ComplaintViewModel.WORK_START_API_TAG, false);
 
                 })

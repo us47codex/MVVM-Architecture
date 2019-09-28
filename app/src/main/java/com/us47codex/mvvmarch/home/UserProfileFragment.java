@@ -381,7 +381,6 @@ public class UserProfileFragment extends BaseFragment {
                         })
                         .subscribe()
         );
-
     }
 
     private static boolean hasPermissions(Context context, String... permissions) {

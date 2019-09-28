@@ -1,9 +1,14 @@
 package com.us47codex.mvvmarch.base;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
+import android.location.Location;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Looper;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,14 +18,18 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.appcompat.widget.LinearLayoutCompat;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -34,6 +43,13 @@ import androidx.work.WorkManager;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.location.SettingsClient;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.us47codex.mvvmarch.R;
 import com.us47codex.mvvmarch.SunTecApplication;
@@ -51,6 +67,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
+import io.reactivex.Completable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
@@ -65,6 +82,19 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
     private AppCompatTextView userRole, userName, txtSortName;
     private RecyclerView recyclerViewMenu;
     private final List<NavDrawerModel> navDrawerModelList = new ArrayList<>();
+    private FusedLocationProviderClient mFusedLocationClient;
+    private SettingsClient mSettingsClient;
+    private LocationRequest mLocationRequest;
+    private LocationSettingsRequest mLocationSettingsRequest;
+    private LocationCallback mLocationCallback;
+    private Location mCurrentLocation;
+
+    private final int ALL_PERMISSIONS_REQUEST_CODE = 1111;
+    private final String[] ALL_PERMISSIONS = {
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.ACCESS_FINE_LOCATION
+    };
+
 
     protected abstract
     @LayoutRes
@@ -458,6 +488,9 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
         }
     }
 
+
+
+
     private void clearAllDataFromApp() {
         compositeDisposable.add(
                 AppUtils.clearPreference()
@@ -498,4 +531,131 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
     public void onOtherItemSave(int id, View view, String value) {
 
     }
+
+    public boolean isPremissionGranted(Context context){
+        return Build.VERSION.SDK_INT >= 23 &&
+                ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED;
+    }
+
+    public void getLocation(Context context) {
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(context);
+        mSettingsClient = LocationServices.getSettingsClient(context);
+        mLocationCallback = new LocationCallback() {
+            @RequiresApi(api = Build.VERSION_CODES.M)
+            @Override
+            public void onLocationResult(LocationResult locationResult) {
+                super.onLocationResult(locationResult);
+                mCurrentLocation = locationResult.getLastLocation();
+                makeUseOfNewLocation(context,mCurrentLocation);
+            }
+        };
+
+        mLocationRequest = new LocationRequest();
+        mLocationRequest.setInterval(1);
+        mLocationRequest.setFastestInterval(1);
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder();
+        builder.addLocationRequest(mLocationRequest);
+        mLocationSettingsRequest = builder.build();
+        startLocationUpdates(context);
+    }
+
+
+
+    private void makeUseOfNewLocation(Context context, Location location) {
+        if (location != null) {
+            if (location.getLatitude() != 0.0 && location.getLongitude() != 0.0) {
+                if (!AppUtils.isEmpty(SunTecApplication.getInstance().getPreferenceManager().getStringValue(SunTecPreferenceManager.PREF_USER_ID, ""))) {
+
+                    Log.e(TAG, "latitude >>: " + location.getLatitude());
+                    Log.e(TAG, "longitude >>: " + location.getLongitude());
+
+                    SunTecApplication.getInstance().latitude = location.getLatitude();
+                    SunTecApplication.getInstance().longitude = location.getLongitude();
+
+                    Toast.makeText(context, "lat : long :: "+ location.getLatitude() + " / " + location.getLongitude(), Toast.LENGTH_SHORT).show();
+                } else {
+                    mFusedLocationClient.removeLocationUpdates(mLocationCallback);
+                }
+
+            } else {
+                if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                        && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    // TODO: Consider calling
+                    //    ActivityCompat#requestPermissions
+                    // here to request the missing permissions, and then overriding
+                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                    //                                          int[] grantResults)
+                    // to handle the case where the user grants the permission. See the documentation
+                    // for ActivityCompat#requestPermissions for more details.
+                    mFusedLocationClient.removeLocationUpdates(mLocationCallback);
+                    return;
+                }
+            }
+        } else {
+            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                    && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                // TODO: Consider calling
+                //    ActivityCompat#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for ActivityCompat#requestPermissions for more details.
+                mFusedLocationClient.removeLocationUpdates(mLocationCallback);
+                return;
+            }
+
+        }
+
+        mFusedLocationClient.removeLocationUpdates(mLocationCallback);
+    }
+    private void startLocationUpdates(Context context) {
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            mFusedLocationClient.removeLocationUpdates(mLocationCallback);
+            return;
+        }
+//        mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper());
+
+    }
+
+    public void requestLocationPermissions() {
+        compositeDisposable.add(
+                Completable.timer(1, TimeUnit.SECONDS)
+                        .subscribeOn(Schedulers.newThread())
+                        .doOnError(Throwable::printStackTrace)
+                        .doOnComplete(() -> {
+                            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M)
+                                return;
+                            if (!hasPermissions(getActivity(), ALL_PERMISSIONS)) {
+                                ActivityCompat.requestPermissions(getActivity(), ALL_PERMISSIONS,ALL_PERMISSIONS_REQUEST_CODE);
+                            } else {
+                                getLocation(getContext());
+                            }
+                        })
+                        .subscribe()
+        );
+    }
+
+    private static boolean hasPermissions(Context context, String... permissions) {
+        if (context != null && permissions != null) {
+            for (String permission : permissions) {
+                if (ActivityCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+
 }
