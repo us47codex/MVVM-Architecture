@@ -737,7 +737,8 @@ public class VisitBurnerInstallationFragment extends BaseFragment {
         params.put("bmodel", toRequestBody(edtModel.getText().toString()));
         params.put("bapplication", toRequestBody(edtApplication.getText().toString()));
         params.put("contact_person", toRequestBody(edtContactPerson.getText().toString()));
-
+        params.put("out_long", toRequestBody(""));
+        params.put("out_lat", toRequestBody(""));
         return params;
 
     }

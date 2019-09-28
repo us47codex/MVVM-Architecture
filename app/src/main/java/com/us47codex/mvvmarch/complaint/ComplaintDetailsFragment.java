@@ -1,8 +1,15 @@
 package com.us47codex.mvvmarch.complaint;
 
+import android.Manifest;
 import android.app.Dialog;
+import android.content.Context;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +19,7 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -143,6 +151,7 @@ public class ComplaintDetailsFragment extends BaseFragment {
         initView(view);
         getComplainFromDB();
         subscribeApiCallStatusObservable();
+        getLocation();
     }
 
     private void initActionBar(View view) {
@@ -212,8 +221,13 @@ public class ComplaintDetailsFragment extends BaseFragment {
         compositeDisposable.add(
                 RxView.clicks(btnStarWork).throttleFirst(500,
                         TimeUnit.MILLISECONDS).subscribe(o -> {
-                    btnStarWork.setVisibility(View.GONE);
-                    btnVisitReport.setVisibility(View.VISIBLE);
+                    showProgressLoader();
+                    HashMap<String, String> params = new HashMap<>();
+                    params.put("complain_id", String.valueOf(complainId));
+                    params.put("in_lat", "");
+                    params.put("in_long", "");
+                    complaintViewModel.callToApi(params, ComplaintViewModel.WORK_START_API_TAG, false);
+
                 })
         );
         compositeDisposable.add(
@@ -419,6 +433,14 @@ public class ComplaintDetailsFragment extends BaseFragment {
                                                     backToPreviousFragment(R.id.complaintsFragment, frameMain, false);
                                                 }, false);
                                     }
+                                } else if (pair.first.equals(ComplaintViewModel.WORK_START_API_TAG)) {
+                                    hideProgressLoader();
+                                    enableDisableView(frameMain, true);
+                                    JSONObject jsonObject = (JSONObject) pair.second;
+                                    if (jsonObject != null && jsonObject.getInt(Constants.KEY_SUCCESS) == 1) {
+                                        btnStarWork.setVisibility(View.GONE);
+                                        btnVisitReport.setVisibility(View.VISIBLE);
+                                    }
                                 }
                             }
                         }
@@ -429,5 +451,52 @@ public class ComplaintDetailsFragment extends BaseFragment {
                 .doOnError(Throwable::printStackTrace)
                 .subscribe()
         );
+    }
+
+    private void getLocation() {
+        try {
+            LocationManager lm = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                if (getContext().checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                        && getContext().checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    // TODO: Consider calling
+                    //    Activity#requestPermissions
+                    // here to request the missing permissions, and then overriding
+                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                    //                                          int[] grantResults)
+                    // to handle the case where the user grants the permission. See the documentation
+                    // for Activity#requestPermissions for more details.
+                    return;
+                }
+            }
+//        Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+
+            lm.requestSingleUpdate(lm.isProviderEnabled(LocationManager.GPS_PROVIDER) ? LocationManager.GPS_PROVIDER : LocationManager.NETWORK_PROVIDER, new LocationListener() {
+                @Override
+                public void onLocationChanged(Location location) {
+                    double longitude = location.getLongitude();
+                    double latitude = location.getLatitude();
+                    Toast.makeText(getContext(), "Lat :: " + latitude + " Long :: " + longitude, Toast.LENGTH_SHORT).show();
+
+                }
+
+                @Override
+                public void onStatusChanged(String s, int i, Bundle bundle) {
+
+                }
+
+                @Override
+                public void onProviderEnabled(String s) {
+
+                }
+
+                @Override
+                public void onProviderDisabled(String s) {
+
+                }
+            }, Looper.myLooper());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

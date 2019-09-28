@@ -746,7 +746,8 @@ public class VisitOthersFragment extends BaseFragment {
         params.put("contact_person", toRequestBody(edtContactPerson.getText().toString()));
         params.put("report_no", toRequestBody(edtReportNo.getText().toString()));
         params.put("reason_incomplete", toRequestBody(edtReasonIncomplete.getText().toString()));
-
+        params.put("out_long", toRequestBody(""));
+        params.put("out_lat", toRequestBody(""));
         return params;
     }
 

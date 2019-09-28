@@ -766,6 +766,8 @@ public class VisitBurnerServiceFragment extends BaseFragment {
         params.put("battn_by", toRequestBody(edtAttnBy.getText().toString()));
         params.put("bclient", toRequestBody(edtClient.getText().toString()));
         params.put("badress", toRequestBody(edtAddress.getText().toString()));
+        params.put("out_long", toRequestBody(""));
+        params.put("out_lat", toRequestBody(""));
 
         return params;
 
