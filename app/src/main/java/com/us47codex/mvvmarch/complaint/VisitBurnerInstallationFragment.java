@@ -214,7 +214,7 @@ public class VisitBurnerInstallationFragment extends BaseFragment {
         initView(view);
         getComplainFromDB();
         subscribeApiCallStatusObservable();
-        if(isPremissionGranted(getContext())){
+        if(isPermissionGranted(getContext())){
             getLocation(getContext());
         }else{
             requestLocationPermissions();

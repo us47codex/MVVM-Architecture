@@ -2,12 +2,15 @@ package com.us47codex.mvvmarch.base;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -71,6 +74,8 @@ import io.reactivex.Completable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
+
+import static android.content.Context.LOCATION_SERVICE;
 
 public abstract class BaseFragment extends Fragment implements View.OnClickListener, OnItemClickListener {
     private static final String TAG = BaseFragment.class.getSimpleName();
@@ -380,6 +385,11 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
         }
     };
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        checkGPSISEnable();
+    }
 
     protected void showDialogWithSingleButtons(Context context, String title, String msg, String positiveButtonName,
                                                MaterialDialog.SingleButtonCallback positiveButtonCallback, boolean cancelable) {
@@ -532,7 +542,7 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
 
     }
 
-    public boolean isPremissionGranted(Context context){
+    public boolean isPermissionGranted(Context context){
         return Build.VERSION.SDK_INT >= 23 &&
                 ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
                 ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED;
@@ -657,5 +667,16 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
         return true;
     }
 
+
+    private void checkGPSISEnable(){
+        LocationManager service = (LocationManager) getContext().getSystemService(LOCATION_SERVICE);
+        boolean enabled = service.isProviderEnabled(LocationManager.GPS_PROVIDER);
+
+        // Check if enabled and if not send user to the GPS settings
+        if (!enabled) {
+            Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+            startActivity(intent);
+        }
+    }
 
 }

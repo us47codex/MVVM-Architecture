@@ -153,7 +153,7 @@ public class ComplaintDetailsFragment extends BaseFragment {
         getComplainFromDB();
         subscribeApiCallStatusObservable();
         //getLocation();
-        if(isPremissionGranted(getContext())){
+        if(isPermissionGranted(getContext())){
             getLocation(getContext());
         }else{
             requestLocationPermissions();

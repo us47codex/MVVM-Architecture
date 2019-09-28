@@ -200,7 +200,11 @@ public abstract class BaseViewModel extends AndroidViewModel {
                         if (showProgressBar) {
                             getStatusBehaviorRelay().accept(ApiCallStatus.ERROR);
                         }
-                        getErrorRelay().accept(jsonObject.getString(Constants.KEY_MESSAGE));
+                        if(jsonObject.has(Constants.KEY_MESSAGE)) {
+                            getErrorRelay().accept(jsonObject.getString(Constants.KEY_MESSAGE));
+                        }else if(jsonObject.has(Constants.KEY_ERROR)){
+                            getErrorRelay().accept(jsonObject.getString(Constants.KEY_ERROR));
+                        }
                     } catch (Exception e) {
                         if (showProgressBar) {
                             getStatusBehaviorRelay().accept(ApiCallStatus.ERROR);
