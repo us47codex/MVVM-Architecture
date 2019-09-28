@@ -1,8 +1,12 @@
 package com.us47codex.mvvmarch.base;
 
 import android.Manifest;
+import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
@@ -37,6 +41,7 @@ import androidx.core.content.res.ResourcesCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -46,18 +51,22 @@ import androidx.work.WorkManager;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.android.gms.location.SettingsClient;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.us47codex.mvvmarch.R;
 import com.us47codex.mvvmarch.SunTecApplication;
 import com.us47codex.mvvmarch.SunTecPreferenceManager;
 import com.us47codex.mvvmarch.constant.Constants;
+import com.us47codex.mvvmarch.helper.AppLog;
 import com.us47codex.mvvmarch.helper.AppUtils;
 import com.us47codex.mvvmarch.home.NavigationDrawerAdapter;
 import com.us47codex.mvvmarch.interfaces.OnItemClickListener;
@@ -95,6 +104,7 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
     private Location mCurrentLocation;
 
     private final int ALL_PERMISSIONS_REQUEST_CODE = 1111;
+    private static final int REQUEST_CHECK_SETTINGS = 100;
     private final String[] ALL_PERMISSIONS = {
             Manifest.permission.ACCESS_COARSE_LOCATION,
             Manifest.permission.ACCESS_FINE_LOCATION
@@ -221,6 +231,11 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
                 }
             }
         }
+
+        mSettingsClient = LocationServices.getSettingsClient(getContext());
+
+        LocalBroadcastManager.getInstance(getContext()).registerReceiver(mRegistrationBroadcastReceiverForLocationManagerChagne,
+                new IntentFilter(Constants.SYSTEM_LOCATION_MANAGER_CHANGE));
     }
 
     private void initDrawerFragment(View view) {
@@ -443,6 +458,8 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
         if (getCompositeDisposable() != null && getCompositeDisposable().size() > 0) {
             getCompositeDisposable().clear();
         }
+
+        LocalBroadcastManager.getInstance(getContext()).unregisterReceiver(mRegistrationBroadcastReceiverForLocationManagerChagne);
         System.gc();
     }
 
@@ -679,4 +696,28 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
         }
     }
 
+    public BroadcastReceiver mRegistrationBroadcastReceiverForLocationManagerChagne = new BroadcastReceiver() {
+        @RequiresApi(api = Build.VERSION_CODES.M)
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction().equals(Constants.SYSTEM_LOCATION_MANAGER_CHANGE)) {
+                startLocationUpdates();
+            }else{
+                AppLog.error(TAG,"else  ");
+            }
+        }
+    };
+
+    private void startLocationUpdates() {
+        showDialogWithTwoButtons(getContext(), getString(R.string.app_name), getString(R.string.location_str) + " " + getString(R.string.app_name), getString(R.string.cancel), getString(R.string.ok), new MaterialDialog.SingleButtonCallback() {
+            @Override
+            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                startLocationUpdates();
+            }
+        }, (dialog, which) -> {
+            Intent myIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+            startActivity(myIntent);
+            dialog.dismiss();
+        },true);
+    }
 }

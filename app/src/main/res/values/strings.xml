@@ -74,7 +74,7 @@
     <string name="save_profile">Save Profile</string>
     <string name="complaint">Complaints</string>
     <string name="resetPassword">Reset Password</string>
-    <string name="coming_soon">Coming Soon</string>
+    <string name="coming_soon">Coming Soon</string>V
     <string name="yes">Yes</string>
     <string name="username">Username</string>
     <string name="departments">Departments</string>
@@ -86,5 +86,5 @@
     <string name="dialog_title">Create Signature</string>
     <string name="clear_pad">clear</string>
     <string name="visit">Visit</string>
-
+    <string name="location_str">Your Locations Settings is set to Off.Please Enable Location to</string>
 </resources>

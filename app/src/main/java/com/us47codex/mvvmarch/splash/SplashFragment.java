@@ -97,7 +97,6 @@ public class SplashFragment extends BaseFragment {
         super.onViewCreated(view, savedInstanceState);
         frameMain = view.findViewById(R.id.frameMain);
         horizontalProgress = view.findViewById(R.id.horizontalProgress);
-        initSplashTimer();
     }
 
     /**
@@ -119,6 +118,12 @@ public class SplashFragment extends BaseFragment {
                         })
                         .subscribe()
         );
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        initSplashTimer();
     }
 }
 

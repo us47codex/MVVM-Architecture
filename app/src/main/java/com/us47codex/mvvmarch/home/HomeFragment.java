@@ -146,80 +146,7 @@ public class HomeFragment extends BaseFragment {
         initView(view);
         getDashboardDataFromServer();
         subscribeApiCallStatusObservable();
-        requestLocationPermissionsOne();
 
-        getContext().stopService(new Intent(getContext(), LocationManagerServices.class));
-        getContext().startService(new Intent(getContext(), LocationManagerServices.class));
-    }
-
-    private void requestLocationPermissionsOne() {
-        compositeDisposable.add(
-                Completable.timer(1, TimeUnit.SECONDS)
-                        .subscribeOn(Schedulers.newThread())
-                        .doOnError(Throwable::printStackTrace)
-                        .doOnComplete(() -> {
-                            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M)
-                                return;
-                            if (!hasPermissions(getActivity(), ALL_PERMISSIONS)) {
-                                ActivityCompat.requestPermissions(getActivity(), ALL_PERMISSIONS,
-                                        ALL_PERMISSIONS_REQUEST_CODE);
-                            } else {
-                                checkLocation();
-                            }
-                        })
-                        .subscribe()
-        );
-
-    }
-    private void checkLocation() {
-        if (ActivityCompat.checkSelfPermission(Objects.requireNonNull(getActivity()), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            if (!isWorkScheduled()) {
-                AppUtils.callWorkManager(getContext());
-            }
-        }
-    }
-
-
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
-        if (requestCode == ALL_PERMISSIONS_REQUEST_CODE) {
-            for (int i = 0; i < grantResults.length; i++) {
-                if (grantResults[i] == PackageManager.PERMISSION_GRANTED) {
-                    AppLog.error("TAG", permissions[i] + " :: PERMISSION_GRANTED");
-                } else if (grantResults[i] == PackageManager.PERMISSION_DENIED) {
-                    if (!hasPermissions(getActivity(), ALL_PERMISSIONS)) {
-                        ActivityCompat.requestPermissions(getActivity(), new String[]{permissions[i]},
-                                ALL_PERMISSIONS_REQUEST_CODE);
-                    }
-                }
-
-            }
-
-            if (hasPermissions(getActivity(), ALL_PERMISSIONS)) {
-                checkLocation();
-            }
-        }
-    }
-
-    private static boolean hasPermissions(Context context, String... permissions) {
-        if (context != null && permissions != null) {
-            for (String permission : permissions) {
-                if (ActivityCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
-                    return false;
-                }
-            }
-        }
-        return true;
     }
 
     private void initView(View view) {
@@ -337,38 +264,4 @@ public class HomeFragment extends BaseFragment {
                 .subscribe()
         );
     }
-
-
-    private boolean isWorkScheduled() {
-        try {
-            boolean running = false;
-            if (TextUtils.isEmpty(SunTecApplication.getInstance().getPreferenceManager().getStringValue(SunTecPreferenceManager.PREF_LOCATION_ID, ""))) {
-                return false;
-            }
-            String strUUID = SunTecApplication.getInstance().getPreferenceManager().getStringValue(SunTecPreferenceManager.PREF_LOCATION_ID, "");
-            //if(UUID.fromString(MyApplication.getInstance().getPrefManager().getLocationId().equals("null"))
-            if (!TextUtils.isEmpty(strUUID) && !strUUID.equals("null")) {
-                strUUID = String.valueOf(UUID.fromString(strUUID));
-                ListenableFuture<WorkInfo> workStatus1 = WorkManager.getInstance().getWorkInfoById(UUID.fromString(SunTecApplication.getInstance().getPreferenceManager().getStringValue(SunTecPreferenceManager.PREF_LOCATION_ID, "")));
-                // workStatus1.get().getState();
-                try {
-                    if (workStatus1.get().getState() == WorkInfo.State.ENQUEUED) {
-                        running = true;
-                    }
-                    //running = workStatus1.get().getState() == State.RUNNING | workStatus1.get().getState() == State.ENQUEUED;
-                } catch (InterruptedException | ExecutionException e) {
-                    e.printStackTrace();
-                }
-                return running;
-            } else {
-                return false;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
-
-
-
 }

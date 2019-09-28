@@ -75,6 +75,8 @@ public class Constants {
     public static final String KEY_MODEL = "model";
     public static final String KEY_OBJECT = "object";
     public static final String KEY_COMPLAIN_ACTION = "complain_action";
+    public static final String SYSTEM_LOCATION_MANAGER_CHANGE = "locationMangerChange";
+    public static final int PUSH_TYPE_SYSTEM_LOCATION_CHANGE = 101010;
 
     /**
      * login error code
