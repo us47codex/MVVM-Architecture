@@ -1,12 +1,10 @@
 package com.us47codex.mvvmarch.base;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
@@ -25,7 +23,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
@@ -51,15 +48,12 @@ import androidx.work.WorkManager;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
-import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.android.gms.location.SettingsClient;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.us47codex.mvvmarch.R;
@@ -403,7 +397,9 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
     @Override
     public void onResume() {
         super.onResume();
-        checkGPSISEnable();
+        if (!checkGPSISEnable()) {
+            startLocationUpdates();
+        }
     }
 
     protected void showDialogWithSingleButtons(Context context, String title, String msg, String positiveButtonName,
@@ -516,8 +512,6 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
     }
 
 
-
-
     private void clearAllDataFromApp() {
         compositeDisposable.add(
                 AppUtils.clearPreference()
@@ -559,35 +553,38 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
 
     }
 
-    public boolean isPermissionGranted(Context context){
-        return Build.VERSION.SDK_INT >= 23 &&
+    public boolean isPermissionGranted(Context context) {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&
                 ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
                 ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED;
     }
 
     public void getLocation(Context context) {
-        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(context);
-        mSettingsClient = LocationServices.getSettingsClient(context);
-        mLocationCallback = new LocationCallback() {
-            @RequiresApi(api = Build.VERSION_CODES.M)
-            @Override
-            public void onLocationResult(LocationResult locationResult) {
-                super.onLocationResult(locationResult);
-                mCurrentLocation = locationResult.getLastLocation();
-                makeUseOfNewLocation(context,mCurrentLocation);
-            }
-        };
+        try {
+            mFusedLocationClient = LocationServices.getFusedLocationProviderClient(context);
+            mSettingsClient = LocationServices.getSettingsClient(context);
+            mLocationCallback = new LocationCallback() {
+                @RequiresApi(api = Build.VERSION_CODES.M)
+                @Override
+                public void onLocationResult(LocationResult locationResult) {
+                    super.onLocationResult(locationResult);
+                    mCurrentLocation = locationResult.getLastLocation();
+                    makeUseOfNewLocation(context, mCurrentLocation);
+                }
+            };
 
-        mLocationRequest = new LocationRequest();
-        mLocationRequest.setInterval(1);
-        mLocationRequest.setFastestInterval(1);
-        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder();
-        builder.addLocationRequest(mLocationRequest);
-        mLocationSettingsRequest = builder.build();
-        startLocationUpdates(context);
+            mLocationRequest = new LocationRequest();
+            mLocationRequest.setInterval(1);
+            mLocationRequest.setFastestInterval(1);
+            mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+            LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder();
+            builder.addLocationRequest(mLocationRequest);
+            mLocationSettingsRequest = builder.build();
+            startLocationUpdates(context);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
-
 
 
     private void makeUseOfNewLocation(Context context, Location location) {
@@ -601,7 +598,7 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
                     SunTecApplication.getInstance().latitude = location.getLatitude();
                     SunTecApplication.getInstance().longitude = location.getLongitude();
 
-                    Toast.makeText(context, "lat : long :: "+ location.getLatitude() + " / " + location.getLongitude(), Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(context, "lat : long :: " + location.getLatitude() + " / " + location.getLongitude(), Toast.LENGTH_SHORT).show();
                 } else {
                     mFusedLocationClient.removeLocationUpdates(mLocationCallback);
                 }
@@ -638,6 +635,7 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
 
         mFusedLocationClient.removeLocationUpdates(mLocationCallback);
     }
+
     private void startLocationUpdates(Context context) {
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
                 ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -651,8 +649,7 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
             mFusedLocationClient.removeLocationUpdates(mLocationCallback);
             return;
         }
-//        mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper());
-
+        mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.getMainLooper());
     }
 
     public void requestLocationPermissions() {
@@ -663,8 +660,8 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
                         .doOnComplete(() -> {
                             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M)
                                 return;
-                            if (!hasPermissions(getActivity(), ALL_PERMISSIONS)) {
-                                ActivityCompat.requestPermissions(getActivity(), ALL_PERMISSIONS,ALL_PERMISSIONS_REQUEST_CODE);
+                            if (!hasPermissions()) {
+                                ActivityCompat.requestPermissions(getActivity(), ALL_PERMISSIONS, ALL_PERMISSIONS_REQUEST_CODE);
                             } else {
                                 getLocation(getContext());
                             }
@@ -673,10 +670,10 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
         );
     }
 
-    private static boolean hasPermissions(Context context, String... permissions) {
-        if (context != null && permissions != null) {
-            for (String permission : permissions) {
-                if (ActivityCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
+    public boolean hasPermissions() {
+        if (getActivity() != null && ALL_PERMISSIONS != null) {
+            for (String permission : ALL_PERMISSIONS) {
+                if (ActivityCompat.checkSelfPermission(getActivity(), permission) != PackageManager.PERMISSION_GRANTED) {
                     return false;
                 }
             }
@@ -685,15 +682,16 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
     }
 
 
-    private void checkGPSISEnable(){
+    private boolean checkGPSISEnable() {
         LocationManager service = (LocationManager) getContext().getSystemService(LOCATION_SERVICE);
         boolean enabled = service.isProviderEnabled(LocationManager.GPS_PROVIDER);
 
         // Check if enabled and if not send user to the GPS settings
-        if (!enabled) {
-            Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-            startActivity(intent);
-        }
+//        if (!enabled) {
+//            Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+//            startActivity(intent);
+//        }
+        return enabled;
     }
 
     public BroadcastReceiver mRegistrationBroadcastReceiverForLocationManagerChagne = new BroadcastReceiver() {
@@ -702,8 +700,8 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equals(Constants.SYSTEM_LOCATION_MANAGER_CHANGE)) {
                 startLocationUpdates();
-            }else{
-                AppLog.error(TAG,"else  ");
+            } else {
+                AppLog.error(TAG, "else  ");
             }
         }
     };
@@ -715,9 +713,11 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
                 startLocationUpdates();
             }
         }, (dialog, which) -> {
-            Intent myIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-            startActivity(myIntent);
-            dialog.dismiss();
-        },true);
+            if (!checkGPSISEnable()) {
+                Intent myIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                startActivity(myIntent);
+                dialog.dismiss();
+            }
+        }, true);
     }
 }

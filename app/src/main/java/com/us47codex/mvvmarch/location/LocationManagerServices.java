@@ -9,7 +9,6 @@ import android.os.Build;
 import android.os.IBinder;
 import android.os.Looper;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
@@ -107,7 +106,7 @@ public class LocationManagerServices extends Service {
                     Log.e(TAG, "latitude >>: " + location.getLatitude());
                     Log.e(TAG, "longitude >>: " + location.getLongitude());
 
-                    Toast.makeText(getApplicationContext(), "lat : long :: "+ location.getLatitude() + " / " + location.getLongitude(), Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(getApplicationContext(), "lat : long :: "+ location.getLatitude() + " / " + location.getLongitude(), Toast.LENGTH_SHORT).show();
                 } else {
                     mFusedLocationClient.removeLocationUpdates(mLocationCallback);
                 }

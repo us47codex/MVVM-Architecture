@@ -153,9 +153,9 @@ public class ComplaintDetailsFragment extends BaseFragment {
         getComplainFromDB();
         subscribeApiCallStatusObservable();
         //getLocation();
-        if(isPermissionGranted(getContext())){
+        if (hasPermissions()) {
             getLocation(getContext());
-        }else{
+        } else {
             requestLocationPermissions();
         }
     }
@@ -444,8 +444,12 @@ public class ComplaintDetailsFragment extends BaseFragment {
                                     enableDisableView(frameMain, true);
                                     JSONObject jsonObject = (JSONObject) pair.second;
                                     if (jsonObject != null && jsonObject.getInt(Constants.KEY_SUCCESS) == 1) {
-                                        btnStarWork.setVisibility(View.GONE);
-                                        btnVisitReport.setVisibility(View.VISIBLE);
+                                        String data = jsonObject.getString("data");
+                                        showDialogWithSingleButtons(getContext(), getString(R.string.app_name),
+                                                data, Objects.requireNonNull(getActivity()).getString(R.string.ok), (dialog, which) -> {
+                                                    btnStarWork.setVisibility(View.GONE);
+                                                    btnVisitReport.setVisibility(View.VISIBLE);
+                                                }, false);
                                     }
                                 }
                             }

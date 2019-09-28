@@ -86,5 +86,5 @@
     <string name="dialog_title">Create Signature</string>
     <string name="clear_pad">clear</string>
     <string name="visit">Visit</string>
-    <string name="location_str">Your Locations Settings is set to Off.Please Enable Location to</string>
+    <string name="location_str">Your Locations Settings Is Not Enable. Please Enable Location For</string>
 </resources>
