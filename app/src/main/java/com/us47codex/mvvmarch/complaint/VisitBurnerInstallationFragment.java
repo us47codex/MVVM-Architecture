@@ -713,7 +713,7 @@ public class VisitBurnerInstallationFragment extends BaseFragment {
         params.put("badress", toRequestBody(edtAddress.getText().toString()));
         params.put("tax", toRequestBody(edtFoods.getText().toString()));
         params.put("others", toRequestBody(edtHotelBill.getText().toString()));
-        params.put(",to_form", toRequestBody(edtTransport.getText().toString()));
+        params.put("to_form", toRequestBody(edtTransport.getText().toString()));
         params.put("conveyance", toRequestBody(edtConveyance.getText().toString()));
         params.put("services_charges", toRequestBody(edtServiceCharge.getText().toString()));
         params.put("training_given_by", toRequestBody(edtName.getText().toString()));
