@@ -389,13 +389,48 @@ public class VisitBurnerServiceFragment extends BaseFragment {
         this.complaint = complaint;
         edtAttnBy.setText(getPreference().getStringValue(SunTecPreferenceManager.PREF_USER_NAME, ""));
         txvMachineType.setText(String.format("%s %s", complaint.getMcType(), AppUtils.isEmpty(complaint.getVisitType()) ? "" : ": " + complaint.getVisitType()));
-        edtContactPerson.setText(complaint.getCustomerLastName());
-        edtAddress.setText(complaint.getAddress());
-        edtClient.setText(complaint.getCustomerFirstName());
-        edtModel.setText(complaint.getMcModel());
-        edtSerialNo.setText(complaint.getSrNo());
-        txvDate.setText(AppUtils.getCurrentDate());
-        txvFinishDate.setText(AppUtils.getCurrentDate());
+
+        if(!AppUtils.isEmpty(complaint.getCustomerLastName())){
+            edtContactPerson.setText(complaint.getCustomerLastName());
+        }else{
+            edtContactPerson.setText("--");
+        }
+
+        if(!AppUtils.isEmpty(complaint.getAddress())){
+            edtAddress.setText(complaint.getAddress());
+        }else{
+            edtAddress.setText("--");
+        }
+
+        if(!AppUtils.isEmpty(complaint.getCustomerFirstName())){
+            edtClient.setText(complaint.getCustomerFirstName());
+        }else{
+            edtClient.setText("--");
+        }
+
+        if(!AppUtils.isEmpty(complaint.getMcModel())) {
+            edtModel.setText(complaint.getMcModel());
+        }else{
+            edtModel.setText("--");
+        }
+
+        if(!AppUtils.isEmpty(complaint.getSrNo())) {
+            edtSerialNo.setText(complaint.getSrNo());
+        }else{
+            edtSerialNo.setText("--");
+        }
+
+        if(!AppUtils.isEmpty(AppUtils.getCurrentDate())) {
+            txvDate.setText(AppUtils.getCurrentDate());
+        }else{
+            txvDate.setText("--");
+        }
+
+        if(!AppUtils.isEmpty(AppUtils.getCurrentDate())) {
+            txvFinishDate.setText(AppUtils.getCurrentDate());
+        }else{
+            txvFinishDate.setText("--");
+        }
 
         edtAttnBy.setClickable(false);
         txvDate.setClickable(false);
@@ -673,7 +708,7 @@ public class VisitBurnerServiceFragment extends BaseFragment {
         params.put("tax", edtFoods.getText().toString());
         params.put("others", edtHotelBill.getText().toString());
         params.put("to_from", edtTransport.getText().toString());
-        params.put("conveyance", edtContactPerson.getText().toString());
+        params.put("conveyance",edtConveyance.getText().toString());
         params.put("services_charges", edtServiceCharge.getText().toString());
         params.put("training_given_by", edtName.getText().toString());
         params.put("training_given", training);
@@ -712,6 +747,7 @@ public class VisitBurnerServiceFragment extends BaseFragment {
 //        AND AMC
 
         HashMap<String, RequestBody> params = new HashMap<>();
+        params.put("current_date", toRequestBody(txvDate.getText().toString()));
         params.put("spare_replace", toRequestBody(edtSpareReplace.getText().toString()));
         params.put("report_no", toRequestBody(edtReportNo.getText().toString()));
         params.put("action_taken", toRequestBody(edtActionTakenWork.getText().toString()));
@@ -741,7 +777,7 @@ public class VisitBurnerServiceFragment extends BaseFragment {
         params.put("tax", toRequestBody(edtFoods.getText().toString()));
         params.put("others", toRequestBody(edtHotelBill.getText().toString()));
         params.put("to_form", toRequestBody(edtTransport.getText().toString()));
-        params.put("conveyance", toRequestBody(edtContactPerson.getText().toString()));
+        params.put("conveyance", toRequestBody(edtConveyance.getText().toString()));
         params.put("services_charges", toRequestBody(edtServiceCharge.getText().toString()));
         params.put("training_given_by", toRequestBody(edtName.getText().toString()));
         params.put("training_given", toRequestBody(training));

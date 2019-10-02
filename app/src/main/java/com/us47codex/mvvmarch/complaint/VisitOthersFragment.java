@@ -398,15 +398,51 @@ public class VisitOthersFragment extends BaseFragment {
     private void setData(Complaint complaint) {
         this.complaint = complaint;
         txvMachineType.setText(String.format("%s %s", complaint.getMcType(), AppUtils.isEmpty(complaint.getVisitType()) ? "" : ": " + complaint.getVisitType()));
-        edtCustomerName.setText(complaint.getCustomerFirstName());
-        edtContactPerson.setText(complaint.getCustomerLastName());
-        edtCustomerAddress.setText(complaint.getAddress());
+
+        if(!AppUtils.isEmpty(complaint.getCustomerFirstName())) {
+            edtCustomerName.setText(complaint.getCustomerFirstName());
+        }else{
+            edtCustomerName.setText("--");
+        }
+
+        if(!AppUtils.isEmpty(complaint.getCustomerLastName())){
+            edtContactPerson.setText(complaint.getCustomerLastName());
+        }else{
+            edtContactPerson.setText("--");
+        }
+
+        if(!AppUtils.isEmpty(complaint.getAddress())){
+            edtCustomerAddress.setText(complaint.getAddress());
+        }else{
+            edtCustomerAddress.setText("--");
+        }
+
+        if(!AppUtils.isEmpty(complaint.getDealerName())){
+            edtOEMDealerName.setText(complaint.getDealerName());
+        }else{
+            edtOEMDealerName.setText("--");
+        }
+
+        if(!AppUtils.isEmpty(AppUtils.getCurrentDate())){
+            txvDate.setText(AppUtils.getCurrentDate());
+        }else{
+            txvDate.setText("--");
+        }
+        if(!AppUtils.isEmpty(AppUtils.getCurrentDateTime())){
+            txvWorkDateTime.setText(AppUtils.getCurrentDateTime());
+        }else{
+            txvWorkDateTime.setText("==");
+        }
+
 //        edtComplaintNoDate.setText(complaint.getComplainNoDate());
-        edtOEMDealerName.setText(complaint.getDealerName());
-        txvDate.setText(AppUtils.getCurrentDate());
-        txvWorkDateTime.setText(AppUtils.getCurrentDateTime());
-        txvCheckoutDateTime.setText(AppUtils.getCurrentDateTime());
-        edtHeatPumpModelSerialNo.setText(String.format("%s %s", complaint.getMcModel(), complaint.getHeatPSrNo()));
+
+        if(!AppUtils.isEmpty(complaint.getMcModel()) && !AppUtils.isEmpty(complaint.getHeatPSrNo())) {
+            edtHeatPumpModelSerialNo.setText(String.format("%s %s", complaint.getMcModel(), complaint.getHeatPSrNo()));
+        }else if(!AppUtils.isEmpty(complaint.getMcModel())) {
+            edtHeatPumpModelSerialNo.setText(String.format("%s", complaint.getMcModel()));
+        }else{
+            edtHeatPumpModelSerialNo.setText("==");
+        }
 
         edtHeatPumpModelSerialNo.setClickable(false);
         txvDate.setClickable(false);
@@ -708,6 +744,7 @@ public class VisitOthersFragment extends BaseFragment {
 
 
         HashMap<String, RequestBody> params = new HashMap<>();
+        params.put("current_date", toRequestBody(txvDate.getText().toString()));
         params.put("id", toRequestBody(String.valueOf(complaint.getId())));
         params.put("resolve_image", toRequestBody(""));
         params.put("sign_customer\"; filename=\"sign_customer.jpg\"", toRequestBody(customerSign));
@@ -755,6 +792,7 @@ public class VisitOthersFragment extends BaseFragment {
         params.put("out_lat", toRequestBody(String.valueOf(SunTecApplication.getInstance().latitude)));
         params.put("out_long", toRequestBody(String.valueOf(SunTecApplication.getInstance().longitude)));
 
+        AppLog.error("TAG","params :" + params.toString());
         return params;
     }
 

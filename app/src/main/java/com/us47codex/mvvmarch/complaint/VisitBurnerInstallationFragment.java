@@ -703,6 +703,7 @@ public class VisitBurnerInstallationFragment extends BaseFragment {
 
 
         HashMap<String, RequestBody> params = new HashMap<>();
+        params.put("current_date", toRequestBody(txvDate.getText().toString()));
         params.put("id", toRequestBody(String.valueOf(complaint.getId())));
         params.put("report_no", toRequestBody(edtReportNo.getText().toString()));
         params.put("resolve_image", toRequestBody(""));
