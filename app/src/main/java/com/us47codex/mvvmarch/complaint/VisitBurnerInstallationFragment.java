@@ -384,22 +384,79 @@ public class VisitBurnerInstallationFragment extends BaseFragment {
         this.complaint = complaint;
         txvMachineType.setText(String.format("%s %s", complaint.getMcType(), AppUtils.isEmpty(complaint.getVisitType()) ? "" : ": " + complaint.getVisitType()));
 //        edtCustomerName.setText(complaint.getCustomerLastName());
-        edtAddress.setText(complaint.getAddress());
-        edtClient.setText(complaint.getCustomerFirstName());
-        edtContactPerson.setText(complaint.getCustomerLastName());
+
+
+        if(!AppUtils.isEmpty(complaint.getAddress())){
+            edtAddress.setText(complaint.getAddress());
+        }else{
+            edtAddress.setText("--");
+        }
+
+        if(!AppUtils.isEmpty(complaint.getCustomerFirstName())){
+            edtClient.setText(complaint.getCustomerFirstName());
+        }else{
+            edtClient.setText("--");
+        }
+
+        if(!AppUtils.isEmpty(complaint.getCustomerLastName())){
+            edtContactPerson.setText(complaint.getCustomerLastName());
+        }else{
+            edtContactPerson.setText("--");
+        }
+
+        if(!AppUtils.isEmpty(complaint.getMcModel())){
+            edtModel.setText(complaint.getMcModel());
+        }else{
+            edtModel.setText("--");
+        }
+
+        if(!AppUtils.isEmpty(complaint.getSrNo())){
+            edtSerialNo.setText(complaint.getSrNo());
+        }else{
+            edtSerialNo.setText("--");
+        }
+        if(!AppUtils.isEmpty(AppUtils.getCurrentDate())){
+            txvDate.setText(AppUtils.getCurrentDate());
+        }else{
+            txvDate.setText("--");
+        }
+
+        if(!AppUtils.isEmpty(AppUtils.getCurrentDate())){
+            txvFinishDate.setText(AppUtils.getCurrentDate());
+        }else{
+            txvFinishDate.setText("--");
+        }
+
+        if(!AppUtils.isEmpty(AppUtils.getCurrentDate())){
+            txvInstallationDateEnd.setText(AppUtils.getCurrentDate());
+        }else{
+            txvInstallationDateEnd.setText("--");
+        }
+
+        if(!AppUtils.isEmpty(AppUtils.getCurrentDate())){
+            txvCommissioningDateEnd.setText(AppUtils.getCurrentDate());
+        }else{
+            txvCommissioningDateEnd.setText("--");
+        }
+
+        if(!AppUtils.isEmpty(AppUtils.getCurrentDateTime())){
+            txvCheckoutDateTime.setText(AppUtils.getCurrentDateTime());
+        }else{
+            txvCheckoutDateTime.setText(AppUtils.getCurrentDateTime());
+        }
+
+
         edtAttnBy.setText(getPreference().getStringValue(SunTecPreferenceManager.PREF_USER_NAME, ""));
-        edtModel.setText(complaint.getMcModel());
-        edtSerialNo.setText(complaint.getSrNo());
-        txvDate.setText(AppUtils.getCurrentDate());
-        txvFinishDate.setText(AppUtils.getCurrentDate());
-        txvInstallationDateEnd.setText(AppUtils.getCurrentDate());
-        txvCommissioningDateEnd.setText(AppUtils.getCurrentDate());
-        txvCheckoutDateTime.setText(AppUtils.getCurrentDateTime());
+
+
+
+
+
 
         edtModel.setClickable(false);
         edtSerialNo.setClickable(false);
         edtAttnBy.setClickable(false);
-        txvDate.setClickable(false);
+        //txvDate.setClickable(false);
         txvFinishDate.setClickable(false);
         edtTotalAmount.setClickable(false);
         txvInstallationDateEnd.setClickable(false);

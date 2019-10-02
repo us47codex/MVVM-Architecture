@@ -433,7 +433,7 @@ public class VisitBurnerServiceFragment extends BaseFragment {
         }
 
         edtAttnBy.setClickable(false);
-        txvDate.setClickable(false);
+        //txvDate.setClickable(false);
         txvFinishDate.setEnabled(false);
         edtFoods.addTextChangedListener(amountWatcher);
         edtHotelBill.addTextChangedListener(amountWatcher);

@@ -324,7 +324,7 @@ public class VisitOthersFragment extends BaseFragment {
                         tilReasonIncomplete.setVisibility(View.GONE);
                         break;
                     case R.id.rdbIncomplete:
-                        workStatus = "Incompelete";
+                        workStatus = "Incomplete  ";
                         tilReasonIncomplete.setVisibility(View.VISIBLE);
                         break;
                 }
@@ -445,7 +445,7 @@ public class VisitOthersFragment extends BaseFragment {
         }
 
         edtHeatPumpModelSerialNo.setClickable(false);
-        txvDate.setClickable(false);
+        //txvDate.setClickable(false);
         txvWorkDateTime.setClickable(false);
         txvCheckoutDateTime.setClickable(false);
         getReportNo();
