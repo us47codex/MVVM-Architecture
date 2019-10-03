@@ -406,7 +406,7 @@ public class VisitOthersFragment extends BaseFragment {
         txvWorkDateTime.setText(!AppUtils.isEmpty(AppUtils.getCurrentDateTime()) ? AppUtils.getCurrentDateTime() : "--");
 //        edtComplaintNoDate.setText(complaint.getComplainNoDate());
         edtHeatPumpModelSerialNo.setText(String.format("%s %s", AppUtils.isEmpty(complaint.getMcModel()) ? "" : complaint.getMcModel(),
-                AppUtils.isEmpty(complaint.getHeatPSrNo()) ? "" : complaint.getHeatPSrNo()));
+                AppUtils.isEmpty(complaint.getSrNo()) ? "" : complaint.getSrNo()));
 
         edtHeatPumpModelSerialNo.setClickable(false);
         //txvDate.setClickable(false);
