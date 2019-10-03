@@ -20,6 +20,20 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
+            android.applicationVariants.all { variant ->
+                variant.outputs.all {
+                    def formattedDate = new Date().format('(yyyy-MMM-dd_hh:mm_a)')
+                    def newName = "v" + versionCode + "_" + formattedDate
+                    outputFileName = "Suntec_${newName}.apk"
+                }
+            }
+        }
+    }
     compileOptions {
         sourceCompatibility = '1.8'
         targetCompatibility = '1.8'

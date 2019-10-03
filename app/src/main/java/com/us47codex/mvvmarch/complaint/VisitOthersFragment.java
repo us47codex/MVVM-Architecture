@@ -190,9 +190,9 @@ public class VisitOthersFragment extends BaseFragment {
         initView(view);
         getComplainFromDB();
         subscribeApiCallStatusObservable();
-        if(isPermissionGranted(getContext())){
+        if (isPermissionGranted(getContext())) {
             getLocation(getContext());
-        }else{
+        } else {
             requestLocationPermissions();
         }
     }
@@ -398,51 +398,15 @@ public class VisitOthersFragment extends BaseFragment {
     private void setData(Complaint complaint) {
         this.complaint = complaint;
         txvMachineType.setText(String.format("%s %s", complaint.getMcType(), AppUtils.isEmpty(complaint.getVisitType()) ? "" : ": " + complaint.getVisitType()));
-
-        if(!AppUtils.isEmpty(complaint.getCustomerFirstName())) {
-            edtCustomerName.setText(complaint.getCustomerFirstName());
-        }else{
-            edtCustomerName.setText("--");
-        }
-
-        if(!AppUtils.isEmpty(complaint.getCustomerLastName())){
-            edtContactPerson.setText(complaint.getCustomerLastName());
-        }else{
-            edtContactPerson.setText("--");
-        }
-
-        if(!AppUtils.isEmpty(complaint.getAddress())){
-            edtCustomerAddress.setText(complaint.getAddress());
-        }else{
-            edtCustomerAddress.setText("--");
-        }
-
-        if(!AppUtils.isEmpty(complaint.getDealerName())){
-            edtOEMDealerName.setText(complaint.getDealerName());
-        }else{
-            edtOEMDealerName.setText("--");
-        }
-
-        if(!AppUtils.isEmpty(AppUtils.getCurrentDate())){
-            txvDate.setText(AppUtils.getCurrentDate());
-        }else{
-            txvDate.setText("--");
-        }
-        if(!AppUtils.isEmpty(AppUtils.getCurrentDateTime())){
-            txvWorkDateTime.setText(AppUtils.getCurrentDateTime());
-        }else{
-            txvWorkDateTime.setText("==");
-        }
-
+        edtCustomerName.setText(!AppUtils.isEmpty(complaint.getCustomerFirstName()) ? complaint.getCustomerFirstName() : "--");
+        edtContactPerson.setText(!AppUtils.isEmpty(complaint.getCustomerLastName()) ? complaint.getCustomerLastName() : "--");
+        edtCustomerAddress.setText(!AppUtils.isEmpty(complaint.getAddress()) ? complaint.getAddress() : "--");
+        edtOEMDealerName.setText(!AppUtils.isEmpty(complaint.getDealerName()) ? complaint.getDealerName() : "--");
+        txvDate.setText(!AppUtils.isEmpty(AppUtils.getCurrentDate()) ? AppUtils.getCurrentDate() : "--");
+        txvWorkDateTime.setText(!AppUtils.isEmpty(AppUtils.getCurrentDateTime()) ? AppUtils.getCurrentDateTime() : "--");
 //        edtComplaintNoDate.setText(complaint.getComplainNoDate());
-
-        if(!AppUtils.isEmpty(complaint.getMcModel()) && !AppUtils.isEmpty(complaint.getHeatPSrNo())) {
-            edtHeatPumpModelSerialNo.setText(String.format("%s %s", complaint.getMcModel(), complaint.getHeatPSrNo()));
-        }else if(!AppUtils.isEmpty(complaint.getMcModel())) {
-            edtHeatPumpModelSerialNo.setText(String.format("%s", complaint.getMcModel()));
-        }else{
-            edtHeatPumpModelSerialNo.setText("==");
-        }
+        edtHeatPumpModelSerialNo.setText(String.format("%s %s", AppUtils.isEmpty(complaint.getMcModel()) ? "" : complaint.getMcModel(),
+                AppUtils.isEmpty(complaint.getHeatPSrNo()) ? "" : complaint.getHeatPSrNo()));
 
         edtHeatPumpModelSerialNo.setClickable(false);
         //txvDate.setClickable(false);
@@ -792,7 +756,7 @@ public class VisitOthersFragment extends BaseFragment {
         params.put("out_lat", toRequestBody(String.valueOf(SunTecApplication.getInstance().latitude)));
         params.put("out_long", toRequestBody(String.valueOf(SunTecApplication.getInstance().longitude)));
 
-        AppLog.error("TAG","params :" + params.toString());
+        AppLog.error("TAG", "params :" + params.toString());
         return params;
     }
 
