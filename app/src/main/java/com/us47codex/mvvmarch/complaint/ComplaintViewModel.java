@@ -565,6 +565,15 @@ public class ComplaintViewModel extends BaseViewModel {
                             complaint.setEngineerFirstName(commentJsonObject.optString("engineer_first_name"));
                             complaint.setEngineerLastName(commentJsonObject.optString("engineer_last_name"));
                             complaint.setVisitType(commentJsonObject.optString("visit_type"));
+                            complaint.setInStartDate(commentJsonObject.optString("in_start_date"));
+                            complaint.setInEndDate(commentJsonObject.optString("in_end_date"));
+                            complaint.setInLat(commentJsonObject.optString("in_lat"));
+                            complaint.setInLong(commentJsonObject.optString("in_long"));
+                            complaint.setInStatus(commentJsonObject.optString("in_status"));
+                            complaint.setInDate(commentJsonObject.optString("in_date"));
+                            complaint.setOutLat(commentJsonObject.optString("out_lat"));
+                            complaint.setOutLong(commentJsonObject.optString("out_long"));
+
                             return complaint;
                         })
                         .onErrorReturn(throwable -> {

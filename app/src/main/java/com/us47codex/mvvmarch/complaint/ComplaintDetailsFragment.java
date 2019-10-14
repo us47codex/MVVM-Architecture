@@ -67,7 +67,7 @@ public class ComplaintDetailsFragment extends BaseFragment {
     private FrameLayout frameMain;
     private AppCompatTextView txvComplaintNo, txvStatus, txvCustomerName, txvMobile, txvEmail, txvDealerName, txvMachineType,
             txvMachineModel, txvSerialNo, txvReferenceAlternateNumber, txvAddress, txvProblemDescription, txvComplaintBy,
-            txvAssignee, txvComplaintDate, txvScheduleDate, txvCloseDate;
+            txvAssignee, txvComplaintDate, txvScheduleDate, txvCloseDate, txvCustomerCompanyName;
     private AppCompatButton btnStarWork, btnSchedule, btnVisitReport;
     private ComplaintViewModel complaintViewModel;
     private long complainId;
@@ -199,6 +199,7 @@ public class ComplaintDetailsFragment extends BaseFragment {
         txvComplaintNo = view.findViewById(R.id.txvComplaintNo);
         txvStatus = view.findViewById(R.id.txvStatus);
         txvCustomerName = view.findViewById(R.id.txvCustomerName);
+        txvCustomerCompanyName = view.findViewById(R.id.txvCustomerCompanyName);
         txvMobile = view.findViewById(R.id.txvMobile);
         txvEmail = view.findViewById(R.id.txvEmail);
         txvDealerName = view.findViewById(R.id.txvDealerName);
@@ -259,23 +260,6 @@ public class ComplaintDetailsFragment extends BaseFragment {
 
     private void setData(Complaint complaint) {
         this.complaint = complaint;
-        txvComplaintNo.setText(String.valueOf(complaint.getId()));
-        txvStatus.setText(complaint.getStatus());
-        txvCustomerName.setText(complaint.getCustomerLastName());
-        txvMobile.setText(complaint.getMno());
-        txvEmail.setText(complaint.getEmail());
-        txvDealerName.setText(complaint.getDealerName());
-        txvMachineType.setText(complaint.getMcType());
-        txvMachineModel.setText(complaint.getMcModel());
-        txvSerialNo.setText(complaint.getSrNo());
-        txvReferenceAlternateNumber.setText(complaint.getAlternateNum());
-        txvAddress.setText(complaint.getAddress());
-        txvProblemDescription.setText(complaint.getDescription());
-        txvComplaintBy.setText(complaint.getComplainForm());
-        txvAssignee.setText(complaint.getComplainTo());
-        txvComplaintDate.setText(complaint.getAssignDate());
-        txvScheduleDate.setText(complaint.getScheduleDate());
-//        txvCloseDate.setText(complaint.getclose());
 
         if (complaint.getStatus().equalsIgnoreCase(Constants.STATUS_OPEN)) {
             btnSchedule.setText("Schedule");
@@ -284,9 +268,15 @@ public class ComplaintDetailsFragment extends BaseFragment {
             btnVisitReport.setVisibility(View.GONE);
         } else if (complaint.getStatus().equalsIgnoreCase(Constants.STATUS_SCHEDULE)) {
             btnSchedule.setText("Reschedule");
-            btnSchedule.setVisibility(View.VISIBLE);
-            btnStarWork.setVisibility(View.VISIBLE);
-            btnVisitReport.setVisibility(View.GONE);
+            if (AppUtils.isEmpty(complaint.getInStatus())) {
+                btnSchedule.setVisibility(View.VISIBLE);
+                btnStarWork.setVisibility(View.VISIBLE);
+                btnVisitReport.setVisibility(View.GONE);
+            } else {
+                btnSchedule.setVisibility(View.GONE);
+                btnStarWork.setVisibility(View.GONE);
+                btnVisitReport.setVisibility(View.VISIBLE);
+            }
 //        } else if (complaint.getStatus().equalsIgnoreCase(Constants.STATUS_CLOSED)) {
 //            btnSchedule.setVisibility(View.GONE);
 //            btnVisit.setVisibility(View.GONE);
@@ -300,6 +290,7 @@ public class ComplaintDetailsFragment extends BaseFragment {
         txvComplaintNo.setText(complaint.getId() != 0 ? String.valueOf(complaint.getId()) : "0");
         txvStatus.setText(!AppUtils.isEmpty(complaint.getStatus()) ? complaint.getStatus() : "--");
         txvCustomerName.setText(!AppUtils.isEmpty(complaint.getCustomerLastName()) ? complaint.getCustomerLastName() : "--");
+        txvCustomerCompanyName.setText(!AppUtils.isEmpty(complaint.getCustomerFirstName()) ? complaint.getCustomerFirstName() : "--");
         txvMobile.setText(!AppUtils.isEmpty(complaint.getMno()) ? complaint.getMno() : "--");
         txvEmail.setText(!AppUtils.isEmpty(complaint.getEmail()) ? complaint.getEmail() : "--");
         txvDealerName.setText(!AppUtils.isEmpty(complaint.getDealerName()) ? complaint.getDealerName() : "--");

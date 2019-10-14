@@ -244,6 +244,30 @@ public class Complaint {
     @ColumnInfo(name = "visit_type")
     private String visitType;
 
+    @ColumnInfo(name = "in_start_date")
+    private String inStartDate;
+
+    @ColumnInfo(name = "in_end_date")
+    private String inEndDate;
+
+    @ColumnInfo(name = "in_lat")
+    private String inLat;
+
+    @ColumnInfo(name = "in_long")
+    private String inLong;
+
+    @ColumnInfo(name = "in_status")
+    private String inStatus;
+
+    @ColumnInfo(name = "in_date")
+    private String inDate;
+
+    @ColumnInfo(name = "out_lat")
+    private String outLat;
+
+    @ColumnInfo(name = "out_long")
+    private String outLong;
+
     public long getId() {
         return id;
     }
@@ -842,5 +866,69 @@ public class Complaint {
 
     public void setVisitType(String visitType) {
         this.visitType = visitType;
+    }
+
+    public String getInStartDate() {
+        return inStartDate;
+    }
+
+    public void setInStartDate(String inStartDate) {
+        this.inStartDate = inStartDate;
+    }
+
+    public String getInEndDate() {
+        return inEndDate;
+    }
+
+    public void setInEndDate(String inEndDate) {
+        this.inEndDate = inEndDate;
+    }
+
+    public String getInLat() {
+        return inLat;
+    }
+
+    public void setInLat(String inLat) {
+        this.inLat = inLat;
+    }
+
+    public String getInLong() {
+        return inLong;
+    }
+
+    public void setInLong(String inLong) {
+        this.inLong = inLong;
+    }
+
+    public String getInStatus() {
+        return inStatus;
+    }
+
+    public void setInStatus(String inStatus) {
+        this.inStatus = inStatus;
+    }
+
+    public String getInDate() {
+        return inDate;
+    }
+
+    public void setInDate(String inDate) {
+        this.inDate = inDate;
+    }
+
+    public String getOutLat() {
+        return outLat;
+    }
+
+    public void setOutLat(String outLat) {
+        this.outLat = outLat;
+    }
+
+    public String getOutLong() {
+        return outLong;
+    }
+
+    public void setOutLong(String outLong) {
+        this.outLong = outLong;
     }
 }
