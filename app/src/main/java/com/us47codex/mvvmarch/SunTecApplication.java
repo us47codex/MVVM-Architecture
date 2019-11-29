@@ -2,13 +2,7 @@ package com.us47codex.mvvmarch;
 
 import android.app.Application;
 
-import com.us47codex.mvvmarch.helper.AppLog;
 import com.us47codex.mvvmarch.roomDatabase.SunTecDatabase;
-
-import java.util.HashMap;
-
-import static com.us47codex.mvvmarch.SunTecPreferenceManager.PREF_AUTHENTICATION_TOKEN;
-import static com.us47codex.mvvmarch.SunTecPreferenceManager.PREF_USER_ID;
 
 public class SunTecApplication extends Application {
     private static final String TAG = SunTecApplication.class.getSimpleName();
@@ -16,7 +10,7 @@ public class SunTecApplication extends Application {
     private static SunTecApplication mInstance;
     private SunTecPreferenceManager pref;
     private SunTecDatabase sunTecDatabase;
-    public double latitude,longitude;
+    public double latitude, longitude;
 
     @Override
     public void onCreate() {
@@ -24,7 +18,7 @@ public class SunTecApplication extends Application {
         mInstance = this;
     }
 
-    public static synchronized SunTecApplication getInstance(){
+    public static synchronized SunTecApplication getInstance() {
         return mInstance;
     }
 
