@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <dimen name="text_size_fifty" tools:keep="@dimen/text_size_fifty">50sp</dimen>
+    <dimen name="text_size_forty" tools:keep="@dimen/text_size_forty">40sp</dimen>
+    <dimen name="text_size_thirty" tools:keep="@dimen/text_size_thirty">30sp</dimen>
+    <dimen name="text_size_twenty_six" tools:keep="@dimen/text_size_twenty_six">26sp</dimen>
+    <dimen name="text_size_twenty_four" tools:keep="@dimen/text_size_twenty_four">24sp</dimen>
+    <dimen name="text_size_twenty_two" tools:keep="@dimen/text_size_twenty_two">22sp</dimen>
+    <dimen name="text_size_twenty" tools:keep="@dimen/text_size_twenty">20sp</dimen>
+    <dimen name="text_size_eighteen" tools:keep="@dimen/text_size_eighteen">18sp</dimen>
+    <dimen name="text_size_sixteen" tools:keep="@dimen/text_size_sixteen">16sp</dimen>
+    <dimen name="text_size_fourteen" tools:keep="@dimen/text_size_fourteen">14sp</dimen>
+    <dimen name="text_size_twelve" tools:keep="@dimen/text_size_twelve">12sp</dimen>
+    <dimen name="text_size_ten" tools:keep="@dimen/text_size_ten">10sp</dimen>
+
+    <dimen name="space_five">5dp</dimen>
+    <dimen name="space_ten">10dp</dimen>
+    <dimen name="space_twenty">20dp</dimen>
+    <dimen name="space_thirty">30dp</dimen>
+    <dimen name="space_forty">40dp</dimen>
+    <dimen name="space_hundred">100dp</dimen>
+    <dimen name="space_hundred_fifty">150dp</dimen>
+    <dimen name="space_two_hundred">200dp</dimen>
+    <dimen name="space_three_hundred">300dp</dimen>
+    <dimen name="space_seventy">70dp</dimen>
+    <dimen name="space_sixty">60dp</dimen>
+    <dimen name="space_fifty" tools:keep="@dimen/space_fifty">50dp</dimen>
+
+</resources>

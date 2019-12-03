@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <color name="colorPrimary">#C80612</color>
+    <color name="colorPrimaryDark">#C8574B</color>
+    <color name="colorAccent">#D81B60</color>
+
+    <color name="background_color" tools:keep="@color/background_color">#f9fafb</color>
+    <color name="background_color_two">#f5fafb</color>
+    <color name="white" tools:keep="@color/white">#FFFFFF</color>
+    <color name="black" tools:keep="@color/black">#000000</color>
+    <color name="maroon" tools:keep="@color/maroon">#800000</color>
+    <color name="green" tools:keep="@color/green">#008000</color>
+    <color name="text_color" tools:keep="@color/text_color">#252525</color>
+    <color name="text_color_gray" tools:keep="@color/text_color_gray">#888888</color>
+    <color name="text_color_blue" tools:keep="@color/text_color_blue">#01aef0</color>
+    <color name="text_divider_color" tools:keep="@color/text_divider_color">#d4ccc6</color>
+
+    <color name="open_status">#f36a22</color>
+    <color name="schedule_status">#01aef0</color>
+    <color name="assignee_to_status" tools:keep="@color/assignee_to_status">#17cbc0</color>
+    <color name="accept_status" tools:keep="@color/accept_status">#39be16</color>
+    <color name="start_status" tools:keep="@color/start_status">#ebbd07</color>
+    <color name="pause_status" tools:keep="@color/pause_status">#b4b4b5</color>
+    <color name="close_status">#8ec63f</color>
+    <color name="verify_status" tools:keep="@color/verify_status">#432e8b</color>
+    <color name="reOpen_status" tools:keep="@color/reOpen_status">#c24343</color>
+    <color name="side_drawer_icon_color" tools:keep="@color/side_drawer_icon_color">#AAAAAA</color>
+    <color name="place_holder_image" tools:keep="@color/place_holder_image">#CCCBCB</color>
+    <color name="place_holder_image_inner" tools:keep="@color/place_holder_image_inner">#D6D6D6
+    </color>
+    <color name="light_orange" tools:keep="@color/light_orange">#FFEFE5</color>
+
+</resources>

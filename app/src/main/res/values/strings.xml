@@ -1,0 +1,90 @@
+<resources>
+    <string name="app_name">SUNTEC</string>
+    <string name="no_internet_connection">No Internet connection</string>
+    <string name="back_to_online">Back online</string>
+
+    <!--Typeface for custom views-->
+    <string name="typeface_open_sans_bold" translatable="false"> OpenSans-Bold.ttf</string>
+    <string name="typeface_open_sans_bold_light" translatable="false"> OpenSans-Light.ttf</string>
+    <string name="typeface_open_sans_regular" translatable="false"> OpenSans-Regular.ttf</string>
+    <string name="typeface_open_sans_semi_bold" translatable="false"> OpenSans-Semibold.ttf</string>
+    <string name="war_password_empty">Password should not be empty.</string>
+    <string name="password_length_must_be_four">Password must be 4–16 characters with at least.</string>
+
+    <string name="hint_edit_email">Email Id</string>
+    <string name="hint_enter_password">Password</string>
+    <string name="err_unknown">Please try again</string>
+    <string name="signIn">Sign In</string>
+    <string name="submit">Submit</string>
+    <string name="something_went_wrong">Something went wrong please try again.</string>
+    <string name="please_try_again">Please try again.</string>
+
+    <!--Warning Messages-->
+    <string name="war_enter_email">Please enter email / username / mobile number.</string>
+    <string name="war_enter_user_name">Please enter valid username.</string>
+    <string name="war_enter_your_email">Please enter email.</string>
+    <string name="war_enter_valid_email">Please enter valid email.</string>
+    <string name="war_enter_valid_mobile">Please enter valid mobile number.</string>
+    <string name="war_email_empty">Email should not be empty.</string>
+    <string name="war_name_empty">Name should not be empty.</string>
+    <string name="war_nick_name_empty">Nick name should not be empty.</string>
+    <string name="war_enter_first_name">Please enter your first name.</string>
+    <string name="war_enter_middle_name">Please enter your middle name.</string>
+    <string name="war_enter_last_name">Please enter your last name.</string>
+    <string name="war_enter_country_name">Please enter your country name.</string>
+    <string name="war_enter_your_mobile">Please enter your mobile number.</string>
+    <string name="password_length_must_be">Password must be 6–16 characters with at least.</string>
+    <string name="new_password_reg">Password must have upper and lowercase letters at least 1 number.</string>
+
+    <string name="no_record_available">No record available</string>
+    <string name="complaint_overview">Complaint Overview</string>
+    <string name="complaint_no">Complaint No.</string>
+    <string name="pending">Pending</string>
+    <string name="reopen">Reopen</string>
+    <string name="in_progress">In-Progress</string>
+    <string name="completed">Completed</string>
+    <string name="verified">Verified</string>
+
+    <string name="ok">Ok</string>
+    <string name="cancel">Cancel</string>
+    <string name="search_hint">Search...</string>
+    <string name="logout_warning_msg">Are you sure you want to logout ?</string>
+    <string name="profile_update_msg">Your profile updated successfully.</string>
+
+    <string name="home">Home</string>
+    <string name="drawer_open">Open</string>
+    <string name="drawer_close">Close</string>
+    <string name="version">Version</string>
+    <string name="setting">Settings</string>
+    <string name="about_us">About Us</string>
+    <string name="logout">Logout</string>
+    <string name="change_password">Change Password</string>
+    <string name="profile">Profile</string>
+    <string name="save">Save</string>
+    <string name="first_name">First Name</string>
+    <string name="middle_name">Middle Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="email_id">Email Address</string>
+    <string name="mobileNumber">Mobile Number</string>
+    <string name="password">Password</string>
+    <string name="confirm_password">Enter confirm password</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="save_profile">Save Profile</string>
+    <string name="complaint">Complaints</string>
+    <string name="resetPassword">Reset Password</string>
+    <string name="coming_soon">Coming Soon</string>V
+    <string name="yes">Yes</string>
+    <string name="username">Username</string>
+    <string name="departments">Departments</string>
+    <string name="visit_report">Visit Report</string>
+    <string name="password_must_be_same">Password must be same</string>
+    <string name="password_updated_successfully">Password updated successfully</string>
+    <string name="ticket_scheduled_successfully">Ticket Scheduled Successfully</string>
+    <string name="signature">signature</string>
+    <string name="dialog_title">Create Signature</string>
+    <string name="clear_pad">clear</string>
+    <string name="visit">Visit</string>
+    <string name="location_str">Your Locations Settings Is Not Enable. Please Enable Location For</string>
+</resources>
