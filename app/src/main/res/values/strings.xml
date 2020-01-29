@@ -87,4 +87,5 @@
     <string name="clear_pad">clear</string>
     <string name="visit">Visit</string>
     <string name="location_str">Your Locations Settings Is Not Enable. Please Enable Location For</string>
+    <string name="draft">Draft</string>
 </resources>

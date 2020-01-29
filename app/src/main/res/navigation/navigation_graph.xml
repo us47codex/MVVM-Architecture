@@ -46,6 +46,9 @@
         <action
             android:id="@+id/toChangePasswordFragment"
             app:destination="@id/changePasswordFragment" />
+        <action
+            android:id="@+id/toVisitDraftFragment"
+            app:destination="@id/visitDraftFragment" />
     </fragment>
     <fragment
         android:id="@+id/userProfileFragment"
@@ -102,4 +105,9 @@
         android:name="com.us47codex.mvvmarch.complaint.VisitOthersFragment"
         android:label="fragment_visit_others"
         tools:layout="@layout/fragment_visit_others" />
+    <fragment
+        android:id="@+id/visitDraftFragment"
+        android:name="com.us47codex.mvvmarch.complaint.VisitDraftFragment"
+        android:label="fragment_visit_draft"
+        tools:layout="@layout/fragment_visit_draft" />
 </navigation>

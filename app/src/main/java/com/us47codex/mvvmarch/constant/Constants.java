@@ -12,7 +12,7 @@ public class Constants {
     public static final int PROFILE_ID = 1;
     public static final int CHANGE_PASSWORD_ID = 2;
     public static final int COMPLAINTS_ID = 3;
-    public static final int ABOUT_US_ID = 4;
+    public static final int DRAFT_ID = 4;
     public static final int LOGOUT_ID = 5;
 
     /*

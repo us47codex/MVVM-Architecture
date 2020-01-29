@@ -30,8 +30,9 @@
             android:layout_gravity="center"
             android:layout_weight="1"
             android:gravity="center|start"
+            android:textAllCaps="true"
             android:textColor="@color/text_color"
-            android:textSize="@dimen/_16ssp"
+            android:textSize="@dimen/_18ssp"
             app:textAllCaps="false" />
 
         <ImageView

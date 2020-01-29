@@ -332,19 +332,19 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
         NavDrawerModel navItemComplaints = new NavDrawerModel();
         navItemComplaints.setId(Constants.COMPLAINTS_ID);
         navItemComplaints.setTitle(getResources().getString(R.string.complaint));
-        navItemComplaints.setImgId(R.drawable.ic_change_password);
+        navItemComplaints.setImgId(R.drawable.ic_assignment);
         navDrawerModelList.add(navItemComplaints);
 
-//        NavDrawerModel navItemAboutUs = new NavDrawerModel();
-//        navItemAboutUs.setId(Constants.ABOUT_US_ID);
-//        navItemAboutUs.setTitle(getResources().getString(R.string.about_us));
-//        navItemAboutUs.setImgId(R.drawable.ic_aboutus);
-//        navDrawerModelList.add(navItemAboutUs);
+        NavDrawerModel navItemAboutUs = new NavDrawerModel();
+        navItemAboutUs.setId(Constants.DRAFT_ID);
+        navItemAboutUs.setTitle(getResources().getString(R.string.draft));
+        navItemAboutUs.setImgId(R.drawable.ic_drafts);
+        navDrawerModelList.add(navItemAboutUs);
 
         NavDrawerModel navItemLogout = new NavDrawerModel();
         navItemLogout.setId(Constants.LOGOUT_ID);
         navItemLogout.setTitle(getResources().getString(R.string.logout));
-        navItemLogout.setImgId(R.drawable.ic_logout);
+        navItemLogout.setImgId(R.drawable.ic_power);
         navDrawerModelList.add(navItemLogout);
         drawerAdapter.notifyDataSetChanged();
 
@@ -374,6 +374,9 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
             } else if (navDrawerModel.getId() == Constants.CHANGE_PASSWORD_ID) {
                 jumpToDestinationFragment(getCurrentFragmentId(),
                         R.id.toChangePasswordFragment, frameMain, null, false);
+            } else if (navDrawerModel.getId() == Constants.DRAFT_ID) {
+                jumpToDestinationFragment(getCurrentFragmentId(),
+                        R.id.toVisitDraftFragment, frameMain, null, false);
             } else {
                 showDialogWithSingleButtons(getContext(), getString(R.string.app_name),
                         Objects.requireNonNull(getActivity()).getString(R.string.coming_soon),
