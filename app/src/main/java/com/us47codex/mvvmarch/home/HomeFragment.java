@@ -1,12 +1,8 @@
 package com.us47codex.mvvmarch.home;
 
 import android.Manifest;
-import android.content.Context;
-import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,34 +14,22 @@ import android.widget.LinearLayout;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatTextView;
-import androidx.core.app.ActivityCompat;
 import androidx.core.util.Pair;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProviders;
-import androidx.work.WorkInfo;
-import androidx.work.WorkManager;
+import androidx.lifecycle.ViewModelProvider;
 
-import com.google.common.util.concurrent.ListenableFuture;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.us47codex.mvvmarch.R;
-import com.us47codex.mvvmarch.SunTecApplication;
-import com.us47codex.mvvmarch.SunTecPreferenceManager;
 import com.us47codex.mvvmarch.base.BaseFragment;
 import com.us47codex.mvvmarch.constant.Constants;
 import com.us47codex.mvvmarch.enums.ApiCallStatus;
-import com.us47codex.mvvmarch.helper.AppLog;
-import com.us47codex.mvvmarch.helper.AppUtils;
-import com.us47codex.mvvmarch.location.LocationManagerServices;
 
 import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Objects;
-import java.util.UUID;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
-import io.reactivex.Completable;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
@@ -131,7 +115,7 @@ public class HomeFragment extends BaseFragment {
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             window.setStatusBarColor(getResources().getColor(R.color.white));
         }
-        homeViewModel = ViewModelProviders.of(this).get(HomeViewModel.class);
+        homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
     }
 
     @Nullable

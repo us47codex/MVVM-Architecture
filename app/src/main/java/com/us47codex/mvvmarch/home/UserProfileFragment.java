@@ -29,7 +29,7 @@ import androidx.appcompat.widget.AppCompatButton;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.FileProvider;
 import androidx.core.util.Pair;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
@@ -158,7 +158,7 @@ public class UserProfileFragment extends BaseFragment {
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             window.setStatusBarColor(getResources().getColor(R.color.white));
         }
-        homeViewModel = ViewModelProviders.of(this).get(HomeViewModel.class);
+        homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
     }
 
     @Nullable
@@ -428,7 +428,7 @@ public class UserProfileFragment extends BaseFragment {
             }
             if (pictureFile != null) {
                 Uri selectedImageUri = FileProvider.getUriForFile(getContext(), Objects.requireNonNull(getContext()).getPackageName() +
-                        ".provider", pictureFile);
+                        ".FileProvider", pictureFile);
 
 
                 cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, selectedImageUri);

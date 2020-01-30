@@ -26,7 +26,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.core.util.Pair;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.github.florent37.singledateandtimepicker.SingleDateAndTimePicker;
 import com.jakewharton.rxbinding2.view.RxView;
@@ -136,7 +136,7 @@ public class ComplaintDetailsFragment extends BaseFragment {
         if (bundle != null) {
             complainId = bundle.getLong(Constants.KEY_COMPLAIN_ID, 0);
         }
-        complaintViewModel = ViewModelProviders.of(this).get(ComplaintViewModel.class);
+        complaintViewModel = new ViewModelProvider(this).get(ComplaintViewModel.class);
     }
 
     @Nullable

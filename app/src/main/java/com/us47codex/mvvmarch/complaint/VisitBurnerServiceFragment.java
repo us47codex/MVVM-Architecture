@@ -31,7 +31,7 @@ import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.appcompat.widget.LinearLayoutCompat;
 import androidx.core.util.Pair;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -203,7 +203,7 @@ public class VisitBurnerServiceFragment extends BaseFragment {
         if (bundle != null) {
             complainId = bundle.getLong(Constants.KEY_COMPLAIN_ID, 0);
         }
-        complaintViewModel = ViewModelProviders.of(this).get(ComplaintViewModel.class);
+        complaintViewModel = new ViewModelProvider(this).get(ComplaintViewModel.class);
     }
 
     @Nullable

@@ -12,8 +12,8 @@ import androidx.room.PrimaryKey;
  * Email : us47codex@gmail.com
  **/
 
-@Entity(tableName = "tbl_visits")
-public class Visit {
+@Entity(tableName = "tbl_visit_draft")
+public class VisitDraft {
     @NonNull
     @PrimaryKey
     @ColumnInfo(name = "id")

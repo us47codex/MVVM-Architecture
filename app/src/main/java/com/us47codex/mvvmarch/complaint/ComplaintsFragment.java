@@ -14,7 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.core.util.Pair;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -122,7 +122,7 @@ public class ComplaintsFragment extends BaseFragment {
         if (bundle != null) {
             FILTER_COMPLAINT = bundle.getString(Constants.KEY_FILTER_COMPLAINT, "all");
         }
-        complaintViewModel = ViewModelProviders.of(this).get(ComplaintViewModel.class);
+        complaintViewModel = new ViewModelProvider(this).get(ComplaintViewModel.class);
     }
 
     @Nullable
