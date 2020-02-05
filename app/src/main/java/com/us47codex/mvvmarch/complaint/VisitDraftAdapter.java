@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.us47codex.mvvmarch.R;
 import com.us47codex.mvvmarch.helper.AppUtils;
 import com.us47codex.mvvmarch.interfaces.OnItemClickListener;
-import com.us47codex.mvvmarch.roomDatabase.Complaint;
+import com.us47codex.mvvmarch.roomDatabase.VisitDraft;
 
 import java.util.List;
 
@@ -25,10 +25,10 @@ import java.util.List;
  **/
 public class VisitDraftAdapter extends RecyclerView.Adapter<VisitDraftAdapter.ComplainsViewHolder> {
     private Context context;
-    private List<Complaint> complaintList;
+    private List<VisitDraft> complaintList;
     private OnItemClickListener onItemClickListener;
 
-    public VisitDraftAdapter(Context context, List<Complaint> complaintList) {
+    public VisitDraftAdapter(Context context, List<VisitDraft> complaintList) {
         this.context = context;
         this.complaintList = complaintList;
     }
@@ -43,12 +43,11 @@ public class VisitDraftAdapter extends RecyclerView.Adapter<VisitDraftAdapter.Co
 
     @Override
     public void onBindViewHolder(@NonNull ComplainsViewHolder holder, int position) {
-        Complaint complaint = complaintList.get(position);
+        VisitDraft complaint = complaintList.get(position);
         holder.txvComplaintNo.setText(String.valueOf(complaint.getId()));
-        holder.txvCustomerName.setText(complaint.getCustomerLastName());
+        holder.txvCustomerName.setText(complaint.getCustomerName());
         holder.txvMachineType.setText(String.format("%s %s", complaint.getMcType(), AppUtils.isEmpty(complaint.getVisitType()) ? "" : ": " + complaint.getVisitType()));
-        holder.txvStatus.setText(complaint.getStatus());
-        holder.txvDate.setText(complaint.getUpdatedAt());
+        holder.txvDate.setText(complaint.getVisitDate());
 
         holder.llComplaint.setOnClickListener(view -> {
             onItemClickListener.onItemClick(view, complaint);

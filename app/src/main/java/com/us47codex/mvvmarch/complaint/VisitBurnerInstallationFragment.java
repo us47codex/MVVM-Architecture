@@ -49,7 +49,9 @@ import com.us47codex.mvvmarch.enums.ApiCallStatus;
 import com.us47codex.mvvmarch.helper.AppLog;
 import com.us47codex.mvvmarch.helper.AppUtils;
 import com.us47codex.mvvmarch.roomDatabase.Complaint;
+import com.us47codex.mvvmarch.roomDatabase.VisitDraft;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
@@ -67,6 +69,7 @@ import java.util.concurrent.TimeUnit;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.functions.Consumer;
 import io.reactivex.observers.DisposableMaybeObserver;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.RequestBody;
@@ -80,6 +83,7 @@ import static com.us47codex.mvvmarch.helper.AppUtils.toRequestBody;
  * Email : us47codex@gmail.com
  **/
 public class VisitBurnerInstallationFragment extends BaseFragment {
+    private String TAG = VisitBurnerInstallationFragment.class.getSimpleName();
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
     private FrameLayout frameMain;
     private ComplaintViewModel complaintViewModel;
@@ -545,6 +549,7 @@ public class VisitBurnerInstallationFragment extends BaseFragment {
                                         showDialogWithSingleButtons(getContext(), getString(R.string.app_name),
                                                 "Report submitted successfully", Objects.requireNonNull(getActivity()).getString(R.string.ok), (dialog, which) -> {
                                                     backToPreviousFragment(R.id.complaintsFragment, frameMain, false);
+                                                    prepareParamForBurnerInstallationDraftAndInsert();
                                                 }, false);
                                     }
                                 } else if (pair.first.equals(ComplaintViewModel.GET_REPORT_NO_API_TAG)) {
@@ -701,57 +706,6 @@ public class VisitBurnerInstallationFragment extends BaseFragment {
 //        }
     }
 
-    private HashMap<String, String> prepareBurnerInstallationParamsold() {
-        // Complain Visit Burner
-        //installation & commissionin
-        //AND
-        //Pre-installed
-
-
-        HashMap<String, String> params = new HashMap<>();
-        params.put("id", String.valueOf(complaint.getId()));
-        params.put("resolve_image", "");
-//        params.put("sign_repre", covertBitmapToBase64(bitmapSignatureAndStamp));
-//        params.put("sign_customer", covertBitmapToBase64(bitmapCustomerSign));
-        params.put("battn_by", edtAttnBy.getText().toString());
-        params.put("bclient", edtClient.getText().toString());
-        params.put("badress", edtAddress.getText().toString());
-        params.put("tax", edtFoods.getText().toString());
-        params.put("others", edtHotelBill.getText().toString());
-        params.put("to_form", edtTransport.getText().toString());
-        params.put("conveyance", edtConveyance.getText().toString());
-        params.put("services_charges", edtServiceCharge.getText().toString());
-        params.put("training_given_by", edtName.getText().toString());
-        params.put("training_given", training);
-        params.put("checkout_date", txvCheckoutDateTime.getText().toString());
-        params.put("customer_remark", edtCustomerRemarks.getText().toString());
-        params.put("rate_communication", edtEffectiveCommunication.getText().toString());
-        params.put("rate_problem", edtPresenceOfMind.getText().toString());
-        params.put("rate_behaviour", edtSiteBehaviour.getText().toString());
-        params.put("rate_work", edtTimelyCompletion.getText().toString());
-        params.put("rate_cooperation", edtCooperationWithYou.getText().toString());
-        params.put("rate_knowladge", edtProductJobKnowledge.getText().toString());
-        params.put("crate", customerFeedback);
-        params.put("engineer_remark", edtEngineerRemark.getText().toString());
-        params.put("bcom_work_done", edtCommissioningWorkDoneDescription.getText().toString());
-        params.put("com_end_date", txvCommissioningDateEnd.getText().toString());
-        params.put("com_start_date", txvCommissioningDateStart.getText().toString());
-        params.put("bin_work_des", edtInstallationWorkDoneDescription.getText().toString());
-        params.put("in_end_date", txvInstallationDateEnd.getText().toString());
-        params.put("in_start_date", txvInstallationDateStart.getText().toString());
-        params.put("bfuel", edtFuel.getText().toString());
-        params.put("btype", edtType.getText().toString());
-        params.put("bsrno", edtSerialNo.getText().toString());
-        params.put("bcode", edtCode.getText().toString());
-        params.put("bquantity", edtQuantity.getText().toString());
-        params.put("bmodel", edtModel.getText().toString());
-        params.put("bapplication", edtApplication.getText().toString());
-        params.put("contact_person", edtContactPerson.getText().toString());
-
-        return params;
-
-    }
-
     private HashMap<String, RequestBody> prepareBurnerInstallationParams() {
         // Complain Visit Burner
         //installation & commissionin
@@ -806,6 +760,104 @@ public class VisitBurnerInstallationFragment extends BaseFragment {
 
     }
 
+    private HashMap<String, String> prepareParamForBurnerInstallationDraftAndInsert() {
+        // Complain Visit Burner
+        //installation & commissionin
+        //AND
+        //Pre-installed
+
+
+        HashMap<String, String> params = new HashMap<>();
+        params.put("current_date", txvDate.getText().toString());
+        params.put("id", String.valueOf(complaint.getId()));
+        params.put("report_no", edtReportNo.getText().toString());
+        params.put("resolve_image", "");
+        params.put("battn_by", edtAttnBy.getText().toString());
+        params.put("bclient", edtClient.getText().toString());
+        params.put("badress", edtAddress.getText().toString());
+        params.put("tax", edtFoods.getText().toString());
+        params.put("others", edtHotelBill.getText().toString());
+        params.put("to_form", edtTransport.getText().toString());
+        params.put("conveyance", edtConveyance.getText().toString());
+        params.put("services_charges", edtServiceCharge.getText().toString());
+        params.put("training_given_by", edtName.getText().toString());
+        params.put("training_given", training);
+        params.put("checkout_date", txvCheckoutDateTime.getText().toString());
+        params.put("customer_remark", edtCustomerRemarks.getText().toString());
+        params.put("rate_communication", edtEffectiveCommunication.getText().toString());
+        params.put("rate_problem", edtPresenceOfMind.getText().toString());
+        params.put("rate_behaviour", edtSiteBehaviour.getText().toString());
+        params.put("rate_work", edtTimelyCompletion.getText().toString());
+        params.put("rate_cooperation", edtCooperationWithYou.getText().toString());
+        params.put("rate_knowladge", edtProductJobKnowledge.getText().toString());
+        params.put("crate", "");
+        params.put("engineer_remark", edtEngineerRemark.getText().toString());
+        params.put("bcom_work_done", edtCommissioningWorkDoneDescription.getText().toString());
+        params.put("com_end_date", txvCommissioningDateEnd.getText().toString());
+        params.put("com_start_date", txvCommissioningDateStart.getText().toString());
+        params.put("bin_work_des", edtInstallationWorkDoneDescription.getText().toString());
+        params.put("in_end_date", txvInstallationDateEnd.getText().toString());
+        params.put("in_start_date", txvInstallationDateStart.getText().toString());
+        params.put("bfuel", edtFuel.getText().toString());
+        params.put("btype", edtType.getText().toString());
+        params.put("bsrno", edtSerialNo.getText().toString());
+        params.put("bcode", edtCode.getText().toString());
+        params.put("bquantity", edtQuantity.getText().toString());
+        params.put("bmodel", edtModel.getText().toString());
+        params.put("bapplication", edtApplication.getText().toString());
+        params.put("contact_person", edtContactPerson.getText().toString());
+        params.put("out_lat", String.valueOf(SunTecApplication.getInstance().latitude));
+        params.put("out_long", String.valueOf(SunTecApplication.getInstance().longitude));
+
+        params.put("sign_customer\"; filename=\"sign_customer.jpg\"", customerSign.getAbsolutePath());
+
+        if (suntecRepreSign != null)
+            params.put("sign_repre\"; filename=\"sign_repre.jpg\"", suntecRepreSign.getAbsolutePath());
+        else
+            params.put("sign_repre\"; filename=\"sign_repre.jpg\"", "");
+
+        VisitDraft visitDraft = new VisitDraft();
+        visitDraft.setId(complaint.getId());
+        visitDraft.setMcType(complaint.getMcType());
+        visitDraft.setVisitType(complaint.getVisitType());
+        visitDraft.setReportNo(edtReportNo.getText().toString().trim());
+        visitDraft.setVisitData(hashmapToString(params).toString());
+        visitDraft.setCustomerName(complaint.getCustomerLastName());
+        visitDraft.setVisitDate(AppUtils.getCurrentDateTime());
+
+        try {
+            getDatabase().visitDraftDao().insertVisitDraft(visitDraft)
+                    .subscribeOn(Schedulers.io())
+                    .doOnError(new Consumer<Throwable>() {
+                        @Override
+                        public void accept(Throwable throwable) throws Exception {
+                            throwable.printStackTrace();
+                        }
+                    })
+                    .subscribe();
+        } catch (Exception e) {
+            e.printStackTrace();
+            AppLog.error(TAG, e);
+        }
+        AppLog.error("TAG", "prepareParamForDraftAndInsert :: params :" + params.toString());
+
+        return params;
+    }
+
+    private JSONObject hashmapToString(HashMap<String, String> params) {
+
+        JSONObject jsonData = new JSONObject();
+        for (String key : params.keySet()) {
+            String value = params.get(key);
+            try {
+                jsonData.put(key, value);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        AppLog.debug(TAG, "convertToString :: " + jsonData);
+        return jsonData;
+    }
 
     protected void showDialogSelectDate(AppCompatTextView appCompatTextView) {
         if (dialogWakeUpCall != null) {

@@ -520,6 +520,7 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
                 AppUtils.clearPreference()
                         .andThen(getDatabase().userDao().deleteAllUser())
                         .andThen(getDatabase().complaintDao().deleteAllComplaint())
+                        .andThen(getDatabase().visitDraftDao().deleteAllVisitDrafts())
                         .subscribeOn(Schedulers.computation())
                         .observeOn(AndroidSchedulers.mainThread())
                         .doOnComplete(() -> {

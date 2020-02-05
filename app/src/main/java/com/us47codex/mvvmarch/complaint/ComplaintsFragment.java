@@ -50,6 +50,7 @@ import static com.us47codex.mvvmarch.constant.Constants.KEY_COMPLAIN_ID;
  * Email : us47codex@gmail.com
  **/
 public class ComplaintsFragment extends BaseFragment {
+    private final String TAG = ComplaintsFragment.class.getSimpleName();
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
     private FrameLayout frameMain;
     private AppCompatTextView txvNoRecordAvailable;

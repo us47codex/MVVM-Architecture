@@ -3,6 +3,7 @@ package com.us47codex.mvvmarch.complaint;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -38,6 +39,7 @@ import com.github.florent37.singledateandtimepicker.SingleDateAndTimePicker;
 import com.github.gcacace.signaturepad.views.SignaturePad;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.gson.Gson;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.us47codex.mvvmarch.R;
 import com.us47codex.mvvmarch.SunTecApplication;
@@ -47,9 +49,13 @@ import com.us47codex.mvvmarch.enums.ApiCallStatus;
 import com.us47codex.mvvmarch.helper.AppLog;
 import com.us47codex.mvvmarch.helper.AppUtils;
 import com.us47codex.mvvmarch.roomDatabase.Complaint;
+import com.us47codex.mvvmarch.roomDatabase.VisitDraft;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -58,6 +64,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
@@ -66,6 +73,7 @@ import java.util.concurrent.TimeUnit;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.functions.Consumer;
 import io.reactivex.observers.DisposableMaybeObserver;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.RequestBody;
@@ -101,6 +109,10 @@ public class VisitOthersFragment extends BaseFragment {
     private String SignatureFilePath = "";
     private AppCompatImageView signatureImage;
 
+    private byte[] customerSignByte = new byte[1];
+    private byte[] marketingProjectHeadSignByte = new byte[1];
+    private byte[] suntecRepreSignByte = new byte[1];
+
     private Dialog dialogWakeUpCall;
 
     private File customerSign;
@@ -111,6 +123,7 @@ public class VisitOthersFragment extends BaseFragment {
     private int MARKETING_PROJECT_HEAD_SIGN_CODE = 2;
     private String workStatus = "Complete", qualityOfService = "Excellent";
     private ArrayList<String> typeOfCall = new ArrayList<>();
+    private String TAG = VisitOthersFragment.class.getSimpleName();
 
     @Override
     protected int getLayoutId() {
@@ -462,9 +475,12 @@ public class VisitOthersFragment extends BaseFragment {
                             }
                         } else if (object instanceof String) {
                             String errorCode = (String) object;
+                            String msg = object + "\n Visit Report saved to draft. Please check in Draft";
                             showDialogWithSingleButtons(getContext(), getString(R.string.app_name),
-                                    String.valueOf(object), Objects.requireNonNull(getActivity()).getString(R.string.ok), (dialog, which) -> {
+                                    String.valueOf(msg), Objects.requireNonNull(getActivity()).getString(R.string.ok), (dialog, which) -> {
                                         enableDisableView(frameMain, true);
+                                        backToPreviousFragment(R.id.complaintsFragment, frameMain, false);
+                                        prepareParamForVisitOtherDraftAndInsert();
                                     }, false);
 
                         } else if (object instanceof Pair) {
@@ -582,11 +598,15 @@ public class VisitOthersFragment extends BaseFragment {
 //            scanMediaFile(photo, type);
             if (type == CUSTOMER_SIGN_CODE) {
                 customerSign = saveBitmapToJPG(signature, photo);
+                customerSignByte = bitmapToByteArray(signature);
             } else if (type == SUNTEC_REPRE_SIGN_CODE) {
                 suntecRepreSign = saveBitmapToJPG(signature, photo);
+                suntecRepreSignByte = bitmapToByteArray(signature);
             } else if (type == MARKETING_PROJECT_HEAD_SIGN_CODE) {
                 marketingProjectHeadSign = saveBitmapToJPG(signature, photo);
+                marketingProjectHeadSignByte = bitmapToByteArray(signature);
             }
+//            convertToString(signature);
             result = true;
         } catch (IOException e) {
             e.printStackTrace();
@@ -637,6 +657,7 @@ public class VisitOthersFragment extends BaseFragment {
         if (isValidated()) {
             showProgressLoader();
             complaintViewModel.callToApi(prepareParam(), ComplaintViewModel.HEAT_PUMP_COMPLAIN_VISIT_API_TAG, true);
+//            prepareParamForVisitOtherDraftAndInsert();
         }
     }
 
@@ -649,58 +670,6 @@ public class VisitOthersFragment extends BaseFragment {
         } else {
             Toast.makeText(getContext(), "Complain is null", Toast.LENGTH_SHORT).show();
         }
-    }
-
-    private HashMap<String, String> prepareParamOld() {
-        //Complain Visit Heat Pump, HOT Water Generator, Dyare
-
-
-        HashMap<String, String> params = new HashMap<>();
-        params.put("id", String.valueOf(complaint.getId()));
-        params.put("resolve_image", "");
-//        params.put("sign_customer", covertBitmapToBase64(bitmapCustomerSign));
-//        params.put("sign_marketing", covertBitmapToBase64(bitmapMarketingProjectHead));
-//        params.put("sign_repre", covertBitmapToBase64(bitmapSunteRepresentative));
-        params.put("checkout_date", txvCheckoutDateTime.getText().toString());
-        params.put("spare_replace", edtPartsReplaced.getText().toString());
-        params.put("work_date", txvWorkDateTime.getText().toString());
-        params.put("tax", edtTax.getText().toString());
-        params.put("others", edtOthers.getText().toString());
-        params.put("to_form", edtToFrom.getText().toString());
-        params.put("conveyance", edtConvayance.getText().toString());
-        params.put("services_charges", edtServiceCharge.getText().toString());
-        params.put("quality_service", qualityOfService);
-        params.put("work_status", workStatus);
-        params.put("customer_remark", edtCustomerRemark.getText().toString());
-        params.put("suggetion_customer", edtSuggestionToCustomer.getText().toString());
-        params.put("description_work", edtDescriptionOfWorkDone.getText().toString());
-        params.put("observation", edtObservation.getText().toString());
-        params.put("nature_problem", edtNatureOfProblem.getText().toString());
-        params.put("courtesy_visit", chkCourtesyVisit.isChecked() ? edtCourtesyVisit.getText().toString() : "");
-        params.put("warranty", chkWarranty.isChecked() ? edtWarranty.getText().toString() : "");
-        params.put("chargeable", chkChargeable.isChecked() ? edtChargeable.getText().toString() : "");
-        params.put("commissioning", chkCommissioning.isChecked() ? edtCommissioning.getText().toString() : "");
-        params.put("installation", chkInstallation.isChecked() ? edtInstallation.getText().toString() : "");
-        params.put("pre_installation", chkPreInstallation.isChecked() ? edtPreInstallation.getText().toString() : "");
-        params.put("services", chkService.isChecked() ? edtService.getText().toString() : "");
-        params.put("type_of_call", typeOfCall.toString());
-        params.put("complain_no_date", edtComplaintNoDate.getText().toString());
-        params.put("po_no_date", edtPONoDate.getText().toString());
-        params.put("equipment", edtEquipment.getText().toString());
-        params.put("d_mno", edtDealerPhoneNo.getText().toString());
-        params.put("d_address", edtDealerAddress.getText().toString());
-        params.put("d_contact_person", edtDealerContactPerson.getText().toString());
-        params.put("oem_dealer_name", edtOEMDealerName.getText().toString());
-        params.put("month_year_insta", edtMonthYearOfInstallation.getText().toString());
-        params.put("no_of_hwg", edtNoOfHWG.getText().toString());
-        params.put("hwg_sr_no", edtHWGModelSerialNo.getText().toString());
-        params.put("no_of_heat", edtNoOfHeatPumps.getText().toString());
-        params.put("heat_p_sr_no", edtHeatPumpModelSerialNo.getText().toString());
-        params.put("contact_person", edtContactPerson.getText().toString());
-        params.put("report_no", edtReportNo.getText().toString());
-        params.put("reason_incomplte", edtReasonIncomplete.getText().toString());
-
-        return params;
     }
 
     private HashMap<String, RequestBody> prepareParam() {
@@ -758,6 +727,106 @@ public class VisitOthersFragment extends BaseFragment {
 
         AppLog.error("TAG", "params :" + params.toString());
         return params;
+    }
+
+    private HashMap<String, String> prepareParamForVisitOtherDraftAndInsert() {
+
+        HashMap<String, String> params = new HashMap<>();
+        params.put("current_date", txvDate.getText().toString());
+        params.put("id", String.valueOf(complaint.getId()));
+        params.put("resolve_image", "");
+        params.put("checkout_date", txvCheckoutDateTime.getText().toString());
+        params.put("spare_replace", edtPartsReplaced.getText().toString());
+        params.put("work_date", txvWorkDateTime.getText().toString());
+        params.put("tax", edtTax.getText().toString());
+        params.put("others", edtOthers.getText().toString());
+        params.put("to_form", edtToFrom.getText().toString());
+        params.put("conveyance", edtConvayance.getText().toString());
+        params.put("services_charges", edtServiceCharge.getText().toString());
+        params.put("quality_service", qualityOfService);
+        params.put("work_status", workStatus);
+        params.put("customer_remark", edtCustomerRemark.getText().toString());
+        params.put("suggetion_customer", edtSuggestionToCustomer.getText().toString());
+        params.put("description_work", edtDescriptionOfWorkDone.getText().toString());
+        params.put("observation", edtObservation.getText().toString());
+        params.put("nature_problem", edtNatureOfProblem.getText().toString());
+        params.put("courtesy_visit", chkCourtesyVisit.isChecked() ? edtCourtesyVisit.getText().toString() : "");
+        params.put("warranty", chkWarranty.isChecked() ? edtWarranty.getText().toString() : "");
+        params.put("chargeable", chkChargeable.isChecked() ? edtChargeable.getText().toString() : "");
+        params.put("commissioning", chkCommissioning.isChecked() ? edtCommissioning.getText().toString() : "");
+        params.put("installation", chkInstallation.isChecked() ? edtInstallation.getText().toString() : "");
+        params.put("pre_installation", chkPreInstallation.isChecked() ? edtPreInstallation.getText().toString() : "");
+        params.put("services", chkService.isChecked() ? edtService.getText().toString() : "");
+        params.put("type_of_call", typeOfCall.toString().replace("[", "").replace("]", ""));
+        params.put("complain_no_date", edtComplaintNoDate.getText().toString());
+        params.put("po_no_date", edtPONoDate.getText().toString());
+        params.put("equipment", edtEquipment.getText().toString());
+        params.put("d_mno", edtDealerPhoneNo.getText().toString());
+        params.put("d_address", edtDealerAddress.getText().toString());
+        params.put("d_contact_person", edtDealerContactPerson.getText().toString());
+        params.put("oem_dealer_name", edtOEMDealerName.getText().toString());
+        params.put("month_year_insta", edtMonthYearOfInstallation.getText().toString());
+        params.put("no_of_hwg", edtNoOfHWG.getText().toString());
+        params.put("hwg_sr_no", edtHWGModelSerialNo.getText().toString());
+        params.put("no_of_heat", edtNoOfHeatPumps.getText().toString());
+        params.put("heat_p_sr_no", edtHeatPumpModelSerialNo.getText().toString());
+        params.put("contact_person", edtContactPerson.getText().toString());
+        params.put("report_no", edtReportNo.getText().toString());
+        params.put("reason_incomplete", edtReasonIncomplete.getText().toString());
+        params.put("out_lat", String.valueOf(SunTecApplication.getInstance().latitude));
+        params.put("out_long", String.valueOf(SunTecApplication.getInstance().longitude));
+
+        params.put("sign_customer\"; filename=\"sign_customer.jpg\"", customerSign.getAbsolutePath());
+        if (marketingProjectHeadSign != null)
+            params.put("sign_marketing\"; filename=\"sign_marketing.jpg\"", marketingProjectHeadSign.getAbsolutePath());
+        else
+            params.put("sign_marketing\"; filename=\"sign_marketing.jpg\"", "");
+        if (suntecRepreSign != null)
+            params.put("sign_repre\"; filename=\"sign_repre.jpg\"", suntecRepreSign.getAbsolutePath());
+        else
+            params.put("sign_repre\"; filename=\"sign_repre.jpg\"", "");
+
+        VisitDraft visitDraft = new VisitDraft();
+        visitDraft.setId(complaint.getId());
+        visitDraft.setMcType(complaint.getMcType());
+        visitDraft.setVisitType(complaint.getVisitType());
+        visitDraft.setReportNo(edtReportNo.getText().toString().trim());
+        visitDraft.setVisitData(hashmapToString(params).toString());
+        visitDraft.setCustomerName(complaint.getCustomerLastName());
+        visitDraft.setVisitDate(AppUtils.getCurrentDateTime());
+
+        try {
+            getDatabase().visitDraftDao().insertVisitDraft(visitDraft)
+                    .subscribeOn(Schedulers.io())
+                    .doOnError(new Consumer<Throwable>() {
+                        @Override
+                        public void accept(Throwable throwable) throws Exception {
+                            throwable.printStackTrace();
+                        }
+                    })
+                    .subscribe();
+        } catch (Exception e) {
+            e.printStackTrace();
+            AppLog.error(TAG, e);
+        }
+        AppLog.error("TAG", "prepareParamForDraftAndInsert :: params :" + params.toString());
+        return params;
+    }
+
+    public HashMap<String, RequestBody> stringToMap(String t) throws JSONException {
+
+        HashMap<String, RequestBody> map = new HashMap<String, RequestBody>();
+        JSONObject jObject = new JSONObject(t);
+        Iterator<?> keys = jObject.keys();
+
+        while (keys.hasNext()) {
+            String key = (String) keys.next();
+            String value = jObject.getString(key);
+            map.put(key, toRequestBody(value));
+            AppLog.debug(TAG, "jsonToMap :: " + key);
+            AppLog.debug(TAG, "jsonToMap :: " + value);
+        }
+        return map;
     }
 
     protected void showDialogSelectDate(AppCompatTextView appCompatTextView) {
@@ -825,6 +894,111 @@ public class VisitOthersFragment extends BaseFragment {
         } */ else {
             return true;
         }
+    }
+
+    private void convertToString(Bitmap image) {
+        Gson gson = new Gson();
+
+        HashMap<String, Object> params = new HashMap<>();
+        params.put("name", "Upendra Shah");
+        params.put("email", "U@gmail.com");
+        params.put("sign_customer\"; filename=\"sign_customer.jpg\"", bitmapToByteArray(image));
+
+        AppLog.debug(TAG, "convertToString :: " + params.get("name"));
+        AppLog.debug(TAG, "convertToString :: " + params.get("email"));
+
+        String json = gson.toJson(params);
+
+        JSONObject jsonData = new JSONObject();
+        for (String key : params.keySet()) {
+            Object value;
+            if (key.equalsIgnoreCase("sign_customer\"; filename=\"sign_customer.jpg\"")) {
+                value = (byte[]) params.get(key);
+            } else {
+                value = params.get(key);
+            }
+
+            try {
+                jsonData.put(key, value);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        AppLog.debug(TAG, "convertToString :: " + jsonData);
+
+        try {
+            jsonToMap(jsonData.toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private JSONObject hashmapToString(HashMap<String, String> params) {
+
+        JSONObject jsonData = new JSONObject();
+        for (String key : params.keySet()) {
+            String value = params.get(key);
+            try {
+                jsonData.put(key, value);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        AppLog.debug(TAG, "convertToString :: " + jsonData);
+
+        try {
+            jsonToMap(jsonData.toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return jsonData;
+    }
+
+    public void jsonToMap(String t) throws JSONException {
+
+        HashMap<String, Object> map = new HashMap<String, Object>();
+        JSONObject jObject = new JSONObject(t);
+        Iterator<?> keys = jObject.keys();
+
+        while (keys.hasNext()) {
+            String key = (String) keys.next();
+            String value = jObject.getString(key);
+            map.put(key, value);
+            AppLog.debug(TAG, "jsonToMap :: " + key);
+            AppLog.debug(TAG, "jsonToMap :: " + value);
+        }
+    }
+
+    public byte[] bitmapToByteArray(Bitmap image) {
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        image.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+        return stream.toByteArray();
+    }
+
+    public Bitmap byteArrayToBitmap(byte[] outImage) {
+        ByteArrayInputStream imageStream = new ByteArrayInputStream(outImage);
+        return BitmapFactory.decodeStream(imageStream);
+    }
+
+    private File byteArrayToFile(byte[] outImage) throws IOException {
+        ByteArrayInputStream imageStream = new ByteArrayInputStream(outImage);
+        Bitmap bitmap = BitmapFactory.decodeStream(imageStream);
+
+        File photo = new File(getContext().getCacheDir(), String.format("Signature_%d.jpg", System.currentTimeMillis(), Locale.ENGLISH));
+        try {
+            Bitmap newBitmap = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_8888);
+            Canvas canvas = new Canvas(newBitmap);
+            canvas.drawColor(Color.WHITE);
+            canvas.drawBitmap(bitmap, 0, 0, null);
+            OutputStream stream = new FileOutputStream(photo);
+            newBitmap.compress(Bitmap.CompressFormat.JPEG, 80, stream);
+            stream.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return photo;
     }
 }
 

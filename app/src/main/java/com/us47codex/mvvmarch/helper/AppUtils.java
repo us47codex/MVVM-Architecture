@@ -1,6 +1,5 @@
 package com.us47codex.mvvmarch.helper;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
@@ -12,9 +11,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Point;
 import android.location.Location;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Environment;
-import android.os.Looper;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.text.TextUtils;
@@ -23,11 +20,7 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
 import android.view.WindowManager;
-import android.widget.Toast;
 
-import androidx.annotation.RequiresApi;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 
@@ -40,8 +33,6 @@ import com.github.pwittchen.reactivenetwork.library.rx2.internet.observing.strat
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationResult;
-import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.SettingsClient;
 import com.us47codex.mvvmarch.BuildConfig;
@@ -50,7 +41,6 @@ import com.us47codex.mvvmarch.SunTecApplication;
 import com.us47codex.mvvmarch.SunTecPreferenceManager;
 import com.us47codex.mvvmarch.constant.Constants;
 import com.us47codex.mvvmarch.constant.EndPoints;
-import com.us47codex.mvvmarch.location.LocationManagerServices;
 import com.us47codex.mvvmarch.location.LocationWorkManager;
 
 import org.json.JSONObject;
@@ -458,20 +448,20 @@ public class AppUtils {
 
     // This method  converts String to RequestBody
     public static RequestBody toRequestBody(String value) {
-        return RequestBody.create(MediaType.parse("text/plain"), value);
+        return RequestBody.create(value, MediaType.parse("text/plain"));
     }  // This method  converts String to RequestBody
 
     public static RequestBody toRequestBody(File file) {
 //        File file = new File("file_name");
         if (file == null) {
-            return RequestBody.create(MediaType.parse("image/jpg"), "");
+            return RequestBody.create("", MediaType.parse("image/jpg"));
         }
-        return RequestBody.create(MediaType.parse("image/jpg"), file);
+        return RequestBody.create(file, MediaType.parse("image/jpg"));
     }
 
     public static MultipartBody.Part toRequestBody1(File file) {
 //        File file = new File("file_name");
-        RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+        RequestBody requestFile = RequestBody.create(file, MediaType.parse("multipart/form-data"));
         return MultipartBody.Part.createFormData("image", file.getName(), requestFile);
     }
 
@@ -487,9 +477,6 @@ public class AppUtils {
             e.printStackTrace();
         }
     }
-
-
-
 
 
 }
