@@ -89,6 +89,7 @@ public class VisitBurnerServiceFragment extends BaseFragment {
     private FrameLayout frameMain;
     private ComplaintViewModel complaintViewModel;
     private List<Complaint> complaintList;
+    private String apiTag = "";
 
     private TextInputEditText edtAttnBy, edtClient, edtAddress, edtQuantity, edtModel, edtCustomerAddress, edtContactPerson, edtCustomerName,
             edtReportNo, edtFuel, edtType, edtSerialNo, edtCode, edtEngineerRemark, edtCommissioningWorkDoneDescription,
@@ -375,6 +376,7 @@ public class VisitBurnerServiceFragment extends BaseFragment {
     private void submitReport() {
         if (isValidated()) {
             showProgressLoader();
+            apiTag = ComplaintViewModel.BURNER_SERVICE_COMPLAINT_VISIT_API_TAG;
             complaintViewModel.callToApi(prepareBurnerServiceParams(), ComplaintViewModel.BURNER_SERVICE_COMPLAINT_VISIT_API_TAG, true);
         }
     }
@@ -382,6 +384,7 @@ public class VisitBurnerServiceFragment extends BaseFragment {
     private void getReportNo() {
         if (complaint != null) {
             showProgressLoader();
+            apiTag = ComplaintViewModel.GET_REPORT_NO_API_TAG;
             HashMap<String, String> params = new HashMap<>();
             params.put("mc_type", complaint.getMcType());
             complaintViewModel.callToApi(params, ComplaintViewModel.GET_REPORT_NO_API_TAG, true);
@@ -508,9 +511,12 @@ public class VisitBurnerServiceFragment extends BaseFragment {
                             }
                         } else if (object instanceof String) {
                             String errorCode = (String) object;
+                            String msg = object + "\nVisit Report saved to draft. Please check in Draft";
                             showDialogWithSingleButtons(getContext(), getString(R.string.app_name),
-                                    String.valueOf(object), Objects.requireNonNull(getActivity()).getString(R.string.ok), (dialog, which) -> {
+                                    String.valueOf(msg), Objects.requireNonNull(getActivity()).getString(R.string.ok), (dialog, which) -> {
                                         enableDisableView(frameMain, true);
+                                        if (apiTag.equalsIgnoreCase(ComplaintViewModel.BURNER_SERVICE_COMPLAINT_VISIT_API_TAG))
+                                            prepareParamForBurnerServiceDraftAndInsert();
                                     }, false);
 
                         } else if (object instanceof Pair) {
@@ -524,7 +530,6 @@ public class VisitBurnerServiceFragment extends BaseFragment {
                                         showDialogWithSingleButtons(getContext(), getString(R.string.app_name),
                                                 "Report submitted successfully", Objects.requireNonNull(getActivity()).getString(R.string.ok), (dialog, which) -> {
                                                     backToPreviousFragment(R.id.complaintsFragment, frameMain, false);
-                                                    prepareParamForBurnerServiceDraftAndInsert();
                                                 }, false);
                                     }
                                 } else if (pair.first.equals(ComplaintViewModel.GET_REPORT_NO_API_TAG)) {

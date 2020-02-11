@@ -277,7 +277,7 @@ public class VisitDraftFragment extends BaseFragment {
                             }
                         } else if (object instanceof String) {
                             String errorCode = (String) object;
-                            String msg = object + "\n Visit Report saved to draft. Please check in Draft";
+                            String msg = object + "\nVisit Report saved to draft. Please check in Draft";
                             showDialogWithSingleButtons(getContext(), getString(R.string.app_name),
                                     String.valueOf(errorCode), Objects.requireNonNull(getActivity()).getString(R.string.ok), (dialog, which) -> {
                                         enableDisableView(frameMain, true);

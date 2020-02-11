@@ -13,6 +13,7 @@ import com.us47codex.mvvmarch.constant.Constants;
 import com.us47codex.mvvmarch.constant.EndPoints;
 import com.us47codex.mvvmarch.enums.ApiCallStatus;
 import com.us47codex.mvvmarch.helper.AppLog;
+import com.us47codex.mvvmarch.helper.InternetConnection;
 import com.us47codex.mvvmarch.restApi.RestApiClient;
 import com.us47codex.mvvmarch.restApi.RestCallAPI;
 import com.us47codex.mvvmarch.roomDatabase.User;
@@ -66,36 +67,41 @@ public class LoginViewModel extends BaseViewModel {
                 .strategy(new SocketInternetObservingStrategy())
                 .build();
 
-//        getCompositeDisposable().add(
-//                AppUtils.checkHardInternetConnection()
-//                        .subscribeOn(Schedulers.io())
-//                        .doOnSuccess(aBoolean -> {
-//                            if (aBoolean) {
-        try {
-            switch ((apiTag)) {
-                case LOGIN_API_TAG:
-                    callToUserLogin((HashMap<String, String>) params, apiTag, shouldShowLoader);
-                    break;
-                case OTP_SEND_API_TAG:
-                    callToOTPSend((HashMap<String, String>) params, apiTag, shouldShowLoader);
-                    break;
-                case OTP_PASSWORD_UPDATE_API_TAG:
-                    callToOTPPasswordUpdate((HashMap<String, String>) params, apiTag, shouldShowLoader);
-                    break;
-                case PROFILE_API_TAG:
-                    callToUserProfile((HashMap<String, String>) params, apiTag, shouldShowLoader);
-                    break;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-//                            }
-//                        })
-//                        .doOnError(e -> {
-//                            getStatusBehaviorRelay().accept(ApiCallStatus.ERROR);
-//                            getErrorRelay().accept(Objects.requireNonNull(e.getLocalizedMessage()));
-//                        })
-//                        .subscribe());
+        getCompositeDisposable().add(
+                InternetConnection.checkSoftInternetConnectionStatusRxSingle(getApplication())
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .doOnSuccess(aBoolean -> {
+                            if (aBoolean) {
+                                try {
+                                    switch ((apiTag)) {
+                                        case LOGIN_API_TAG:
+                                            callToUserLogin((HashMap<String, String>) params, apiTag, shouldShowLoader);
+                                            break;
+                                        case OTP_SEND_API_TAG:
+                                            callToOTPSend((HashMap<String, String>) params, apiTag, shouldShowLoader);
+                                            break;
+                                        case OTP_PASSWORD_UPDATE_API_TAG:
+                                            callToOTPPasswordUpdate((HashMap<String, String>) params, apiTag, shouldShowLoader);
+                                            break;
+                                        case PROFILE_API_TAG:
+                                            callToUserProfile((HashMap<String, String>) params, apiTag, shouldShowLoader);
+                                            break;
+                                    }
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            } else {
+                                if (shouldShowLoader)
+                                    getStatusBehaviorRelay().accept(ApiCallStatus.ERROR);
+                                getErrorRelay().accept("No internet connection");
+                            }
+                        })
+                        .doOnError(e -> {
+                            getStatusBehaviorRelay().accept(ApiCallStatus.ERROR);
+                            getErrorRelay().accept(Objects.requireNonNull(e.getLocalizedMessage()));
+                        })
+                        .subscribe());
     }
 
     private void callToUserLogin(LoginParamModel params, String apiTag, boolean shouldShowLoader) {

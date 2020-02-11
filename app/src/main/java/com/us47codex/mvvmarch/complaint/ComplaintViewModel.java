@@ -12,6 +12,7 @@ import com.us47codex.mvvmarch.constant.Constants;
 import com.us47codex.mvvmarch.constant.EndPoints;
 import com.us47codex.mvvmarch.enums.ApiCallStatus;
 import com.us47codex.mvvmarch.helper.AppLog;
+import com.us47codex.mvvmarch.helper.InternetConnection;
 import com.us47codex.mvvmarch.restApi.RestCallAPI;
 import com.us47codex.mvvmarch.roomDatabase.Complaint;
 import com.us47codex.mvvmarch.roomDatabase.User;
@@ -26,6 +27,7 @@ import io.reactivex.Completable;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.SingleSource;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Function;
 import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
@@ -69,58 +71,63 @@ public class ComplaintViewModel extends BaseViewModel {
                 .strategy(new SocketInternetObservingStrategy())
                 .build();
 
-//        getCompositeDisposable().add(
-//                AppUtils.checkHardInternetConnection()
-//                        .subscribeOn(Schedulers.io())
-//                        .doOnSuccess(aBoolean -> {
-//                            if (aBoolean) {
-        try {
-            switch ((apiTag)) {
-                case COMPLAINT_LIST_API_TAG:
-                    callToComplaintList((HashMap<String, String>) params, apiTag, shouldShowLoader);
-                    break;
+        getCompositeDisposable().add(
+                InternetConnection.checkSoftInternetConnectionStatusRxSingle(getApplication())
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .doOnSuccess(aBoolean -> {
+                            if (aBoolean) {
+                                try {
+                                    switch ((apiTag)) {
+                                        case COMPLAINT_LIST_API_TAG:
+                                            callToComplaintList((HashMap<String, String>) params, apiTag, shouldShowLoader);
+                                            break;
 
-                case COMPLAINT_DETAIL_API_TAG:
-                    callToComplaintDetail((HashMap<String, String>) params, apiTag, shouldShowLoader);
-                    break;
+                                        case COMPLAINT_DETAIL_API_TAG:
+                                            callToComplaintDetail((HashMap<String, String>) params, apiTag, shouldShowLoader);
+                                            break;
 
-                case BURNER_SERVICE_COMPLAINT_VISIT_API_TAG:
-                    callToBurnerServiceComplainVisit((HashMap<String, RequestBody>) params, apiTag, shouldShowLoader);
-                    break;
+                                        case BURNER_SERVICE_COMPLAINT_VISIT_API_TAG:
+                                            callToBurnerServiceComplainVisit((HashMap<String, RequestBody>) params, apiTag, shouldShowLoader);
+                                            break;
 
-                case BURNER_INSTALLATION_COMPLAINT_VISIT_API_TAG:
-                    callToBurnerInstallationComplainVisit((HashMap<String, RequestBody>) params, apiTag, shouldShowLoader);
-                    break;
+                                        case BURNER_INSTALLATION_COMPLAINT_VISIT_API_TAG:
+                                            callToBurnerInstallationComplainVisit((HashMap<String, RequestBody>) params, apiTag, shouldShowLoader);
+                                            break;
 
-                case HEAT_PUMP_COMPLAIN_VISIT_API_TAG:
-                    callToHeatPumpComplainVisit((HashMap<String, RequestBody>) params, apiTag, shouldShowLoader);
-                    break;
+                                        case HEAT_PUMP_COMPLAIN_VISIT_API_TAG:
+                                            callToHeatPumpComplainVisit((HashMap<String, RequestBody>) params, apiTag, shouldShowLoader);
+                                            break;
 
-                case COMPLAIN_SCHEDULE_API_TAG:
-                    callToComplainSchedule((HashMap<String, String>) params, apiTag, shouldShowLoader);
-                    break;
+                                        case COMPLAIN_SCHEDULE_API_TAG:
+                                            callToComplainSchedule((HashMap<String, String>) params, apiTag, shouldShowLoader);
+                                            break;
 
-                case SCHEDULE_DATE_API_TAG:
-                    callToScheduleDate((HashMap<String, String>) params, apiTag, shouldShowLoader);
-                    break;
+                                        case SCHEDULE_DATE_API_TAG:
+                                            callToScheduleDate((HashMap<String, String>) params, apiTag, shouldShowLoader);
+                                            break;
 
-                case GET_REPORT_NO_API_TAG:
-                    callToGetReportNo((HashMap<String, String>) params, apiTag, shouldShowLoader);
-                    break;
-                case WORK_START_API_TAG:
-                    callToWorkStart((HashMap<String, String>) params, apiTag, shouldShowLoader);
-                    break;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-//                            }
-//                        })
-//                        .doOnError(e -> {
-//                            getStatusBehaviorRelay().accept(ApiCallStatus.ERROR);
-//                            getErrorRelay().accept(Objects.requireNonNull(e.getLocalizedMessage()));
-//                        })
-//                        .subscribe());
+                                        case GET_REPORT_NO_API_TAG:
+                                            callToGetReportNo((HashMap<String, String>) params, apiTag, shouldShowLoader);
+                                            break;
+                                        case WORK_START_API_TAG:
+                                            callToWorkStart((HashMap<String, String>) params, apiTag, shouldShowLoader);
+                                            break;
+                                    }
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            } else {
+                                if (shouldShowLoader)
+                                    getStatusBehaviorRelay().accept(ApiCallStatus.ERROR);
+                                getErrorRelay().accept("No internet connection");
+                            }
+                        })
+                        .doOnError(e -> {
+                            getStatusBehaviorRelay().accept(ApiCallStatus.ERROR);
+                            getErrorRelay().accept(Objects.requireNonNull(e.getLocalizedMessage()));
+                        })
+                        .subscribe());
     }
 
     private void callToComplaintDetail(HashMap<String, String> params, String apiTag, boolean shouldShowLoader) {

@@ -88,6 +88,7 @@ public class VisitBurnerInstallationFragment extends BaseFragment {
     private FrameLayout frameMain;
     private ComplaintViewModel complaintViewModel;
     private List<Complaint> complaintList;
+    private String apiTag = "";
 
     private TextInputEditText edtAttnBy, edtClient, edtAddress, edtQuantity, edtModel, edtCustomerAddress, edtContactPerson, edtCustomerName,
             edtReportNo, edtFuel, edtType, edtSerialNo, edtCode, edtEngineerRemark, edtCommissioningWorkDoneDescription,
@@ -218,9 +219,9 @@ public class VisitBurnerInstallationFragment extends BaseFragment {
         initView(view);
         getComplainFromDB();
         subscribeApiCallStatusObservable();
-        if(isPermissionGranted(getContext())){
+        if (isPermissionGranted(getContext())) {
             getLocation(getContext());
-        }else{
+        } else {
             requestLocationPermissions();
         }
     }
@@ -369,6 +370,7 @@ public class VisitBurnerInstallationFragment extends BaseFragment {
     private void submitReport() {
         if (isValidated()) {
             showProgressLoader();
+            apiTag = ComplaintViewModel.BURNER_INSTALLATION_COMPLAINT_VISIT_API_TAG;
             complaintViewModel.callToApi(prepareBurnerInstallationParams(), ComplaintViewModel.BURNER_INSTALLATION_COMPLAINT_VISIT_API_TAG, true);
         }
     }
@@ -376,6 +378,7 @@ public class VisitBurnerInstallationFragment extends BaseFragment {
     private void getReportNo() {
         if (complaint != null) {
             showProgressLoader();
+            apiTag = ComplaintViewModel.GET_REPORT_NO_API_TAG;
             HashMap<String, String> params = new HashMap<>();
             params.put("mc_type", complaint.getMcType());
             complaintViewModel.callToApi(params, ComplaintViewModel.GET_REPORT_NO_API_TAG, true);
@@ -390,71 +393,67 @@ public class VisitBurnerInstallationFragment extends BaseFragment {
 //        edtCustomerName.setText(complaint.getCustomerLastName());
 
 
-        if(!AppUtils.isEmpty(complaint.getAddress())){
+        if (!AppUtils.isEmpty(complaint.getAddress())) {
             edtAddress.setText(complaint.getAddress());
-        }else{
+        } else {
             edtAddress.setText("--");
         }
 
-        if(!AppUtils.isEmpty(complaint.getCustomerFirstName())){
+        if (!AppUtils.isEmpty(complaint.getCustomerFirstName())) {
             edtClient.setText(complaint.getCustomerFirstName());
-        }else{
+        } else {
             edtClient.setText("--");
         }
 
-        if(!AppUtils.isEmpty(complaint.getCustomerLastName())){
+        if (!AppUtils.isEmpty(complaint.getCustomerLastName())) {
             edtContactPerson.setText(complaint.getCustomerLastName());
-        }else{
+        } else {
             edtContactPerson.setText("--");
         }
 
-        if(!AppUtils.isEmpty(complaint.getMcModel())){
+        if (!AppUtils.isEmpty(complaint.getMcModel())) {
             edtModel.setText(complaint.getMcModel());
-        }else{
+        } else {
             edtModel.setText("--");
         }
 
-        if(!AppUtils.isEmpty(complaint.getSrNo())){
+        if (!AppUtils.isEmpty(complaint.getSrNo())) {
             edtSerialNo.setText(complaint.getSrNo());
-        }else{
+        } else {
             edtSerialNo.setText("--");
         }
-        if(!AppUtils.isEmpty(AppUtils.getCurrentDate())){
+        if (!AppUtils.isEmpty(AppUtils.getCurrentDate())) {
             txvDate.setText(AppUtils.getCurrentDate());
-        }else{
+        } else {
             txvDate.setText("--");
         }
 
-        if(!AppUtils.isEmpty(AppUtils.getCurrentDate())){
+        if (!AppUtils.isEmpty(AppUtils.getCurrentDate())) {
             txvFinishDate.setText(AppUtils.getCurrentDate());
-        }else{
+        } else {
             txvFinishDate.setText("--");
         }
 
-        if(!AppUtils.isEmpty(AppUtils.getCurrentDate())){
+        if (!AppUtils.isEmpty(AppUtils.getCurrentDate())) {
             txvInstallationDateEnd.setText(AppUtils.getCurrentDate());
-        }else{
+        } else {
             txvInstallationDateEnd.setText("--");
         }
 
-        if(!AppUtils.isEmpty(AppUtils.getCurrentDate())){
+        if (!AppUtils.isEmpty(AppUtils.getCurrentDate())) {
             txvCommissioningDateEnd.setText(AppUtils.getCurrentDate());
-        }else{
+        } else {
             txvCommissioningDateEnd.setText("--");
         }
 
-        if(!AppUtils.isEmpty(AppUtils.getCurrentDateTime())){
+        if (!AppUtils.isEmpty(AppUtils.getCurrentDateTime())) {
             txvCheckoutDateTime.setText(AppUtils.getCurrentDateTime());
-        }else{
+        } else {
             txvCheckoutDateTime.setText(AppUtils.getCurrentDateTime());
         }
 
 
         edtAttnBy.setText(getPreference().getStringValue(SunTecPreferenceManager.PREF_USER_NAME, ""));
-
-
-
-
 
 
         edtModel.setClickable(false);
@@ -533,9 +532,12 @@ public class VisitBurnerInstallationFragment extends BaseFragment {
                             }
                         } else if (object instanceof String) {
                             String errorCode = (String) object;
+                            String msg = object + "\nVisit Report saved to draft. Please check in Draft";
                             showDialogWithSingleButtons(getContext(), getString(R.string.app_name),
-                                    String.valueOf(object), Objects.requireNonNull(getActivity()).getString(R.string.ok), (dialog, which) -> {
+                                    String.valueOf(msg), Objects.requireNonNull(getActivity()).getString(R.string.ok), (dialog, which) -> {
                                         enableDisableView(frameMain, true);
+                                        if (apiTag.equalsIgnoreCase(ComplaintViewModel.BURNER_INSTALLATION_COMPLAINT_VISIT_API_TAG))
+                                            prepareParamForBurnerInstallationDraftAndInsert();
                                     }, false);
 
                         } else if (object instanceof Pair) {
@@ -549,7 +551,6 @@ public class VisitBurnerInstallationFragment extends BaseFragment {
                                         showDialogWithSingleButtons(getContext(), getString(R.string.app_name),
                                                 "Report submitted successfully", Objects.requireNonNull(getActivity()).getString(R.string.ok), (dialog, which) -> {
                                                     backToPreviousFragment(R.id.complaintsFragment, frameMain, false);
-                                                    prepareParamForBurnerInstallationDraftAndInsert();
                                                 }, false);
                                     }
                                 } else if (pair.first.equals(ComplaintViewModel.GET_REPORT_NO_API_TAG)) {

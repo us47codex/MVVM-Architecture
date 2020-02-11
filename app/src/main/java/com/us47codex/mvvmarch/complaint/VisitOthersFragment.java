@@ -89,6 +89,7 @@ import static com.us47codex.mvvmarch.helper.AppUtils.toRequestBody;
 public class VisitOthersFragment extends BaseFragment {
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
     private FrameLayout frameMain;
+    private String apiTag = "";
     private ComplaintViewModel complaintViewModel;
     private List<Complaint> complaintList;
     private TextInputEditText edtOEMDealerName, edtMonthYearOfInstallation, edtNoOfHWG, edtHWGModelSerialNo,
@@ -475,12 +476,12 @@ public class VisitOthersFragment extends BaseFragment {
                             }
                         } else if (object instanceof String) {
                             String errorCode = (String) object;
-                            String msg = object + "\n Visit Report saved to draft. Please check in Draft";
+                            String msg = object + "\nVisit Report saved to draft. Please check in Draft";
                             showDialogWithSingleButtons(getContext(), getString(R.string.app_name),
                                     String.valueOf(msg), Objects.requireNonNull(getActivity()).getString(R.string.ok), (dialog, which) -> {
                                         enableDisableView(frameMain, true);
-                                        backToPreviousFragment(R.id.complaintsFragment, frameMain, false);
-                                        prepareParamForVisitOtherDraftAndInsert();
+                                        if (apiTag.equalsIgnoreCase(ComplaintViewModel.HEAT_PUMP_COMPLAIN_VISIT_API_TAG))
+                                            prepareParamForVisitOtherDraftAndInsert();
                                     }, false);
 
                         } else if (object instanceof Pair) {
@@ -656,6 +657,7 @@ public class VisitOthersFragment extends BaseFragment {
     private void submitReport() {
         if (isValidated()) {
             showProgressLoader();
+            apiTag = ComplaintViewModel.HEAT_PUMP_COMPLAIN_VISIT_API_TAG;
             complaintViewModel.callToApi(prepareParam(), ComplaintViewModel.HEAT_PUMP_COMPLAIN_VISIT_API_TAG, true);
 //            prepareParamForVisitOtherDraftAndInsert();
         }
@@ -664,6 +666,7 @@ public class VisitOthersFragment extends BaseFragment {
     private void getReportNo() {
         if (complaint != null) {
             showProgressLoader();
+            apiTag = ComplaintViewModel.GET_REPORT_NO_API_TAG;
             HashMap<String, String> params = new HashMap<>();
             params.put("mc_type", complaint.getMcType());
             complaintViewModel.callToApi(params, ComplaintViewModel.GET_REPORT_NO_API_TAG, true);

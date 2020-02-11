@@ -11,6 +11,7 @@ import com.us47codex.mvvmarch.base.BaseViewModel;
 import com.us47codex.mvvmarch.constant.EndPoints;
 import com.us47codex.mvvmarch.enums.ApiCallStatus;
 import com.us47codex.mvvmarch.helper.AppLog;
+import com.us47codex.mvvmarch.helper.InternetConnection;
 import com.us47codex.mvvmarch.restApi.RestCallAPI;
 import com.us47codex.mvvmarch.roomDatabase.User;
 
@@ -22,6 +23,7 @@ import java.util.Objects;
 import io.reactivex.Completable;
 import io.reactivex.Single;
 import io.reactivex.SingleSource;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Function;
 import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
@@ -58,34 +60,38 @@ public class HomeViewModel extends BaseViewModel {
         InternetObservingSettings settings = InternetObservingSettings.builder()
                 .strategy(new SocketInternetObservingStrategy())
                 .build();
-
-//        getCompositeDisposable().add(
-//                AppUtils.checkHardInternetConnection()
-//                        .subscribeOn(Schedulers.io())
-//                        .doOnSuccess(aBoolean -> {
-//                            if (aBoolean) {
-        try {
-            switch ((apiTag)) {
-                case DASHBOARD_API_TAG:
-                    callToDashboard((HashMap<String, String>) params, apiTag, shouldShowLoader);
-                    break;
-                case POST_PROFILE_API_TAG:
-                    callToUpdateProfile((HashMap<String, RequestBody>) params, apiTag, shouldShowLoader);
-                    break;
-                case CHANGE_PASSWORD_API_TAG:
-                    callToChangePassword((HashMap<String, String>) params, apiTag, shouldShowLoader);
-                    break;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-//                            }
-//                        })
-//                        .doOnError(e -> {
-//                            getStatusBehaviorRelay().accept(ApiCallStatus.ERROR);
-//                            getErrorRelay().accept(Objects.requireNonNull(e.getLocalizedMessage()));
-//                        })
-//                        .subscribe());
+        getCompositeDisposable().add(
+                InternetConnection.checkSoftInternetConnectionStatusRxSingle(getApplication())
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .doOnSuccess(aBoolean -> {
+                            if (aBoolean) {
+                                try {
+                                    switch ((apiTag)) {
+                                        case DASHBOARD_API_TAG:
+                                            callToDashboard((HashMap<String, String>) params, apiTag, shouldShowLoader);
+                                            break;
+                                        case POST_PROFILE_API_TAG:
+                                            callToUpdateProfile((HashMap<String, RequestBody>) params, apiTag, shouldShowLoader);
+                                            break;
+                                        case CHANGE_PASSWORD_API_TAG:
+                                            callToChangePassword((HashMap<String, String>) params, apiTag, shouldShowLoader);
+                                            break;
+                                    }
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            } else {
+                                if (shouldShowLoader)
+                                    getStatusBehaviorRelay().accept(ApiCallStatus.ERROR);
+                                getErrorRelay().accept("No internet connection");
+                            }
+                        })
+                        .doOnError(e -> {
+                            getStatusBehaviorRelay().accept(ApiCallStatus.ERROR);
+                            getErrorRelay().accept(Objects.requireNonNull(e.getLocalizedMessage()));
+                        })
+                        .subscribe());
     }
 
     private void callToUpdateProfile(HashMap<String, RequestBody> params, String apiTag, boolean shouldShowLoader) {
