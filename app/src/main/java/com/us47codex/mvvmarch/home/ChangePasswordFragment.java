@@ -109,6 +109,7 @@ public class ChangePasswordFragment extends BaseFragment {
             window.setStatusBarColor(getResources().getColor(R.color.white));
         }
         homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
+        subscribeApiCallStatusObservable();
     }
 
     @Nullable
@@ -122,7 +123,6 @@ public class ChangePasswordFragment extends BaseFragment {
         super.onViewCreated(view, savedInstanceState);
         initActionBar(view);
         initView(view);
-        subscribeApiCallStatusObservable();
     }
 
     private void initActionBar(View view) {

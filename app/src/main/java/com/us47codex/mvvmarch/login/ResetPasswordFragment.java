@@ -109,6 +109,7 @@ public class ResetPasswordFragment extends BaseFragment {
             window.setStatusBarColor(getResources().getColor(R.color.white));
         }
         loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
+        subscribeApiCallStatusObservable();
     }
 
     @Nullable
@@ -121,7 +122,6 @@ public class ResetPasswordFragment extends BaseFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initView(view);
-        subscribeApiCallStatusObservable();
     }
 
     private void initView(View view) {

@@ -116,6 +116,7 @@ public class HomeFragment extends BaseFragment {
             window.setStatusBarColor(getResources().getColor(R.color.white));
         }
         homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
+        subscribeApiCallStatusObservable();
     }
 
     @Nullable
@@ -129,7 +130,6 @@ public class HomeFragment extends BaseFragment {
         super.onViewCreated(view, savedInstanceState);
         initView(view);
         getDashboardDataFromServer();
-        subscribeApiCallStatusObservable();
 
     }
 

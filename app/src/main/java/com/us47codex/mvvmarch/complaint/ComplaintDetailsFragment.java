@@ -137,6 +137,7 @@ public class ComplaintDetailsFragment extends BaseFragment {
             complainId = bundle.getLong(Constants.KEY_COMPLAIN_ID, 0);
         }
         complaintViewModel = new ViewModelProvider(this).get(ComplaintViewModel.class);
+        subscribeApiCallStatusObservable();
     }
 
     @Nullable
@@ -151,7 +152,6 @@ public class ComplaintDetailsFragment extends BaseFragment {
         initActionBar(view);
         initView(view);
         getComplainFromDB();
-        subscribeApiCallStatusObservable();
         //getLocation();
         if (hasPermissions()) {
             getLocation(getContext());

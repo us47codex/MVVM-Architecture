@@ -125,6 +125,7 @@ public class VisitDraftFragment extends BaseFragment {
             window.setStatusBarColor(getResources().getColor(R.color.white));
         }
         complaintViewModel = new ViewModelProvider(this).get(ComplaintViewModel.class);
+        subscribeApiCallStatusObservable();
     }
 
     @Nullable
@@ -140,7 +141,6 @@ public class VisitDraftFragment extends BaseFragment {
         initView(view);
         showProgressLoader();
         getVisitDraftsFromDB();
-        subscribeApiCallStatusObservable();
     }
 
     private void initActionBar(View view) {
@@ -198,7 +198,7 @@ public class VisitDraftFragment extends BaseFragment {
         super.onItemClick(view, object);
         switch (view.getId()) {
             case R.id.llComplaint:
-                VisitDraft visitDraft = (VisitDraft) object;
+                visitDraft = (VisitDraft) object;
                 if (visitDraft.getId() != 0) {
                     if (visitDraft.getMcType().equalsIgnoreCase(Constants.BURNER)) {
                         if (visitDraft.getVisitType().equalsIgnoreCase(Constants.INSTALLATION_AND_COMMISSIONING)
@@ -316,13 +316,13 @@ public class VisitDraftFragment extends BaseFragment {
         try {
             HashMap<String, String> imageParams = stringToMapForImage(visitDraft.getVisitData());
             params = stringToMap(visitDraft.getVisitData());
-            if (AppUtils.isEmpty(imageParams.get("sign_customer\"; filename=\"sign_customer.jpg\""))) {
+            if (!AppUtils.isEmpty(imageParams.get("sign_customer\"; filename=\"sign_customer.jpg\""))) {
                 params.put("sign_customer\"; filename=\"sign_customer.jpg\"", toRequestBody(new File(imageParams.get("sign_customer\"; filename=\"sign_customer.jpg\""))));
             }
-            if (AppUtils.isEmpty(imageParams.get("sign_repre\"; filename=\"sign_repre.jpg\""))) {
+            if (!AppUtils.isEmpty(imageParams.get("sign_repre\"; filename=\"sign_repre.jpg\""))) {
                 params.put("sign_repre\"; filename=\"sign_repre.jpg\"", toRequestBody(new File(imageParams.get("sign_repre\"; filename=\"sign_repre.jpg\""))));
             }
-            if (AppUtils.isEmpty(imageParams.get("sign_marketing\"; filename=\"sign_marketing.jpg\""))) {
+            if (!AppUtils.isEmpty(imageParams.get("sign_marketing\"; filename=\"sign_marketing.jpg\""))) {
                 params.put("sign_marketing\"; filename=\"sign_marketing.jpg\"", toRequestBody(new File(imageParams.get("sign_marketing\"; filename=\"sign_marketing.jpg\""))));
             }
             return params;
@@ -338,10 +338,10 @@ public class VisitDraftFragment extends BaseFragment {
         try {
             HashMap<String, String> imageParams = stringToMapForImage(visitDraft.getVisitData());
             params = stringToMap(visitDraft.getVisitData());
-            if (AppUtils.isEmpty(imageParams.get("sign_customer\"; filename=\"sign_customer.jpg\""))) {
+            if (!AppUtils.isEmpty(imageParams.get("sign_customer\"; filename=\"sign_customer.jpg\""))) {
                 params.put("sign_customer\"; filename=\"sign_customer.jpg\"", toRequestBody(new File(imageParams.get("sign_customer\"; filename=\"sign_customer.jpg\""))));
             }
-            if (AppUtils.isEmpty(imageParams.get("sign_repre\"; filename=\"sign_repre.jpg\""))) {
+            if (!AppUtils.isEmpty(imageParams.get("sign_repre\"; filename=\"sign_repre.jpg\""))) {
                 params.put("sign_repre\"; filename=\"sign_repre.jpg\"", toRequestBody(new File(imageParams.get("sign_repre\"; filename=\"sign_repre.jpg\""))));
             }
             return params;
@@ -357,10 +357,10 @@ public class VisitDraftFragment extends BaseFragment {
         try {
             HashMap<String, String> imageParams = stringToMapForImage(visitDraft.getVisitData());
             params = stringToMap(visitDraft.getVisitData());
-            if (AppUtils.isEmpty(imageParams.get("sign_customer\"; filename=\"sign_customer.jpg\""))) {
+            if (!AppUtils.isEmpty(imageParams.get("sign_customer\"; filename=\"sign_customer.jpg\""))) {
                 params.put("sign_customer\"; filename=\"sign_customer.jpg\"", toRequestBody(new File(imageParams.get("sign_customer\"; filename=\"sign_customer.jpg\""))));
             }
-            if (AppUtils.isEmpty(imageParams.get("sign_repre\"; filename=\"sign_repre.jpg\""))) {
+            if (!AppUtils.isEmpty(imageParams.get("sign_repre\"; filename=\"sign_repre.jpg\""))) {
                 params.put("sign_repre\"; filename=\"sign_repre.jpg\"", toRequestBody(new File(imageParams.get("sign_repre\"; filename=\"sign_repre.jpg\""))));
             }
             return params;

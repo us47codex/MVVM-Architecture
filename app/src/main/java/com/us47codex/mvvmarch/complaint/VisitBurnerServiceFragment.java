@@ -210,6 +210,7 @@ public class VisitBurnerServiceFragment extends BaseFragment {
             complainId = bundle.getLong(Constants.KEY_COMPLAIN_ID, 0);
         }
         complaintViewModel = new ViewModelProvider(this).get(ComplaintViewModel.class);
+        subscribeApiCallStatusObservable();
     }
 
     @Nullable
@@ -224,7 +225,6 @@ public class VisitBurnerServiceFragment extends BaseFragment {
         initActionBar(view);
         initView(view);
         getComplainFromDB();
-        subscribeApiCallStatusObservable();
         if (isPermissionGranted(getContext())) {
             getLocation(getContext());
         } else {

@@ -94,6 +94,7 @@ public class LoginFragment extends BaseFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
+        handleApiCAllStatusObservable();
     }
 
     @Nullable
@@ -106,7 +107,6 @@ public class LoginFragment extends BaseFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initView(view);
-        handleApiCAllStatusObservable();
     }
 
     @SuppressWarnings("unchecked")

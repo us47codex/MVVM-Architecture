@@ -159,6 +159,7 @@ public class UserProfileFragment extends BaseFragment {
             window.setStatusBarColor(getResources().getColor(R.color.white));
         }
         homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
+        subscribeApiCallStatusObservable();
     }
 
     @Nullable
@@ -174,7 +175,6 @@ public class UserProfileFragment extends BaseFragment {
         initView(view);
         handleView(false);
         setData();
-        subscribeApiCallStatusObservable();
     }
 
     private void initActionBar(View view) {

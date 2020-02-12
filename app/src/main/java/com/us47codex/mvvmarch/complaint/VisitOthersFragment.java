@@ -110,10 +110,6 @@ public class VisitOthersFragment extends BaseFragment {
     private String SignatureFilePath = "";
     private AppCompatImageView signatureImage;
 
-    private byte[] customerSignByte = new byte[1];
-    private byte[] marketingProjectHeadSignByte = new byte[1];
-    private byte[] suntecRepreSignByte = new byte[1];
-
     private Dialog dialogWakeUpCall;
 
     private File customerSign;
@@ -189,6 +185,7 @@ public class VisitOthersFragment extends BaseFragment {
             complainId = bundle.getLong(Constants.KEY_COMPLAIN_ID, 0);
         }
         complaintViewModel = new ViewModelProvider(this).get(ComplaintViewModel.class);
+        subscribeApiCallStatusObservable();
     }
 
     @Nullable
@@ -203,7 +200,6 @@ public class VisitOthersFragment extends BaseFragment {
         initActionBar(view);
         initView(view);
         getComplainFromDB();
-        subscribeApiCallStatusObservable();
         if (isPermissionGranted(getContext())) {
             getLocation(getContext());
         } else {
@@ -599,15 +595,11 @@ public class VisitOthersFragment extends BaseFragment {
 //            scanMediaFile(photo, type);
             if (type == CUSTOMER_SIGN_CODE) {
                 customerSign = saveBitmapToJPG(signature, photo);
-                customerSignByte = bitmapToByteArray(signature);
             } else if (type == SUNTEC_REPRE_SIGN_CODE) {
                 suntecRepreSign = saveBitmapToJPG(signature, photo);
-                suntecRepreSignByte = bitmapToByteArray(signature);
             } else if (type == MARKETING_PROJECT_HEAD_SIGN_CODE) {
                 marketingProjectHeadSign = saveBitmapToJPG(signature, photo);
-                marketingProjectHeadSignByte = bitmapToByteArray(signature);
             }
-//            convertToString(signature);
             result = true;
         } catch (IOException e) {
             e.printStackTrace();

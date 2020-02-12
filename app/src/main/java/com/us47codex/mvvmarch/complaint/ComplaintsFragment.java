@@ -124,6 +124,7 @@ public class ComplaintsFragment extends BaseFragment {
             FILTER_COMPLAINT = bundle.getString(Constants.KEY_FILTER_COMPLAINT, "all");
         }
         complaintViewModel = new ViewModelProvider(this).get(ComplaintViewModel.class);
+        subscribeApiCallStatusObservable();
     }
 
     @Nullable
@@ -139,7 +140,6 @@ public class ComplaintsFragment extends BaseFragment {
         initView(view);
         showProgressLoader();
         getCommentListFromServer();
-        subscribeApiCallStatusObservable();
     }
 
     private void initActionBar(View view) {
